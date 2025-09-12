@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "themetracker": {
+      "command": "node",
+      "args": ["../lib/cli.js", "mcp"],
+      "cwd": "/Users/serajendran/Documents/GitHub/Themetracker/test-project"
+    }
+  }
+}
