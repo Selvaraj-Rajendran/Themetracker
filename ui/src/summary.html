@@ -1,0 +1,2148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme Coverage Summary - ThemeTracker Live v0.2</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #0f1419;
+        color: #e6e6e6;
+        height: 100vh;
+        overflow-x: hidden;
+      }
+
+      .app {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .header {
+        background: #161b22;
+        border-bottom: 1px solid #2d3748;
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .logo-text {
+        font-size: 24px;
+        font-weight: 600;
+        color: #58a6ff;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: #8b949e;
+        margin-left: 10px;
+      }
+
+      .connection-status {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .connection-status.connected {
+        background: #1f6638;
+        color: #3fb950;
+        border: 1px solid #3fb950;
+      }
+
+      .connection-status.disconnected {
+        background: #67060c;
+        color: #f85149;
+        border: 1px solid #f85149;
+      }
+
+      .back-button {
+        background: #21262d;
+        border: 1px solid #30363d;
+        color: #f0f6fc;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+      }
+
+      .back-button:hover {
+        background: #30363d;
+        border-color: #484f58;
+        text-decoration: none;
+        color: #f0f6fc;
+      }
+
+      .main-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 30px;
+      }
+
+      .overall-metrics {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 30px;
+      }
+
+      .overall-metrics-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .overall-metrics-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #f0f6fc;
+      }
+
+      .overall-metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .overall-metric-card {
+        background: #21262d;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        padding: 16px;
+        text-align: center;
+      }
+
+      .overall-metric-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .overall-metric-value.loading {
+        color: #8b949e;
+        position: relative;
+      }
+
+      .overall-metric-value.loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 16px;
+        height: 16px;
+        border: 2px solid #30363d;
+        border-top: 2px solid #58a6ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      .overall-metric-label {
+        font-size: 14px;
+        color: #8b949e;
+        margin-bottom: 4px;
+      }
+
+      .overall-metric-sublabel {
+        font-size: 12px;
+        color: #6e7681;
+      }
+
+      .main-layout {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        gap: 30px;
+        margin-bottom: 30px;
+        height: calc(100vh - 200px);
+      }
+
+      .summary-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        height: fit-content;
+      }
+
+      .components-section {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 20px;
+        height: 100%;
+        max-height: 70vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .table-container {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 8px;
+        margin-top: 16px;
+      }
+
+      .components-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid #30363d;
+      }
+
+      .components-table th,
+      .components-table td {
+        padding: 16px 12px;
+        text-align: left;
+        border-bottom: 1px solid #30363d;
+      }
+
+      .components-table th {
+        color: #f0f6fc;
+        font-weight: 600;
+        font-size: 14px;
+        background: #161b22;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 2px solid #30363d;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .components-table td {
+        color: #e6e6e6;
+        font-size: 14px;
+      }
+
+      .components-table tbody tr:hover {
+        background: #21262d;
+        cursor: pointer;
+      }
+
+      /* Page metrics specific styling */
+      .page-route-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .page-route-icon {
+        font-size: 16px;
+      }
+
+      .page-route-name {
+        color: #58a6ff;
+        font-weight: 500;
+        font-size: 15px;
+      }
+
+      .page-route-path {
+        color: #8b949e;
+        font-size: 12px;
+        margin-top: 2px;
+      }
+
+      .metric-number {
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .coverage-progress-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        justify-content: space-between;
+      }
+
+      .progress-bar-container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .progress-bar {
+        flex: 1;
+        height: 6px;
+        background: #21262d;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .progress-fill,
+      .coverage-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.3s ease;
+      }
+
+      .progress-text {
+        font-size: 11px;
+        color: #8b949e;
+        min-width: 70px;
+        text-align: right;
+      }
+
+      .component-name {
+        color: #58a6ff;
+        font-weight: 500;
+        font-size: 15px;
+      }
+
+      .component-path {
+        color: #8b949e;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+
+      .coverage-bar {
+        width: 80px;
+        height: 10px;
+        background: #21262d;
+        border-radius: 5px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .coverage-fill {
+        height: 100%;
+        transition: width 0.3s ease;
+        border-radius: 5px;
+      }
+
+      .coverage-fill.excellent {
+        background: linear-gradient(90deg, #3fb950, #56d364);
+      }
+      .coverage-fill.good {
+        background: linear-gradient(90deg, #58a6ff, #79c0ff);
+      }
+      .coverage-fill.fair {
+        background: linear-gradient(90deg, #d29922, #e3b341);
+      }
+      .coverage-fill.poor {
+        background: linear-gradient(90deg, #fb8500, #fd8c3c);
+      }
+      .coverage-fill.critical {
+        background: linear-gradient(90deg, #f85149, #ff7b72);
+      }
+
+      .metric-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .metric-badge.excellent {
+        background: rgba(63, 185, 80, 0.2);
+        color: #3fb950;
+        border: 1px solid #3fb950;
+      }
+
+      .metric-badge.good {
+        background: rgba(88, 166, 255, 0.2);
+        color: #58a6ff;
+        border: 1px solid #58a6ff;
+      }
+
+      .metric-badge.fair {
+        background: rgba(210, 153, 34, 0.2);
+        color: #d29922;
+        border: 1px solid #d29922;
+      }
+
+      .metric-badge.poor {
+        background: rgba(251, 133, 0, 0.2);
+        color: #fb8500;
+        border: 1px solid #fb8500;
+      }
+
+      .metric-badge.critical {
+        background: rgba(248, 81, 73, 0.2);
+        color: #f85149;
+        border: 1px solid #f85149;
+      }
+
+      .issues-count {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .table-stats {
+        color: #8b949e;
+        font-size: 14px;
+      }
+
+      .summary-card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 20px;
+        transition: border-color 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        min-height: 140px;
+      }
+
+      .summary-card:hover {
+        border-color: #484f58;
+      }
+
+      .card-chart {
+        flex-shrink: 0;
+        position: relative;
+        width: 100px;
+        height: 100px;
+      }
+
+      .circular-chart {
+        width: 100px;
+        height: 100px;
+        transform: rotate(-90deg);
+      }
+
+      .circular-chart circle {
+        fill: none;
+        stroke-width: 8;
+        stroke-linecap: round;
+      }
+
+      .circle-bg {
+        stroke: #21262d;
+      }
+
+      .circle-progress {
+        stroke-dasharray: 0 314.16;
+        transition: stroke-dasharray 0.8s ease, stroke-dashoffset 0.8s ease;
+      }
+
+      .circle-progress.excellent {
+        stroke: #3fb950;
+      }
+      .circle-progress.good {
+        stroke: #58a6ff;
+      }
+      .circle-progress.fair {
+        stroke: #d29922;
+      }
+      .circle-progress.poor {
+        stroke: #fb8500;
+      }
+      .circle-progress.critical {
+        stroke: #f85149;
+      }
+
+      .chart-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+
+      .chart-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f0f6fc;
+        line-height: 1;
+      }
+
+      .chart-label {
+        font-size: 10px;
+        color: #8b949e;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 2px;
+      }
+
+      .card-details {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .card-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #f0f6fc;
+      }
+
+      .metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .metric:last-child {
+        margin-bottom: 0;
+      }
+
+      .metric-label {
+        color: #8b949e;
+        font-size: 13px;
+      }
+
+      .metric-value {
+        font-weight: 600;
+        font-size: 14px;
+        transition: color 0.3s ease, transform 0.2s ease;
+      }
+
+      .metric-value.animating {
+        color: #d29922;
+        animation: pulse 1.5s infinite;
+      }
+
+      .metric-value.excellent {
+        color: #3fb950;
+      }
+      .metric-value.good {
+        color: #58a6ff;
+      }
+      .metric-value.fair {
+        color: #d29922;
+      }
+      .metric-value.poor {
+        color: #fb8500;
+      }
+      .metric-value.critical {
+        color: #f85149;
+      }
+
+      .chart-container {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .chart-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #f0f6fc;
+      }
+
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        color: #8b949e;
+        font-size: 16px;
+      }
+
+      .loading::before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border: 2px solid #30363d;
+        border-top: 2px solid #58a6ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animatable-counter {
+        transition: color 0.3s ease;
+      }
+
+      .animatable-counter.loading {
+        color: #8b949e;
+        opacity: 0.7;
+      }
+
+      .no-data {
+        text-align: center;
+        padding: 40px;
+        color: #8b949e;
+      }
+
+      .refresh-hint {
+        margin-top: 20px;
+        padding: 15px;
+        background: #1c2128;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        color: #8b949e;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      @media (max-width: 1200px) {
+        .main-layout {
+          grid-template-columns: 35% 65%;
+        }
+
+        .summary-card {
+          flex-direction: column;
+          text-align: center;
+          gap: 15px;
+          min-height: 120px;
+        }
+
+        .card-chart {
+          width: 80px;
+          height: 80px;
+        }
+
+        .circular-chart {
+          width: 80px;
+          height: 80px;
+        }
+
+        .chart-value {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header {
+          padding: 15px 20px;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .main-content {
+          padding: 20px;
+        }
+
+        .main-layout {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          height: auto;
+        }
+
+        .summary-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 15px;
+        }
+
+        .summary-card {
+          flex-direction: row;
+          text-align: left;
+          gap: 15px;
+          min-height: 100px;
+          padding: 15px;
+        }
+
+        .card-chart {
+          width: 70px;
+          height: 70px;
+        }
+
+        .circular-chart {
+          width: 70px;
+          height: 70px;
+        }
+
+        .chart-value {
+          font-size: 12px;
+        }
+
+        .chart-label {
+          font-size: 8px;
+        }
+
+        .components-section {
+          order: 2;
+          height: auto;
+          max-height: 60vh;
+          padding: 16px;
+        }
+
+        .table-container {
+          max-height: 50vh;
+          padding: 4px;
+          margin-top: 12px;
+        }
+
+        .components-table th,
+        .components-table td {
+          padding: 12px 8px;
+          font-size: 12px;
+        }
+
+        .page-route-cell {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
+        }
+
+        .page-route-path {
+          display: none;
+        }
+
+        .progress-bar-container {
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .progress-bar {
+          width: 100%;
+          height: 6px;
+        }
+
+        .progress-text {
+          font-size: 10px;
+          min-width: auto;
+          text-align: center;
+        }
+
+        .metric-number {
+          font-size: 14px;
+        }
+
+        .coverage-bar {
+          width: 60px;
+          height: 8px;
+        }
+
+        .component-path {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="header">
+        <div class="header-left">
+          <div class="logo-text">
+            🎨 ThemeTracker
+            <span class="subtitle">Coverage Summary</span>
+          </div>
+          <div id="connectionStatus" class="connection-status connected">Connected</div>
+        </div>
+        <div class="header-right" style="display: flex; gap: 10px">
+          <button id="runAnalysisBtn" class="back-button">⚡ Run Analysis</button>
+          <a href="/" class="back-button"> ← Back to Theme Tracker </a>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <!-- Overall Metrics Section -->
+        <div class="overall-metrics">
+          <div class="overall-metrics-header">
+            <div class="overall-metrics-title">📊 Components Overview</div>
+          </div>
+          <div class="overall-metrics-grid">
+            <div class="overall-metric-card">
+              <div class="overall-metric-value excellent" id="totalPagesMetric">-</div>
+              <div class="overall-metric-label">Total Pages</div>
+              <div class="overall-metric-sublabel">Analyzed routes</div>
+            </div>
+            <div class="overall-metric-card">
+              <div class="overall-metric-value good" id="totalComponentsMetric">-</div>
+              <div class="overall-metric-label">Total Components</div>
+              <div class="overall-metric-sublabel">Including duplicates</div>
+            </div>
+            <div class="overall-metric-card">
+              <div class="overall-metric-value fair" id="uniqueComponentsMetric">-</div>
+              <div class="overall-metric-label">Unique Components</div>
+              <div class="overall-metric-sublabel">Deduplicated count</div>
+            </div>
+            <div class="overall-metric-card">
+              <div class="overall-metric-value excellent" id="themeUsageMetric">-</div>
+              <div class="overall-metric-label">With Theme Usage</div>
+              <div class="overall-metric-sublabel" id="themeUsagePercentage">- %</div>
+            </div>
+            <div class="overall-metric-card">
+              <div class="overall-metric-value poor" id="commonComponentsMetric">-</div>
+              <div class="overall-metric-label">Common Components</div>
+              <div class="overall-metric-sublabel">Reusable UI elements</div>
+            </div>
+            <div class="overall-metric-card">
+              <div class="overall-metric-value critical" id="pageSpecificMetric">-</div>
+              <div class="overall-metric-label">Page-Specific</div>
+              <div class="overall-metric-sublabel">Unique to each page</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+          <!-- Left Side - Summary Cards -->
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="card-chart">
+                <svg class="circular-chart">
+                  <circle class="circle-bg" cx="50" cy="50" r="40"></circle>
+                  <circle
+                    class="circle-progress excellent"
+                    id="overallProgressCircle"
+                    cx="50"
+                    cy="50"
+                    r="40"
+                  ></circle>
+                </svg>
+                <div class="chart-center">
+                  <div class="chart-value" id="overallChartValue">-</div>
+                  <div class="chart-label">Coverage</div>
+                </div>
+              </div>
+              <div class="card-details">
+                <div class="card-title">Overall Coverage</div>
+                <div class="metric">
+                  <span class="metric-label">Total Files</span>
+                  <span class="metric-value" id="totalFiles">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Files Audited</span>
+                  <span class="metric-value" id="auditedFiles">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Average Coverage</span>
+                  <span class="metric-value" id="averageCoverage">-</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="card-chart">
+                <svg class="circular-chart">
+                  <circle class="circle-bg" cx="50" cy="50" r="40"></circle>
+                  <!-- Multiple progress circles for different statuses -->
+                  <circle
+                    class="circle-progress excellent"
+                    id="excellentProgressCircle"
+                    cx="50"
+                    cy="50"
+                    r="40"
+                  ></circle>
+                  <circle
+                    class="circle-progress good"
+                    id="goodProgressCircle"
+                    cx="50"
+                    cy="50"
+                    r="40"
+                  ></circle>
+                  <circle
+                    class="circle-progress fair"
+                    id="fairProgressCircle"
+                    cx="50"
+                    cy="50"
+                    r="40"
+                  ></circle>
+                  <circle
+                    class="circle-progress poor"
+                    id="poorProgressCircle"
+                    cx="50"
+                    cy="50"
+                    r="40"
+                  ></circle>
+                  <circle
+                    class="circle-progress critical"
+                    id="criticalProgressCircle"
+                    cx="50"
+                    cy="50"
+                    r="40"
+                  ></circle>
+                </svg>
+                <div class="chart-center">
+                  <div class="chart-value" id="statusChartValue">-</div>
+                  <div class="chart-label">Files</div>
+                </div>
+              </div>
+              <div class="card-details">
+                <div class="card-title">Status Distribution</div>
+                <div class="metric">
+                  <span class="metric-label">Excellent (90%+)</span>
+                  <span class="metric-value excellent" id="excellentCount">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Good (70-89%)</span>
+                  <span class="metric-value good" id="goodCount">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Fair (50-69%)</span>
+                  <span class="metric-value fair" id="fairCount">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Poor (30-49%)</span>
+                  <span class="metric-value poor" id="poorCount">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Critical (<30%)</span>
+                  <span class="metric-value critical" id="criticalCount">-</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="card-chart">
+                <svg class="circular-chart">
+                  <circle class="circle-bg" cx="50" cy="50" r="40"></circle>
+                  <circle
+                    class="circle-progress critical"
+                    id="violationsProgressCircle"
+                    cx="50"
+                    cy="50"
+                    r="40"
+                  ></circle>
+                </svg>
+                <div class="chart-center">
+                  <div class="chart-value" id="violationsChartValue">-</div>
+                  <div class="chart-label">Issues</div>
+                </div>
+              </div>
+              <div class="card-details">
+                <div class="card-title">Violation Metrics</div>
+                <div class="metric">
+                  <span class="metric-label">Critical Violations</span>
+                  <span class="metric-value critical" id="criticalViolations">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">High Violations</span>
+                  <span class="metric-value poor" id="highViolations">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Medium Violations</span>
+                  <span class="metric-value fair" id="mediumViolations">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Low Violations</span>
+                  <span class="metric-value good" id="lowViolations">-</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Total Violations</span>
+                  <span class="metric-value" id="totalViolations">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side - Components Table -->
+          <div class="components-section">
+            <div class="table-container">
+              <table class="components-table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%">Page Route</th>
+                    <th style="width: 12%; text-align: center">Total</th>
+                    <th style="width: 12%; text-align: center">Page-Specific</th>
+                    <th style="width: 12%; text-align: center">Common</th>
+                    <th style="width: 12%; text-align: center">Theme Usage</th>
+                    <th style="width: 32%; text-align: center">Coverage Progress</th>
+                  </tr>
+                </thead>
+                <tbody id="componentsTableBody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; color: #8b949e; padding: 40px">
+                      <div style="font-size: 16px; margin-bottom: 8px">
+                        ⚡ Loading page metrics data...
+                      </div>
+                      <div style="font-size: 14px">
+                        Analyzing component files for theme compliance
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Data State -->
+        <div id="noDataMessage" class="no-data" style="display: none">
+          <h3>📭 No Audit Data Available</h3>
+          <p>Start by running audits on the main ThemeTracker page</p>
+          <div class="refresh-hint">
+            💡 Tip: Use "Audit All Files" to generate comprehensive coverage data
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class SummaryDashboard {
+        constructor() {
+          this.ws = null
+          this.isConnected = false
+          this.auditData = {}
+          this.componentsMetrics = {}
+          this.initializeApp()
+        }
+
+        initializeApp() {
+          this.connectWebSocket()
+          this.updateConnectionStatus('Connecting...', false)
+          this.setupEventListeners()
+        }
+
+        setupEventListeners() {
+          const runAnalysisBtn = document.getElementById('runAnalysisBtn')
+          if (runAnalysisBtn) {
+            runAnalysisBtn.addEventListener('click', () => {
+              this.runFullAnalysis()
+            })
+          }
+
+          const runComponentsAnalysisBtn = document.getElementById('runComponentsAnalysisBtn')
+          if (runComponentsAnalysisBtn) {
+            runComponentsAnalysisBtn.addEventListener('click', () => {
+              this.runComponentsAnalysis()
+            })
+          }
+        }
+
+        runFullAnalysis() {
+          if (this.ws && this.isConnected) {
+            // Show loading state for both buttons since they run in parallel
+            const runBtn = document.getElementById('runAnalysisBtn')
+            const refreshBtn = document.getElementById('runComponentsAnalysisBtn')
+
+            runBtn.textContent = '⏳ Running Analysis...'
+            runBtn.disabled = true
+
+            if (refreshBtn) {
+              refreshBtn.textContent = '⏳ Components Running...'
+              refreshBtn.disabled = true
+            }
+
+            // Start animated counters to show analysis progress
+            this.startAnalysisAnimation()
+
+            // Show loading state in table since components will be analyzed
+            this.showTableLoadingState()
+
+            // Show loading state for overall metrics
+            this.showOverallMetricsLoading()
+
+            // Trigger audit all files (which now includes parallel component analysis)
+            this.ws.send(
+              JSON.stringify({
+                type: 'AUDIT_ALL'
+              })
+            )
+          }
+        }
+
+        runComponentsAnalysis() {
+          if (this.ws && this.isConnected) {
+            // Show loading state
+            document.getElementById('runComponentsAnalysisBtn').textContent = '⏳ Analyzing...'
+            document.getElementById('runComponentsAnalysisBtn').disabled = true
+
+            // Show loading state in table
+            this.showTableLoadingState()
+
+            // Trigger components analysis
+            this.ws.send(
+              JSON.stringify({
+                type: 'RUN_COMPONENTS_ANALYSIS'
+              })
+            )
+          }
+        }
+
+        showTableLoadingState() {
+          const tbody = document.getElementById('componentsTableBody')
+          if (!tbody) return
+
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; color: #8b949e; padding: 40px;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px; margin-bottom: 8px;">
+                  <div style="width: 16px; height: 16px; border: 2px solid #30363d; border-top: 2px solid #58a6ff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                  Analyzing component files...
+                </div>
+                <div style="font-size: 14px;">
+                  Scanning pages for theme compliance and component metrics
+                </div>
+                <div style="margin-top: 20px; font-size: 12px; color: #6e7681;">
+                  This may take a few moments for large codebases
+                </div>
+              </td>
+            </tr>
+          `
+        }
+
+        showOverallMetricsLoading() {
+          // Show loading state for overall metrics
+          const metricElements = [
+            'totalPagesMetric',
+            'totalComponentsMetric',
+            'uniqueComponentsMetric',
+            'themeUsageMetric',
+            'commonComponentsMetric',
+            'pageSpecificMetric'
+          ]
+
+          metricElements.forEach((id) => {
+            const element = document.getElementById(id)
+            if (element) {
+              element.textContent = '...'
+              element.classList.add('loading')
+            }
+          })
+
+          const themeUsagePercentage = document.getElementById('themeUsagePercentage')
+          if (themeUsagePercentage) {
+            themeUsagePercentage.textContent = '...%'
+          }
+        }
+
+        startAnalysisAnimation() {
+          // Reset all counters to show loading pattern and start animating
+          const counterElements = [
+            'totalFiles',
+            'auditedFiles',
+            'averageCoverage',
+            'excellentCount',
+            'goodCount',
+            'fairCount',
+            'poorCount',
+            'criticalCount',
+            'totalViolations',
+            'criticalViolations',
+            'highViolations',
+            'mediumViolations',
+            'lowViolations'
+          ]
+
+          counterElements.forEach((id) => {
+            const element = document.getElementById(id)
+            if (element) {
+              element.textContent = '_-'
+              element.classList.add('animating')
+            }
+          })
+
+          // Reset chart values to loading pattern
+          const chartElements = ['overallChartValue', 'statusChartValue', 'violationsChartValue']
+
+          chartElements.forEach((id) => {
+            const element = document.getElementById(id)
+            if (element) {
+              element.textContent = '_-'
+              element.classList.add('animating')
+            }
+          })
+
+          // Reset chart circles to loading state
+          const chartCircles = [
+            'overallProgressCircle',
+            'excellentProgressCircle',
+            'goodProgressCircle',
+            'fairProgressCircle',
+            'poorProgressCircle',
+            'criticalProgressCircle',
+            'violationsProgressCircle'
+          ]
+
+          chartCircles.forEach((id) => {
+            const circle = document.getElementById(id)
+            if (circle) {
+              // Reset stroke-dasharray to show empty state
+              circle.style.strokeDasharray = '0 314.16'
+            }
+          })
+
+          // Start moving pulse pattern animation
+          const loadingPatterns = ['_-', '-_', '_-']
+          let patternIndex = 0
+
+          this.animationInterval = setInterval(() => {
+            // Animate counter elements
+            counterElements.forEach((id) => {
+              const element = document.getElementById(id)
+              if (element && element.classList.contains('animating')) {
+                element.textContent = loadingPatterns[patternIndex]
+              }
+            })
+
+            // Animate chart center values
+            chartElements.forEach((id) => {
+              const element = document.getElementById(id)
+              if (element && element.classList.contains('animating')) {
+                element.textContent = loadingPatterns[patternIndex]
+              }
+            })
+
+            patternIndex = (patternIndex + 1) % loadingPatterns.length
+          }, 400) // Update every 400ms for smooth pulse effect
+        }
+
+        stopAnalysisAnimation() {
+          if (this.animationInterval) {
+            clearInterval(this.animationInterval)
+            this.animationInterval = null
+          }
+
+          // Reset classes for counter elements
+          const counterElements = [
+            'totalFiles',
+            'auditedFiles',
+            'averageCoverage',
+            'excellentCount',
+            'goodCount',
+            'fairCount',
+            'poorCount',
+            'criticalCount',
+            'totalViolations',
+            'criticalViolations',
+            'highViolations',
+            'mediumViolations',
+            'lowViolations'
+          ]
+
+          counterElements.forEach((id) => {
+            const element = document.getElementById(id)
+            if (element) {
+              element.classList.remove('animating')
+            }
+          })
+
+          // Reset classes for chart elements
+          const chartElements = ['overallChartValue', 'statusChartValue', 'violationsChartValue']
+
+          chartElements.forEach((id) => {
+            const element = document.getElementById(id)
+            if (element) {
+              element.classList.remove('animating')
+            }
+          })
+        }
+
+        animateTableCounters() {
+          const counters = document.querySelectorAll('.animatable-counter')
+
+          counters.forEach((counter) => {
+            const target = parseInt(counter.getAttribute('data-target')) || 0
+            const delay = parseFloat(counter.getAttribute('data-delay')) || 0
+
+            setTimeout(() => {
+              this.animateCountUp(counter, target, false, 800) // 800ms duration
+            }, delay * 1000)
+          })
+        }
+
+        animateProgressBars() {
+          const progressBars = document.querySelectorAll('.coverage-fill')
+          const progressTexts = document.querySelectorAll('.progress-text')
+
+          progressBars.forEach((bar, index) => {
+            const row = bar.closest('tr')
+            if (!row) return
+
+            const progressText = row.querySelector('.progress-text')
+            const target = parseInt(progressText.getAttribute('data-target')) || 0
+            const delay = parseFloat(progressText.getAttribute('data-delay')) || 0
+
+            setTimeout(() => {
+              // Animate progress bar width
+              bar.style.width = `${target}%`
+
+              // Animate progress text
+              this.animateProgressText(progressText, target)
+            }, delay * 1000)
+          })
+        }
+
+        animateProgressText(element, targetPercentage) {
+          const duration = 800
+          const startTime = Date.now()
+
+          const animate = () => {
+            const elapsed = Date.now() - startTime
+            const progress = Math.min(elapsed / duration, 1)
+
+            // Easing function
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+            const currentValue = Math.floor(targetPercentage * easeOutQuart)
+
+            element.textContent = `${currentValue}% theme coverage`
+
+            if (progress < 1) {
+              requestAnimationFrame(animate)
+            }
+          }
+
+          requestAnimationFrame(animate)
+        }
+
+        // Enhanced animateCountUp method to work with DOM elements
+        animateCountUp(element, targetValue, isPercentage = false, duration = 1000) {
+          if (typeof element === 'string') {
+            // Handle ID-based lookup (existing functionality)
+            element = document.getElementById(element)
+          }
+
+          if (!element) return
+
+          const startValue = 0
+          const startTime = Date.now()
+
+          const animate = () => {
+            const elapsed = Date.now() - startTime
+            const progress = Math.min(elapsed / duration, 1)
+
+            // Easing function for smooth animation
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+            const currentValue = Math.floor(startValue + (targetValue - startValue) * easeOutQuart)
+
+            if (isPercentage) {
+              element.textContent = `${currentValue}%`
+            } else {
+              element.textContent = currentValue
+            }
+
+            if (progress < 1) {
+              requestAnimationFrame(animate)
+            }
+          }
+
+          requestAnimationFrame(animate)
+        }
+
+        connectWebSocket() {
+          const wsUrl = `ws://${window.location.hostname}:${window.location.port}`
+          this.ws = new WebSocket(wsUrl)
+
+          this.ws.onopen = () => {
+            this.isConnected = true
+            this.updateConnectionStatus('Connected', true)
+            // First get raw audit data, then request coverage metrics
+            this.requestSummaryData()
+          }
+
+          this.ws.onclose = () => {
+            this.isConnected = false
+            this.updateConnectionStatus('Disconnected', false)
+            setTimeout(() => this.connectWebSocket(), 3000)
+          }
+
+          this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error)
+            this.updateConnectionStatus('Error', false)
+          }
+
+          this.ws.onmessage = (event) => {
+            this.handleWebSocketMessage(JSON.parse(event.data))
+          }
+        }
+
+        updateConnectionStatus(status, isConnected) {
+          const statusEl = document.getElementById('connectionStatus')
+          statusEl.textContent = status
+          statusEl.className = `connection-status ${isConnected ? 'connected' : 'disconnected'}`
+        }
+
+        handleWebSocketMessage(message) {
+          const { type, data } = message
+          console.log('📨 Received WebSocket message:', type, data ? 'with data' : 'no data')
+
+          switch (type) {
+            case 'INITIAL_DATA':
+              console.log(
+                '📨 INITIAL_DATA received:',
+                Object.keys(data || {}).length,
+                'audit entries'
+              )
+              this.auditData = data || {}
+              this.requestCoverageMetrics()
+              this.requestComponentsMetrics()
+              break
+
+            case 'COVERAGE_METRICS':
+              console.log('📨 COVERAGE_METRICS received:', data ? 'success' : 'empty')
+              this.coverageMetrics = data
+              this.updateSummaryDisplay()
+              break
+
+            case 'COVERAGE_METRICS_ERROR':
+              console.error('📨 Coverage metrics error:', message.error)
+              this.updateSummaryDisplay()
+              break
+
+            case 'COMPONENTS_METRICS':
+              console.log('📨 COMPONENTS_METRICS received:', data ? 'success' : 'empty')
+              console.log('🔍 Components data keys:', data ? Object.keys(data) : 'no data')
+              console.log('🔍 Components data summary:', data ? data.summary : 'no summary')
+              this.componentsMetrics = data
+              console.log(
+                '🔍 Stored components metrics:',
+                this.componentsMetrics ? 'stored' : 'failed to store'
+              )
+              this.updateOverallMetrics()
+              this.updateComponentsTable()
+              // Reset button state
+              const componentsRefreshBtn = document.getElementById('runComponentsAnalysisBtn')
+              if (componentsRefreshBtn) {
+                componentsRefreshBtn.textContent = '🧩 Refresh Components'
+                componentsRefreshBtn.disabled = false
+              }
+              break
+
+            case 'COMPONENTS_ANALYSIS_STARTED':
+              console.log('📨 Components analysis started')
+              this.showTableLoadingState()
+              this.showOverallMetricsLoading()
+
+              // Update button text to show it's running
+              const componentsBtn = document.getElementById('runComponentsAnalysisBtn')
+              if (componentsBtn) {
+                componentsBtn.textContent = '⏳ Analyzing...'
+                componentsBtn.disabled = true
+              }
+              break
+
+            case 'COMPONENTS_ANALYSIS_ERROR':
+            case 'COMPONENTS_METRICS_ERROR':
+              console.error('📨 Components metrics error:', message.error)
+              // Reset button state
+              const componentsErrorBtn = document.getElementById('runComponentsAnalysisBtn')
+              if (componentsErrorBtn) {
+                componentsErrorBtn.textContent = '🧩 Refresh Components'
+                componentsErrorBtn.disabled = false
+              }
+              break
+
+            case 'AUDIT_COMPLETED':
+              // Update data when new audits complete
+              if (message.result) {
+                console.log('📨 AUDIT_COMPLETED for:', message.filePath)
+                this.auditData[message.filePath] = message.result
+                // Request updated coverage metrics
+                this.requestCoverageMetrics()
+              }
+              break
+
+            case 'AUDIT_BATCH_COMPLETED':
+              // Reset button state when batch audit completes
+              console.log('📨 AUDIT_BATCH_COMPLETED')
+              const runBtn = document.getElementById('runAnalysisBtn')
+              if (runBtn) {
+                runBtn.textContent = '⚡ Run Analysis'
+                runBtn.disabled = false
+              }
+              // Stop the random animation
+              this.stopAnalysisAnimation()
+              // Request updated coverage metrics
+              this.requestCoverageMetrics()
+
+              // Note: Don't reset component analysis button here since it runs in parallel
+              // It will be reset when COMPONENTS_METRICS is received
+              break
+
+            default:
+              console.log('📨 Received message:', type)
+          }
+        }
+
+        requestSummaryData() {
+          if (this.ws && this.isConnected) {
+            // Request initial audit data first, then coverage metrics
+            this.ws.send(
+              JSON.stringify({
+                type: 'GET_FILE_LIST'
+              })
+            )
+            // Also request coverage metrics and components metrics right away
+            this.requestCoverageMetrics()
+            this.requestComponentsMetrics()
+          }
+        }
+
+        requestCoverageMetrics() {
+          if (this.ws && this.isConnected) {
+            this.ws.send(
+              JSON.stringify({
+                type: 'GET_COVERAGE_METRICS'
+              })
+            )
+          }
+        }
+
+        requestComponentsMetrics() {
+          if (this.ws && this.isConnected) {
+            this.ws.send(
+              JSON.stringify({
+                type: 'GET_COMPONENTS_METRICS'
+              })
+            )
+          }
+        }
+
+        updateOverallMetrics() {
+          console.log('✅ Overall metrics updated')
+          console.log('🔍 this.componentsMetrics exists:', !!this.componentsMetrics)
+          console.log(
+            '🔍 this.componentsMetrics.summary exists:',
+            !!(this.componentsMetrics && this.componentsMetrics.summary)
+          )
+
+          if (!this.componentsMetrics || !this.componentsMetrics.summary) {
+            // Show loading state for overall metrics
+            const metricElements = [
+              'totalPagesMetric',
+              'totalComponentsMetric',
+              'uniqueComponentsMetric',
+              'themeUsageMetric',
+              'commonComponentsMetric',
+              'pageSpecificMetric'
+            ]
+
+            metricElements.forEach((id) => {
+              const element = document.getElementById(id)
+              if (element) {
+                element.textContent = '-'
+                element.classList.add('loading')
+              }
+            })
+
+            document.getElementById('themeUsagePercentage').textContent = '-%'
+            return
+          }
+
+          const summary = this.componentsMetrics.summary
+
+          // Remove loading classes
+          const metricElements = [
+            'totalPagesMetric',
+            'totalComponentsMetric',
+            'uniqueComponentsMetric',
+            'themeUsageMetric',
+            'commonComponentsMetric',
+            'pageSpecificMetric'
+          ]
+
+          metricElements.forEach((id) => {
+            const element = document.getElementById(id)
+            if (element) {
+              element.classList.remove('loading')
+            }
+          })
+
+          // Update overall metrics
+          this.animateCountUp('totalPagesMetric', summary.totalPages)
+          this.animateCountUp('totalComponentsMetric', summary.totalComponents)
+          this.animateCountUp('uniqueComponentsMetric', summary.totalUniqueComponents)
+          this.animateCountUp('themeUsageMetric', summary.componentsWithThemeUsage)
+
+          // Update percentage
+          document.getElementById(
+            'themeUsagePercentage'
+          ).textContent = `${summary.usagePercentage}%`
+
+          // Update breakdown
+          if (summary.componentBreakdown) {
+            this.animateCountUp(
+              'commonComponentsMetric',
+              summary.componentBreakdown.commonComponents
+            )
+            this.animateCountUp(
+              'pageSpecificMetric',
+              summary.componentBreakdown.pageSpecificComponents
+            )
+          }
+
+          console.log('✅ Overall metrics updated')
+        }
+
+        updateSummaryDisplay() {
+          const auditEntries = Object.entries(this.auditData)
+          console.log('🔄 updateSummaryDisplay called')
+          console.log('🔄 Audit entries count:', auditEntries.length)
+          console.log('🔄 Coverage metrics available:', !!this.coverageMetrics)
+
+          if (auditEntries.length === 0) {
+            console.log('🔄 No audit data, showing no-data message')
+            document.getElementById('noDataMessage').style.display = 'block'
+            return
+          }
+
+          console.log('🔄 Hiding no-data message, updating display')
+          document.getElementById('noDataMessage').style.display = 'none'
+
+          // Use detailed coverage metrics if available, otherwise fallback to basic calculation
+          if (this.coverageMetrics) {
+            console.log('🔄 Using detailed coverage metrics')
+            this.updateSummaryCardsDetailed(this.coverageMetrics)
+          } else {
+            console.log('🔄 Using fallback basic calculation')
+            // Fallback to basic calculation
+            const stats = this.calculateStats(auditEntries)
+            this.updateSummaryCards(stats)
+          }
+        }
+
+        updateSummaryCardsDetailed(metrics) {
+          const overview = metrics.overview
+          const violations = metrics.violations
+          const fileTypes = metrics.fileTypes
+
+          // Stop any running animation first
+          this.stopAnalysisAnimation()
+
+          // Animate overview metrics
+          this.animateCountUp('totalFiles', overview.totalFiles)
+          this.animateCountUp('auditedFiles', overview.totalFiles)
+          this.animateCountUp('averageCoverage', overview.averageCoverage, true)
+
+          // Update overall coverage chart (always green)
+          this.updateCircularChart(
+            'overallProgressCircle',
+            'overallChartValue',
+            overview.averageCoverage,
+            '%',
+            true
+          )
+
+          // Update detailed status distribution chart
+          this.updateStatusDistributionChart(overview.statusDistribution, overview.totalFiles)
+
+          // Update violations chart
+          const maxViolations = 100 // Assume max for visualization
+          this.updateCircularChart(
+            'violationsProgressCircle',
+            'violationsChartValue',
+            overview.totalViolations,
+            ''
+          )
+
+          // Animate status distribution (restored all counts)
+          this.animateCountUp('excellentCount', overview.statusDistribution.excellent)
+          this.animateCountUp('goodCount', overview.statusDistribution.good)
+          this.animateCountUp('fairCount', overview.statusDistribution.fair)
+          this.animateCountUp('poorCount', overview.statusDistribution.poor)
+          this.animateCountUp('criticalCount', overview.statusDistribution.critical)
+
+          // Animate violation metrics (restored all violation types)
+          this.animateCountUp('totalViolations', overview.totalViolations)
+          this.animateCountUp('criticalViolations', overview.criticalViolations)
+          this.animateCountUp('highViolations', overview.highViolations)
+          this.animateCountUp('mediumViolations', overview.mediumViolations)
+          this.animateCountUp('lowViolations', overview.lowViolations)
+
+          // Update components table
+          this.updateComponentsTable()
+        }
+
+        updateStatusDistributionChart(statusDistribution, totalFiles) {
+          if (totalFiles === 0) return
+
+          const radius = 40
+          const circumference = 2 * Math.PI * radius
+
+          // Calculate percentages and cumulative offsets
+          const excellent = statusDistribution.excellent
+          const good = statusDistribution.good
+          const fair = statusDistribution.fair
+          const poor = statusDistribution.poor
+          const critical = statusDistribution.critical
+
+          const excellentPerc = (excellent / totalFiles) * 100
+          const goodPerc = (good / totalFiles) * 100
+          const fairPerc = (fair / totalFiles) * 100
+          const poorPerc = (poor / totalFiles) * 100
+          const criticalPerc = (critical / totalFiles) * 100
+
+          // Set up the layered progress circles
+          let cumulativePerc = 0
+
+          // Excellent (starts from 0)
+          const excellentCircle = document.getElementById('excellentProgressCircle')
+          if (excellentCircle && excellentPerc > 0) {
+            const dashArray = (excellentPerc / 100) * circumference
+            excellentCircle.style.strokeDasharray = `${dashArray} ${circumference}`
+            excellentCircle.style.strokeDashoffset = '0'
+          }
+          cumulativePerc += excellentPerc
+
+          // Good (starts after excellent)
+          const goodCircle = document.getElementById('goodProgressCircle')
+          if (goodCircle && goodPerc > 0) {
+            const dashArray = (goodPerc / 100) * circumference
+            const offset = -(cumulativePerc / 100) * circumference
+            goodCircle.style.strokeDasharray = `${dashArray} ${circumference}`
+            goodCircle.style.strokeDashoffset = `${offset}px`
+          }
+          cumulativePerc += goodPerc
+
+          // Fair (starts after good)
+          const fairCircle = document.getElementById('fairProgressCircle')
+          if (fairCircle && fairPerc > 0) {
+            const dashArray = (fairPerc / 100) * circumference
+            const offset = -(cumulativePerc / 100) * circumference
+            fairCircle.style.strokeDasharray = `${dashArray} ${circumference}`
+            fairCircle.style.strokeDashoffset = `${offset}px`
+          }
+          cumulativePerc += fairPerc
+
+          // Poor (starts after fair)
+          const poorCircle = document.getElementById('poorProgressCircle')
+          if (poorCircle && poorPerc > 0) {
+            const dashArray = (poorPerc / 100) * circumference
+            const offset = -(cumulativePerc / 100) * circumference
+            poorCircle.style.strokeDasharray = `${dashArray} ${circumference}`
+            poorCircle.style.strokeDashoffset = `${offset}px`
+          }
+          cumulativePerc += poorPerc
+
+          // Critical (starts after poor)
+          const criticalCircle = document.getElementById('criticalProgressCircle')
+          if (criticalCircle && criticalPerc > 0) {
+            const dashArray = (criticalPerc / 100) * circumference
+            const offset = -(cumulativePerc / 100) * circumference
+            criticalCircle.style.strokeDasharray = `${dashArray} ${circumference}`
+            criticalCircle.style.strokeDashoffset = `${offset}px`
+          }
+
+          // Update center value to show total files
+          const statusChartValue = document.getElementById('statusChartValue')
+          if (statusChartValue) {
+            statusChartValue.textContent = totalFiles
+          }
+        }
+
+        updateCircularChart(circleId, valueId, value, suffix, forceGreen = false) {
+          const circle = document.getElementById(circleId)
+          const valueEl = document.getElementById(valueId)
+
+          if (!circle || !valueEl) return
+
+          // Calculate stroke-dasharray for the progress
+          const radius = 40
+          const circumference = 2 * Math.PI * radius
+          const percentage = Math.min(Math.max(value, 0), 100)
+          const offset = circumference - (percentage / 100) * circumference
+
+          // Determine color class based on value or force green
+          let colorClass = 'critical'
+          if (forceGreen) {
+            colorClass = 'excellent' // Always green for overall coverage
+          } else if (circleId === 'violationsProgressCircle') {
+            // For violations, red is bad (high violations)
+            colorClass =
+              value > 50 ? 'critical' : value > 25 ? 'poor' : value > 10 ? 'fair' : 'good'
+          } else {
+            // For other charts, green is good (high percentage)
+            colorClass =
+              percentage >= 90
+                ? 'excellent'
+                : percentage >= 70
+                ? 'good'
+                : percentage >= 50
+                ? 'fair'
+                : percentage >= 30
+                ? 'poor'
+                : 'critical'
+          }
+
+          // Only update color class if not forcing green (overall coverage already has excellent class)
+          if (!forceGreen) {
+            circle.classList.remove('excellent', 'good', 'fair', 'poor', 'critical')
+            circle.classList.add(colorClass)
+          }
+
+          // Animate the circle
+          circle.style.strokeDasharray = `${circumference - offset} ${circumference}`
+
+          // Animate the value
+          this.animateCountUp(valueId.replace('ChartValue', ''), value, suffix === '%')
+
+          // Set the center value directly for immediate feedback
+          valueEl.textContent = value + suffix
+        }
+
+        calculateStats(auditEntries) {
+          const stats = {
+            totalFiles: auditEntries.length,
+            excellent: 0,
+            good: 0,
+            fair: 0,
+            poor: 0,
+            critical: 0,
+            totalViolations: 0,
+            coverageSum: 0,
+            violationTypes: {},
+            fileTypes: {
+              component: 0,
+              page: 0,
+              layout: 0,
+              utility: 0,
+              wrapper: 0
+            },
+            criticalFiles: [],
+            quickWins: []
+          }
+
+          auditEntries.forEach(([filePath, result]) => {
+            // Count by status
+            stats[result.status]++
+
+            // Sum coverage
+            stats.coverageSum += result.coverage
+
+            // Safe violation handling
+            const violations = Array.isArray(result.violations) ? result.violations : []
+            console.log('🚀 ~ SummaryDashboard ~ calculateStats ~ violations:', violations)
+
+            // Count violations
+            stats.totalViolations += violations.length
+
+            // Group violation types
+            violations.forEach((violation) => {
+              stats.violationTypes[violation.type] = (stats.violationTypes[violation.type] || 0) + 1
+            })
+
+            // Count file types
+            if (result.fileType) {
+              stats.fileTypes[result.fileType]++
+            }
+
+            // Identify critical files
+            if (result.status === 'critical') {
+              stats.criticalFiles.push({ filePath, result })
+            }
+
+            // Identify quick wins (files close to next tier)
+            if (result.coverage >= 65 && result.coverage < 70) {
+              stats.quickWins.push({ filePath, result, needed: 70 - result.coverage })
+            } else if (result.coverage >= 85 && result.coverage < 90) {
+              stats.quickWins.push({ filePath, result, needed: 90 - result.coverage })
+            }
+          })
+
+          stats.averageCoverage =
+            stats.totalFiles > 0 ? Math.round(stats.coverageSum / stats.totalFiles) : 0
+
+          stats.mostCommonIssue =
+            Object.entries(stats.violationTypes).sort(([, a], [, b]) => b - a)[0]?.[0] || 'None'
+
+          return stats
+        }
+
+        updateSummaryCards(stats) {
+          // Stop any running animation first
+          this.stopAnalysisAnimation()
+
+          // Animate all the values
+          this.animateCountUp('totalFiles', stats.totalFiles)
+          this.animateCountUp('auditedFiles', stats.totalFiles)
+          this.animateCountUp('averageCoverage', stats.averageCoverage, true)
+
+          // Update overall coverage chart (always green)
+          this.updateCircularChart(
+            'overallProgressCircle',
+            'overallChartValue',
+            stats.averageCoverage,
+            '%',
+            true
+          )
+
+          // Update detailed status distribution chart
+          const statusDistribution = {
+            excellent: stats.excellent,
+            good: stats.good,
+            fair: stats.fair,
+            poor: stats.poor,
+            critical: stats.critical
+          }
+          this.updateStatusDistributionChart(statusDistribution, stats.totalFiles)
+
+          // Update violations chart
+          this.updateCircularChart(
+            'violationsProgressCircle',
+            'violationsChartValue',
+            stats.totalViolations,
+            ''
+          )
+
+          // Animate all status counts
+          this.animateCountUp('excellentCount', stats.excellent)
+          this.animateCountUp('goodCount', stats.good)
+          this.animateCountUp('fairCount', stats.fair)
+          this.animateCountUp('poorCount', stats.poor)
+          this.animateCountUp('criticalCount', stats.critical)
+
+          this.animateCountUp('totalViolations', stats.totalViolations)
+
+          // Calculate violations from critical files only
+          const criticalViolations = stats.criticalFiles.reduce((sum, file) => {
+            const violations = Array.isArray(file.result.violationsList)
+              ? file.result.violationsList
+              : []
+            return sum + violations.length
+          }, 0)
+          this.animateCountUp('criticalViolations', criticalViolations)
+
+          // Add placeholder values for medium and low violations in fallback mode
+          const mediumViolations = Math.floor(stats.totalViolations * 0.4)
+          const highViolations = Math.floor(stats.totalViolations * 0.3)
+          const lowViolations =
+            stats.totalViolations - criticalViolations - mediumViolations - highViolations
+
+          this.animateCountUp('highViolations', Math.max(0, highViolations))
+          this.animateCountUp('mediumViolations', Math.max(0, mediumViolations))
+          this.animateCountUp('lowViolations', Math.max(0, lowViolations))
+
+          // Update components table
+          this.updateComponentsTable()
+        }
+
+        updateComponentsTable() {
+          const tbody = document.getElementById('componentsTableBody')
+          if (!tbody) return
+
+          // Check if we have dynamic components metrics data
+          if (!this.componentsMetrics || !this.componentsMetrics.pageMetrics) {
+            // Show loading state if no data available
+            tbody.innerHTML = `
+              <tr>
+                <td colspan="6" style="text-align: center; color: #8b949e; padding: 40px;">
+                  <div style="font-size: 16px; margin-bottom: 8px;">⚡ Loading page metrics data...</div>
+                  <div style="font-size: 14px;">Analyzing component files for theme compliance</div>
+                  <div style="margin-top: 20px; font-size: 12px; color: #6e7681;">
+                    Click "Refresh Components" to load the latest data
+                  </div>
+                </td>
+              </tr>
+            `
+            return
+          }
+
+          // Use completely dynamic data from componentsMetrics
+          const pageData = Object.values(this.componentsMetrics.pageMetrics).map((page) => {
+            // Calculate page-specific and common component counts
+            const pageSpecificCount = page.pageSpecificComponents
+              ? page.pageSpecificComponents.length
+              : 0
+            const commonCount = page.commonComponents ? page.commonComponents.length : 0
+
+            console.log(`📊 Page ${page.name}:`, {
+              total: page.totalComponents,
+              pageSpecific: pageSpecificCount,
+              common: commonCount,
+              themeUsage: page.themeUsageCount,
+              coverage: page.averageCoverage
+            })
+
+            return {
+              name: page.name,
+              path: page.path,
+              total: page.totalComponents || 0,
+              pageSpecific: pageSpecificCount,
+              common: commonCount,
+              themeUsage: page.themeUsageCount || 0,
+              coverage: page.averageCoverage || 0,
+              status: page.status || 'pending',
+              violations: page.totalViolations || 0
+            }
+          })
+
+          if (pageData.length === 0) {
+            tbody.innerHTML = `
+              <tr>
+                <td colspan="6" style="text-align: center; color: #8b949e; padding: 40px;">
+                  <div style="font-size: 16px; margin-bottom: 8px;">📭 No page data available</div>
+                  <div style="font-size: 14px;">Run "Refresh Components" to analyze page metrics</div>
+                </td>
+              </tr>
+            `
+            return
+          }
+
+          // Generate table rows for each page with loading animation
+          const rows = pageData
+            .map((page, index) => {
+              const themePercentage =
+                page.total > 0 ? Math.round((page.themeUsage / page.total) * 100) : 0
+              const statusClass = this.getThemeStatusClass(themePercentage)
+
+              // Create progress bar for theme coverage
+              const progressBar = `
+                <div class="coverage-progress-cell">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar">
+                      <div class="coverage-fill ${statusClass}" style="width: 0%; transition: width 1s ease ${
+                index * 0.1
+              }s;"></div>
+                    </div>
+                    <div class="progress-text" data-target="${themePercentage}" data-delay="${
+                index * 0.1
+              }">0% theme coverage</div>
+                  </div>
+                </div>
+              `
+
+              // Page icon based on name
+              const pageIcon = this.getPageIcon(page.name)
+
+              return `
+                <tr style="border-bottom: 1px solid rgba(110, 118, 129, 0.2); opacity: 0; animation: fadeInUp 0.5s ease forwards ${
+                  index * 0.05
+                }s;">
+                  <td style="padding: 12px 16px;">
+                    <div class="page-route-cell">
+                      <span class="page-route-icon">${pageIcon}</span>
+                      <div>
+                        <div class="page-route-name">${page.name}</div>
+                        <div class="page-route-path">${page.path || `pages/${page.name}`}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="padding: 12px 16px;">
+                    <div class="metric-number animatable-counter" data-target="${
+                      page.total
+                    }" data-delay="${index * 0.1}">0</div>
+                  </td>
+                  <td style="padding: 12px 16px;">
+                    <div class="metric-number animatable-counter" data-target="${
+                      page.pageSpecific
+                    }" data-delay="${index * 0.1 + 0.1}">0</div>
+                  </td>
+                  <td style="padding: 12px 16px;">
+                    <div class="metric-number animatable-counter" data-target="${
+                      page.common
+                    }" data-delay="${index * 0.1 + 0.2}">0</div>
+                  </td>
+                  <td style="padding: 12px 16px;">
+                    <div class="metric-number animatable-counter" data-target="${
+                      page.themeUsage
+                    }" data-delay="${index * 0.1 + 0.3}" style="color: ${
+                page.themeUsage > 0 ? '#7c3aed' : '#f87171'
+              };">0</div>
+                  </td>
+                  <td style="padding: 12px 16px;">
+                    ${progressBar}
+                  </td>
+                </tr>
+              `
+            })
+            .join('')
+
+          tbody.innerHTML = rows
+
+          // Trigger animations after a short delay to ensure DOM is ready
+          setTimeout(() => {
+            this.animateTableCounters()
+            this.animateProgressBars()
+          }, 100)
+        }
+
+        getThemeStatusClass(percentage) {
+          if (percentage >= 80) return 'excellent'
+          if (percentage >= 60) return 'good'
+          if (percentage >= 40) return 'fair'
+          if (percentage >= 20) return 'poor'
+          return 'critical'
+        }
+
+        getPageIcon(pageName) {
+          const iconMap = {
+            Dashboard: '📊',
+            Profile: '👤',
+            Security: '🔒',
+            Organisation: '🏢',
+            Bills: '💳',
+            UsersAndGroups: '👥',
+            AuditLogs: '📝',
+            AccountTransfer: '🔄',
+            ConfigureMFA: '🔐',
+            OAuthErrorPage: '⚠️',
+            OauthConsent: '✅',
+            SelectAccount: '🎯',
+            ManageActiveSessions: '⚡'
+          }
+          return iconMap[pageName] || '📄'
+        }
+
+        getStatusClass(coverage) {
+          if (coverage >= 90) return 'excellent'
+          if (coverage >= 70) return 'good'
+          if (coverage >= 50) return 'fair'
+          if (coverage >= 30) return 'poor'
+          return 'critical'
+        }
+
+        getStatusText(status) {
+          const statusMap = {
+            excellent: 'Excellent',
+            good: 'Good',
+            fair: 'Fair',
+            poor: 'Poor',
+            critical: 'Critical'
+          }
+          return statusMap[status] || 'Unknown'
+        }
+      }
+
+      // Initialize dashboard when page loads
+      document.addEventListener('DOMContentLoaded', function () {
+        window.app = new SummaryDashboard()
+        console.log('🚀 Dashboard initialized and stored in window.app')
+      })
+    </script>
+  </body>
+</html>

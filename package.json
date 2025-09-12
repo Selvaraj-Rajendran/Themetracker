@@ -1,0 +1,62 @@
+{
+  "name": "themetracker",
+  "version": "1.0.4",
+  "description": "Real-time theme auditing tool with comprehensive analytics for design system migration. Track design token usage and violations across your React projects.",
+  "keywords": [
+    "theme-auditing",
+    "design-system", 
+    "css-audit",
+    "scss",
+    "styled-components",
+    "tailwind",
+    "theme-migration",
+    "design-tokens",
+    "ui-audit",
+    "react-components",
+    "code-analysis",
+    "coverage-metrics",
+    "migration-tool",
+    "css-variables"
+  ],
+  "author": "kenkaran",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "bin": {
+    "themetracker": "./bin/themetracker"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "assets/",
+    "templates/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "start": "node bin/themetracker start",
+    "test": "echo \"No tests yet\" && exit 0",
+    "prepublishOnly": "echo \"Ready to publish ThemeTracker!\"",
+    "postinstall": "echo \"🎨 ThemeTracker installed! Run 'npx themetracker start' to begin.\""
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "preferGlobal": true,
+  "os": [
+    "darwin",
+    "linux", 
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

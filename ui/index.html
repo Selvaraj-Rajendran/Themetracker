@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ThemeTracker Live v0.2</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #0f1419;
+        color: #e6e6e6;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .app {
+        display: flex;
+        height: 100vh;
+      }
+
+      .sidebar {
+        width: 300px;
+        background: #1a1f29;
+        border-right: 1px solid #2d3748;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar-header {
+        border-bottom: 1px solid #2d3748;
+        background: #161b22;
+        display: flex;
+        height: 70px;
+      }
+
+      .header-content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .logo-text {
+        font-size: 18px;
+        font-weight: bold;
+        color: #58a6ff;
+        flex: 1;
+        padding: 20px;
+        border-right: 1px solid #2d3748;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #161b22;
+        margin: 0;
+      }
+
+      .logo-text .status {
+        font-size: 12px;
+        font-weight: normal;
+        margin-top: 4px;
+      }
+
+      .rocket-logo {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        background: linear-gradient(135deg, #1a1f29 0%, #161b22 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 0 0 1px rgba(45, 55, 72, 0.5);
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .rocket-logo:hover {
+        background: linear-gradient(135deg, #21262d 0%, #1a1f29 100%);
+        box-shadow: inset 0 0 0 1px #58a6ff;
+      }
+
+      .rocket-logo svg {
+        width: 60px;
+        height: 60px;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+        transform: rotate(-90deg);
+        margin-top: 12px;
+      }
+
+      .logo {
+        font-size: 18px;
+        font-weight: bold;
+        color: #58a6ff;
+        margin-bottom: 5px;
+      }
+
+      .status {
+        font-size: 12px;
+        color: #8b949e;
+      }
+
+      .status.connected {
+        color: #3fb950;
+      }
+
+      .status.disconnected {
+        color: #f85149;
+      }
+
+      .sidebar-controls {
+        padding: 15px 20px;
+        border-bottom: 1px solid #2d3748;
+      }
+
+      .search-container {
+        margin-bottom: 12px;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 8px 12px;
+        background: #0d1117;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        color: #e6e6e6;
+        font-size: 12px;
+        transition: border-color 0.2s;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #58a6ff;
+      }
+
+      .search-input::placeholder {
+        color: #8b949e;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 8px 12px;
+        background: #238636;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        margin-bottom: 8px;
+        transition: background-color 0.2s;
+      }
+
+      .btn:hover {
+        background: #2ea043;
+      }
+
+      .btn:disabled {
+        background: #21262d;
+        color: #8b949e;
+        cursor: not-allowed;
+      }
+
+      .btn:disabled:hover {
+        background: #21262d;
+      }
+
+      .btn.secondary {
+        background: #21262d;
+        border: 1px solid #30363d;
+      }
+
+      .btn.secondary:hover {
+        background: #30363d;
+      }
+
+      .filter-section {
+        padding: 15px 20px 10px;
+        border-bottom: 1px solid #2d3748;
+      }
+
+      .filter-label {
+        font-size: 12px;
+        color: #8b949e;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .filter-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        width: 28px;
+        height: 28px;
+        border: 1px solid #30363d;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #161b22;
+        position: relative;
+      }
+
+      .filter-btn:hover {
+        border-color: #58a6ff;
+        background: #1a1f29;
+      }
+
+      .filter-btn.active {
+        border-color: #58a6ff;
+        background: #1a1f29;
+        box-shadow: 0 0 0 1px #58a6ff;
+      }
+
+      .filter-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .filter-dot.excellent {
+        background: #3fb950;
+      }
+      .filter-dot.good {
+        background: #58a6ff;
+      }
+      .filter-dot.fair {
+        background: #d29922;
+      }
+      .filter-dot.poor {
+        background: #fb8500;
+      }
+      .filter-dot.critical {
+        background: #f85149;
+      }
+      .filter-dot.pending {
+        background: #8b949e;
+      }
+
+      .filter-count {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: #58a6ff;
+        color: #fff;
+        font-size: 9px;
+        padding: 2px 4px;
+        border-radius: 8px;
+        min-width: 12px;
+        text-align: center;
+        line-height: 1;
+        display: none;
+      }
+
+      .filter-count.show {
+        display: block;
+      }
+
+      .file-list-header {
+        padding: 15px 20px 10px;
+        border-bottom: 1px solid #2d3748;
+        background: #161b22;
+      }
+
+      .file-list-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #e6e6e6;
+        text-transform: capitalize;
+      }
+
+      .file-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+      }
+
+      .file-item {
+        padding: 8px 12px;
+        margin-bottom: 4px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: background-color 0.2s;
+        position: relative;
+      }
+
+      .file-item:hover .file-audit-btn {
+        opacity: 1;
+      }
+
+      .file-audit-btn {
+        opacity: 0;
+        background: #238636;
+        border: none;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-left: 8px;
+      }
+
+      .file-audit-btn:hover {
+        background: #2ea043;
+      }
+
+      .file-item.selected .file-audit-btn,
+      .file-item.auditing .file-audit-btn {
+        opacity: 1;
+      }
+
+      .file-content {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .file-item:hover {
+        background: #30363d;
+      }
+
+      .file-item.selected {
+        background: #1f6feb;
+      }
+
+      .file-item.auditing {
+        background: #fb8500;
+        animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .file-name {
+        flex: 1;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .file-status {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-left: 8px;
+      }
+
+      .file-status.excellent {
+        background: #3fb950;
+      }
+      .file-status.good {
+        background: #58a6ff;
+      }
+      .file-status.fair {
+        background: #d29922;
+      }
+      .file-status.poor {
+        background: #fb8500;
+      }
+      .file-status.critical {
+        background: #f85149;
+      }
+      .file-status.pending {
+        background: #8b949e;
+      }
+
+      .main-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: #0d1117;
+      }
+
+      .main-header {
+        padding: 20px;
+        border-bottom: 1px solid #2d3748;
+        background: #161b22;
+      }
+
+      .file-path {
+        font-size: 16px;
+        color: #e6e6e6;
+        margin-bottom: 8px;
+      }
+
+      .metrics {
+        display: flex;
+        gap: 20px;
+      }
+
+      .metric {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+      }
+
+      .metric-value {
+        font-weight: bold;
+      }
+
+      .metric.coverage .metric-value {
+        color: #58a6ff;
+      }
+      .metric.violations .metric-value {
+        color: #f85149;
+      }
+      .metric.tokens .metric-value {
+        color: #3fb950;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #8b949e;
+        text-align: center;
+      }
+
+      .empty-state h2 {
+        margin-bottom: 10px;
+        color: #e6e6e6;
+      }
+
+      .violation-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .violation-group {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.2s ease;
+      }
+
+      .violation-group:hover {
+        border-color: #58a6ff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .violation-group-header {
+        padding: 12px 15px;
+        border-bottom: 1px solid #30363d;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        user-select: none;
+      }
+
+      .violation-group-header:hover {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .violation-group-header.critical {
+        color: #f85149;
+        border-bottom-color: #f85149;
+      }
+
+      .violation-group-header.high {
+        color: #f85149;
+        border-bottom-color: #f85149;
+      }
+
+      .violation-group-header.medium {
+        color: #fb8500;
+        border-bottom-color: #fb8500;
+      }
+
+      .violation-group-header.low {
+        color: #d29922;
+        border-bottom-color: #d29922;
+      }
+
+      .violation-group-count {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .violation-group-content {
+        overflow: hidden;
+        transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .violation-group-content.collapsed {
+        height: 0 !important;
+        opacity: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .violation-group-content.expanded {
+        opacity: 1;
+      }
+
+      .collapse-icon {
+        font-size: 12px;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+      }
+
+      .collapse-icon.collapsed {
+        transform: rotate(-90deg);
+      }
+
+      .violation-item {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #30363d;
+        border-radius: 0;
+        padding: 15px;
+        margin: 0;
+      }
+
+      .violation-group-content .violation-item:last-child {
+        border-bottom: none;
+      }
+
+      .violation-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .violation-type {
+        font-weight: bold;
+        color: #4493f8;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .violation-severity {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        margin-left: 8px;
+      }
+
+      .violation-severity.critical {
+        background: #da3633;
+        color: #ffffff;
+      }
+
+      .violation-severity.high {
+        background: #f851494d;
+        color: #f85149;
+      }
+
+      .violation-severity.medium {
+        background: #fb85004d;
+        color: #fb8500;
+      }
+
+      .violation-severity.low {
+        background: #d299224d;
+        color: #d29922;
+      }
+
+      .violation-location {
+        color: #8b949e;
+        font-size: 11px;
+        margin: 4px 0;
+        font-family: 'Monaco', 'Menlo', monospace;
+      }
+
+      .violation-context {
+        background: #161b22;
+        padding: 8px;
+        border-radius: 4px;
+        margin: 4px 0;
+        border-left: 3px solid #4493f8;
+        font-size: 11px;
+        font-family: 'Monaco', 'Menlo', monospace;
+        white-space: pre-wrap;
+        overflow-x: auto;
+        color: #c9d1d9;
+        line-height: 1.4;
+      }
+
+      .violation-value {
+        font-family: 'Monaco', 'Menlo', monospace;
+        background: #0d1117;
+        padding: 8px;
+        border-radius: 4px;
+        margin: 8px 0;
+        border-left: 3px solid #4493f8;
+        font-size: 12px;
+      }
+
+      .violation-suggestion {
+        color: #3fb950;
+        font-size: 12px;
+        background: #0d1821;
+        padding: 8px;
+        border-radius: 4px;
+        border-left: 3px solid #3fb950;
+        margin: 8px 0;
+      }
+
+      .violation-suggestion strong {
+        color: #58a6ff;
+      }
+
+      .suggestion-content {
+        margin-top: 4px;
+        line-height: 1.5;
+      }
+
+      .suggestion-content .highlight {
+        background: #f85149;
+        color: #ffffff;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-weight: bold;
+      }
+
+      .violation-code {
+        background: #f85149;
+        color: #ffffff;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 11px;
+        font-weight: bold;
+      }
+
+      .line-code {
+        background: #161b22;
+        color: #c9d1d9;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 11px;
+        display: block;
+        margin-top: 4px;
+        border-left: 3px solid #4493f8;
+      }
+
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 200px;
+        color: #8b949e;
+      }
+
+      .file-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #8b949e;
+      }
+
+      .file-loading .spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #30363d;
+        border-top: 3px solid #58a6ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 16px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .file-loading .loading-text {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      .file-loading .loading-subtext {
+        font-size: 12px;
+        opacity: 0.7;
+      }
+
+      /* Rocket Loading Animation */
+      .rocket-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #8b949e;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .rocket-container {
+        position: relative;
+        width: 80%;
+        max-width: 400px;
+        height: 60px;
+        margin: 5px 0;
+        display: flex;
+        align-items: center;
+        overflow: visible;
+      }
+
+      .rocket {
+        position: absolute;
+        width: 30px;
+        height: 20px;
+        transform-origin: center;
+        transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        top: 50%;
+        transform: translateY(-50%) scale(0.8);
+        left: 0px;
+        z-index: 20;
+        animation: rocketShake 0.3s ease-in-out infinite alternate;
+      }
+
+      @keyframes rocketShake {
+        0% {
+          transform: translateY(-50%) translateX(0px) rotate(-1deg);
+        }
+        100% {
+          transform: translateY(-50%) translateX(1px) rotate(1deg);
+        }
+      }
+
+      .rocket svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 0 3px rgba(255, 107, 53, 0.5));
+      }
+
+      .smoke-trail {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .smoke-pentagon {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        opacity: 0;
+        animation: smokeFloat 2s ease-out forwards;
+      }
+
+      @keyframes smokeFloat {
+        0% {
+          opacity: 0.8;
+          transform: scale(0.5) translateY(0px);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(1) translateY(-10px);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.5) translateY(-20px);
+        }
+      }
+
+      .rocket-loading .loading-text {
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #e6e6e6;
+        font-weight: 600;
+      }
+
+      .rocket-loading .loading-subtext {
+        font-size: 13px;
+        opacity: 0.8;
+        margin-bottom: 20px;
+      }
+
+      .audit-progress {
+        width: 80%;
+        max-width: 400px;
+        margin: 20px 0;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 24px;
+        background: #30363d;
+        border-radius: 12px;
+        overflow: visible;
+        margin-bottom: 10px;
+        position: relative;
+        border: 2px solid #21262d;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #3fb950, #58a6ff);
+        border-radius: 10px;
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: progressPulse 2s ease-in-out infinite;
+        position: relative;
+      }
+
+      @keyframes progressPulse {
+        0%,
+        100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 1;
+          box-shadow: 0 0 10px rgba(63, 185, 80, 0.5);
+        }
+      }
+
+      .progress-text {
+        font-size: 12px;
+        color: #8b949e;
+        text-align: center;
+      }
+
+      .audit-summary {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+        width: 90%;
+        max-width: 500px;
+        animation: summaryFadeIn 0.5s ease-in;
+      }
+
+      @keyframes summaryFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .audit-summary h3 {
+        color: #e6e6e6;
+        margin-bottom: 15px;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      .summary-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .summary-stat {
+        text-align: center;
+        padding: 8px;
+        border-radius: 6px;
+        background: #0d1117;
+      }
+
+      .summary-stat .count {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+
+      .summary-stat .label {
+        font-size: 10px;
+        text-transform: uppercase;
+        opacity: 0.8;
+      }
+
+      .summary-stat.excellent .count {
+        color: #3fb950;
+      }
+      .summary-stat.good .count {
+        color: #58a6ff;
+      }
+      .summary-stat.fair .count {
+        color: #d29922;
+      }
+      .summary-stat.poor .count {
+        color: #fb8500;
+      }
+      .summary-stat.critical .count {
+        color: #f85149;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 15px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #8b949e;
+        margin-bottom: 5px;
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #e6e6e6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="header-content">
+            <div class="logo-text">
+              ThemeTracker Live
+              <div id="connectionStatus" class="status connected">Connected</div>
+            </div>
+            <div class="rocket-logo">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <!-- Rocket body main -->
+                <ellipse cx="16" cy="12" rx="6" ry="4" fill="#FFD23F" />
+
+                <!-- Rocket body inner -->
+                <ellipse cx="16" cy="12" rx="4" ry="2.5" fill="#FF6B35" />
+
+                <!-- Rocket window -->
+                <circle cx="18" cy="12" r="1.2" fill="#000000" />
+
+                <!-- Top fin -->
+                <polygon points="10,9 12,6 16,8 14,11" fill="#FF6B35" />
+                <polygon points="12,6 16,8 14,11 12,9" fill="#F7931E" />
+
+                <!-- Bottom fin -->
+                <polygon points="10,15 12,18 16,16 14,13" fill="#FF6B35" />
+                <polygon points="12,18 16,16 14,13 12,15" fill="#F7931E" />
+
+                <!-- Rocket tip -->
+                <polygon points="22,12 24,10 24,14" fill="#FFD23F" />
+
+                <!-- Small sparkle -->
+                <circle cx="8" cy="8" r="0.5" fill="#58a6ff">
+                  <animate
+                    attributeName="opacity"
+                    values="0;1;0"
+                    dur="2s"
+                    repeatCount="indefinite"
+                  />
+                </circle>
+                <circle cx="6" cy="16" r="0.4" fill="#3fb950">
+                  <animate
+                    attributeName="opacity"
+                    values="0;1;0"
+                    dur="1.5s"
+                    begin="0.5s"
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-controls">
+          <div class="search-container">
+            <input
+              type="text"
+              class="search-input"
+              id="fileSearch"
+              placeholder="🔍 Search files..."
+            />
+          </div>
+          <button class="btn" id="auditAllBtn">Audit All Files</button>
+          <button class="btn secondary" id="summaryBtn">📊 Theme Coverage Summary</button>
+
+          <button class="btn secondary" id="refreshBtn">Refresh Files</button>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-label">Filter by Status</div>
+          <div class="filter-buttons">
+            <div class="filter-btn active" data-filter="all" title="Show All">
+              <div
+                class="filter-dot"
+                style="background: linear-gradient(45deg, #3fb950, #58a6ff, #d29922, #fb8500)"
+              ></div>
+              <span class="filter-count" id="countAll">0</span>
+            </div>
+            <div class="filter-btn" data-filter="excellent" title="Excellent (90%+)">
+              <div class="filter-dot excellent"></div>
+              <span class="filter-count" id="countExcellent">0</span>
+            </div>
+            <div class="filter-btn" data-filter="good" title="Good (70-89%)">
+              <div class="filter-dot good"></div>
+              <span class="filter-count" id="countGood">0</span>
+            </div>
+            <div class="filter-btn" data-filter="fair" title="Fair (50-69%)">
+              <div class="filter-dot fair"></div>
+              <span class="filter-count" id="countFair">0</span>
+            </div>
+            <div class="filter-btn" data-filter="poor" title="Poor (30-49%)">
+              <div class="filter-dot poor"></div>
+              <span class="filter-count" id="countPoor">0</span>
+            </div>
+            <div class="filter-btn" data-filter="critical" title="Critical (<30%)">
+              <div class="filter-dot critical"></div>
+              <span class="filter-count" id="countCritical">0</span>
+            </div>
+            <div class="filter-btn" data-filter="pending" title="Not Audited">
+              <div class="filter-dot pending"></div>
+              <span class="filter-count" id="countPending">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="file-list-header">
+          <div class="file-list-title" id="fileListTitle">All Files</div>
+        </div>
+
+        <div class="file-list" id="fileList">
+          <div class="loading">Loading files...</div>
+        </div>
+      </div>
+
+      <div class="main-panel">
+        <div class="main-header" id="mainHeader" style="display: none">
+          <div class="file-path" id="filePath"></div>
+          <div class="metrics">
+            <div class="metric coverage">
+              <span>Coverage:</span>
+              <span class="metric-value" id="coverageValue">-</span>
+            </div>
+            <div class="metric violations">
+              <span>Violations:</span>
+              <span class="metric-value" id="violationsValue">-</span>
+            </div>
+            <div class="metric tokens">
+              <span>Theme Tokens:</span>
+              <span class="metric-value" id="tokensValue">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-content" id="mainContent">
+          <div class="empty-state">
+            <h2>Welcome to ThemeTracker Live</h2>
+            <p>Select a file from the sidebar to start auditing</p>
+            <p>or click "Audit All Files" to analyze the entire codebase</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class ThemeTrackerApp {
+        constructor() {
+          this.ws = null
+          this.currentFile = null
+          this.auditData = {}
+          this.fileList = []
+          this.filteredFiles = []
+          this.searchQuery = ''
+          this.statusFilter = 'all'
+          this.isConnected = false
+
+          // Audit All tracking
+          this.isAuditingAll = false
+          this.auditAllProgress = 0
+          this.auditAllTotal = 0
+          this.auditAllCompleted = 0
+          this.auditAllStartTime = null
+          this.lastSmokeTime = null
+
+          this.initializeApp()
+        }
+
+        initializeApp() {
+          this.connectWebSocket()
+          this.setupEventListeners()
+        }
+
+        connectWebSocket() {
+          const wsUrl = `ws://${window.location.hostname}:${window.location.port}`
+          this.ws = new WebSocket(wsUrl)
+
+          this.ws.onopen = () => {
+            this.isConnected = true
+            this.updateConnectionStatus('Connected', true)
+            this.requestFileList()
+          }
+
+          this.ws.onclose = () => {
+            this.isConnected = false
+            this.updateConnectionStatus('Disconnected', false)
+            setTimeout(() => this.connectWebSocket(), 3000)
+          }
+
+          this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error)
+            this.updateConnectionStatus('Error', false)
+          }
+
+          this.ws.onmessage = (event) => {
+            this.handleWebSocketMessage(JSON.parse(event.data))
+          }
+        }
+
+        updateConnectionStatus(status, isConnected) {
+          const statusEl = document.getElementById('connectionStatus')
+          statusEl.textContent = status
+          statusEl.className = `status ${isConnected ? 'connected' : 'disconnected'}`
+        }
+
+        handleWebSocketMessage(message) {
+          const { type, data, filePath, result, files } = message
+
+          switch (type) {
+            case 'INITIAL_DATA':
+              this.auditData = data || {}
+              this.filterFiles()
+              this.updateFileList()
+              break
+
+            case 'FILE_LIST':
+              this.fileList = files || []
+              this.filterFiles()
+              this.updateFileList()
+              break
+
+            case 'AUDIT_STARTED':
+              this.markFileAsAuditing(filePath)
+              break
+
+            case 'AUDIT_COMPLETED':
+              this.auditData[filePath] = result
+              this.updateFileStatus(filePath, result.status)
+
+              // Track audit all progress
+              if (this.isAuditingAll) {
+                this.auditAllCompleted++
+                this.auditAllProgress = (this.auditAllCompleted / this.auditAllTotal) * 100
+                this.updateRocketProgress()
+
+                // Check if audit all is complete
+                if (this.auditAllCompleted >= this.auditAllTotal) {
+                  setTimeout(() => {
+                    this.completeAuditAll()
+                  }, 1000) // Small delay to show 100% completion
+                }
+              }
+
+              // Always display results when audit completes, regardless of current file
+              if (this.currentFile === filePath) {
+                this.displayFileResults(result)
+              }
+
+              // Update filter counts after audit completion
+              this.updateFilterCounts()
+              break
+
+            case 'AUDIT_ERROR':
+              console.error(`Audit error for ${filePath}:`, message.error)
+              this.updateFileStatus(filePath, 'error')
+
+              // Clear loading screen and show error if this is the current file
+              if (this.currentFile === filePath) {
+                this.showError(`Error auditing ${filePath}: ${message.error}`)
+              }
+              break
+
+            default:
+              console.log('Unknown message type:', type)
+          }
+        }
+
+        setupEventListeners() {
+          document.getElementById('auditAllBtn').addEventListener('click', () => {
+            this.auditAll()
+          })
+
+          document.getElementById('summaryBtn').addEventListener('click', () => {
+            this.openSummaryPage()
+          })
+
+          document.getElementById('refreshBtn').addEventListener('click', () => {
+            this.requestFileList()
+          })
+
+          document.getElementById('fileSearch').addEventListener('input', (e) => {
+            this.searchQuery = e.target.value.toLowerCase()
+            this.filterFiles()
+            this.updateFileList()
+          })
+
+          // Filter button event listeners
+          document.querySelectorAll('.filter-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const filter = btn.dataset.filter
+              this.statusFilter = filter
+
+              // Update active state
+              document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'))
+              btn.classList.add('active')
+
+              this.filterFiles()
+              this.updateFileList()
+            })
+          })
+        }
+
+        requestFileList() {
+          if (this.ws && this.isConnected) {
+            this.ws.send(JSON.stringify({ type: 'GET_FILE_LIST' }))
+          }
+        }
+
+        auditAll() {
+          if (this.ws && this.isConnected && !this.isAuditingAll) {
+            this.isAuditingAll = true
+            this.auditAllStartTime = Date.now()
+            this.auditAllCompleted = 0
+            this.auditAllTotal = this.fileList.length
+            this.auditAllProgress = 0
+
+            // Disable the audit all button
+            const auditAllBtn = document.getElementById('auditAllBtn')
+            if (auditAllBtn) {
+              auditAllBtn.disabled = true
+              auditAllBtn.textContent = 'Auditing...'
+            }
+
+            this.showRocketLoading()
+            this.ws.send(JSON.stringify({ type: 'AUDIT_ALL' }))
+          }
+        }
+
+        openSummaryPage() {
+          // Check if we have audit data
+          const hasData = Object.keys(this.auditData).length > 0
+
+          if (hasData) {
+            // Open summary page directly if we have data
+            this.openSummaryWindow()
+          } else {
+            // Ask user if they want to run audit first
+            if (
+              confirm(
+                'No audit data found. Would you like to run a full audit first for comprehensive coverage analysis?'
+              )
+            ) {
+              // Update summary button to show we're preparing data
+              const summaryBtn = document.getElementById('summaryBtn')
+              const originalText = summaryBtn.textContent
+              summaryBtn.textContent = '⏳ Preparing...'
+              summaryBtn.disabled = true
+
+              // Set up one-time listener for audit completion
+              this.summaryPagePending = true
+
+              // Start audit
+              this.auditAll()
+            } else {
+              // Open summary page anyway (will show "no data" message)
+              this.openSummaryWindow()
+            }
+          }
+        }
+
+        openSummaryWindow() {
+          // Smart window handling - reuse existing tab if available
+          if (!window.summaryTab || window.summaryTab.closed) {
+            window.summaryTab = window.open('/summary', 'summaryTab')
+          } else {
+            window.summaryTab.location.href = '/summary'
+            window.summaryTab.focus()
+          }
+        }
+
+        auditFile(filePath) {
+          if (this.ws && this.isConnected) {
+            this.ws.send(
+              JSON.stringify({
+                type: 'AUDIT_FILE',
+                payload: { filePath }
+              })
+            )
+          }
+        }
+
+        filterFiles() {
+          let files = [...this.fileList]
+
+          // Apply search filter
+          if (this.searchQuery.trim()) {
+            files = files.filter((filePath) => {
+              const fileName = filePath.split('/').pop().toLowerCase()
+              const fullPath = filePath.toLowerCase()
+              return fileName.includes(this.searchQuery) || fullPath.includes(this.searchQuery)
+            })
+          }
+
+          // Apply status filter
+          if (this.statusFilter !== 'all') {
+            files = files.filter((filePath) => {
+              const auditResult = this.auditData[filePath]
+              const status = auditResult ? auditResult.status : 'pending'
+              return status === this.statusFilter
+            })
+          }
+
+          this.filteredFiles = files
+          this.updateFilterCounts()
+        }
+
+        updateFilterCounts() {
+          const counts = {
+            all: this.fileList.length,
+            excellent: 0,
+            good: 0,
+            fair: 0,
+            poor: 0,
+            critical: 0,
+            pending: 0
+          }
+
+          this.fileList.forEach((filePath) => {
+            const auditResult = this.auditData[filePath]
+            const status = auditResult ? auditResult.status : 'pending'
+            if (counts[status] !== undefined) {
+              counts[status]++
+            }
+          })
+
+          // Update count displays
+          Object.keys(counts).forEach((status) => {
+            const countEl = document.getElementById(
+              `count${status.charAt(0).toUpperCase() + status.slice(1)}`
+            )
+            if (countEl) {
+              countEl.textContent = counts[status]
+              countEl.classList.toggle('show', counts[status] > 0)
+            }
+          })
+
+          // Update file list title
+          this.updateFileListTitle(counts)
+        }
+
+        updateFileListTitle(counts) {
+          const titleEl = document.getElementById('fileListTitle')
+          const currentCount =
+            this.statusFilter === 'all' ? this.filteredFiles.length : counts[this.statusFilter]
+
+          let title = ''
+          switch (this.statusFilter) {
+            case 'all':
+              title = this.searchQuery
+                ? `Search Results (${currentCount})`
+                : `All Files (${currentCount})`
+              break
+            case 'excellent':
+              title = `Excellent Files (${currentCount})`
+              break
+            case 'good':
+              title = `Good Files (${currentCount})`
+              break
+            case 'fair':
+              title = `Fair Files (${currentCount})`
+              break
+            case 'poor':
+              title = `Poor Files (${currentCount})`
+              break
+            case 'critical':
+              title = `Critical Files (${currentCount})`
+              break
+            case 'pending':
+              title = `Pending Files (${currentCount})`
+              break
+            default:
+              title = `Files (${currentCount})`
+          }
+
+          titleEl.textContent = title
+        }
+
+        updateFileList() {
+          const fileListEl = document.getElementById('fileList')
+
+          if (this.filteredFiles.length === 0) {
+            const message =
+              this.fileList.length === 0
+                ? 'No files found'
+                : this.statusFilter !== 'all'
+                ? `No ${this.statusFilter} files found`
+                : 'No files match search'
+            fileListEl.innerHTML = `<div class="loading">${message}</div>`
+
+            // Update title even when no files
+            this.updateFileListTitle({
+              all: this.fileList.length,
+              excellent: 0,
+              good: 0,
+              fair: 0,
+              poor: 0,
+              critical: 0,
+              pending: 0
+            })
+            return
+          }
+
+          fileListEl.innerHTML = this.filteredFiles
+            .map((filePath) => {
+              const auditResult = this.auditData[filePath]
+              const status = auditResult ? auditResult.status : 'pending'
+              const fileName = filePath.split('/').pop()
+
+              return `
+                        <div class="file-item" data-file-path="${filePath}">
+                            <div class="file-content">
+                                <span class="file-name" title="${filePath}">${fileName}</span>
+                                <div class="file-status ${status}"></div>
+                            </div>
+                            <button class="file-audit-btn" data-file-path="${filePath}">Audit</button>
+                        </div>
+                    `
+            })
+            .join('')
+
+          // Add click listeners
+          fileListEl.querySelectorAll('.file-item').forEach((item) => {
+            const fileContentEl = item.querySelector('.file-content')
+            const auditBtnEl = item.querySelector('.file-audit-btn')
+
+            fileContentEl.addEventListener('click', () => {
+              const filePath = item.dataset.filePath
+              this.selectFile(filePath)
+            })
+
+            auditBtnEl.addEventListener('click', (e) => {
+              e.stopPropagation()
+              const filePath = item.dataset.filePath
+              // Also audit on button click but don't show extra loading
+              this.selectFile(filePath)
+            })
+          })
+
+          // Update filter counts
+          this.updateFilterCounts()
+        }
+
+        selectFile(filePath) {
+          // Update selection
+          document.querySelectorAll('.file-item').forEach((item) => {
+            item.classList.remove('selected')
+          })
+          document.querySelector(`[data-file-path="${filePath}"]`).classList.add('selected')
+
+          this.currentFile = filePath
+
+          // Always audit the file when clicked (like before)
+          this.showLoading(filePath.split('/').pop())
+          this.auditFile(filePath)
+        }
+
+        markFileAsAuditing(filePath) {
+          const fileItem = document.querySelector(`[data-file-path="${filePath}"]`)
+          if (fileItem) {
+            fileItem.classList.add('auditing')
+          }
+        }
+
+        updateFileStatus(filePath, status) {
+          const fileItem = document.querySelector(`[data-file-path="${filePath}"]`)
+          if (fileItem) {
+            fileItem.classList.remove('auditing')
+            const statusEl = fileItem.querySelector('.file-status')
+            statusEl.className = `file-status ${status}`
+          }
+        }
+
+        showLoading(fileName = null) {
+          document.getElementById('mainHeader').style.display = 'none'
+
+          const loadingText = fileName ? `Analyzing ${fileName}...` : 'Analyzing file...'
+          const subText = fileName ? 'Checking theme compliance and violations' : 'Please wait'
+
+          document.getElementById('mainContent').innerHTML = `
+            <div class="file-loading">
+              <div class="spinner"></div>
+              <div class="loading-text">${loadingText}</div>
+              <div class="loading-subtext">${subText}</div>
+            </div>
+          `
+        }
+
+        showError(message) {
+          document.getElementById('mainHeader').style.display = 'none'
+          document.getElementById('mainContent').innerHTML = `
+            <div class="empty-state">
+              <h2>❌ Error</h2>
+              <p style="color: #f85149;">${message}</p>
+              <p style="margin-top: 20px;">Try selecting a different file or refresh the page.</p>
+            </div>
+          `
+        }
+
+        displayFileResults(result) {
+          // Update header
+          document.getElementById('filePath').textContent = result.filePath
+          document.getElementById('coverageValue').textContent = `${result.coverage}%`
+          document.getElementById('violationsValue').textContent = result.violations
+          document.getElementById('tokensValue').textContent = result.themeTokens
+          document.getElementById('mainHeader').style.display = 'block'
+
+          // Update content
+          const content = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Coverage</div>
+                            <div class="stat-value" style="color: ${this.getCoverageColor(
+                              result.coverage
+                            )}">${result.coverage}%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Status</div>
+                            <div class="stat-value" style="color: ${this.getStatusColor(
+                              result.status
+                            )}">${result.status}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Needs Theming</div>
+                            <div class="stat-value">${result.needsTheming ? 'Yes' : 'No'}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Theme Tokens Used</div>
+                            <div class="stat-value">${result.themeTokens}</div>
+                        </div>
+                    </div>
+
+                    ${
+                      result.violationsList && result.violationsList.length > 0
+                        ? this.renderViolationsByGroup(result.violationsList)
+                        : '<p style="color: #3fb950; text-align: center; margin-top: 50px;">🎉 No violations found!</p>'
+                    }
+                `
+
+          document.getElementById('mainContent').innerHTML = content
+        }
+
+        renderViolationsByGroup(violations) {
+          // Group violations by severity
+          const severityOrder = ['critical', 'high', 'medium', 'low']
+
+          const groupedViolations = violations.reduce((groups, violation) => {
+            const severity = violation.severity.toLowerCase()
+            if (!groups[severity]) {
+              groups[severity] = []
+            }
+            groups[severity].push(violation)
+            return groups
+          }, {})
+
+          // Generate HTML for each severity group
+          const groupsHtml = severityOrder
+            .filter(
+              (severity) => groupedViolations[severity] && groupedViolations[severity].length > 0
+            )
+            .map((severity, index) => {
+              const severityViolations = groupedViolations[severity]
+              const severityLabel = severity.charAt(0).toUpperCase() + severity.slice(1)
+              const groupId = `violation-group-${severity}`
+
+              return `
+                <div class="violation-group">
+                  <div class="violation-group-header ${severity}" data-target="${groupId}">
+                    <span>${severityLabel} Severity</span>
+                    <div class="violation-group-count">
+                      <span>${severityViolations.length}</span>
+                      <span class="collapse-icon">▼</span>
+                    </div>
+                  </div>
+                  <div class="violation-group-content expanded" id="${groupId}">
+                    ${severityViolations
+                      .map(
+                        (violation) => `
+                      <div class="violation-item">
+                        <div class="violation-header">
+                          <span class="violation-type">${violation.type}</span>
+                          <span class="violation-severity ${violation.severity.toLowerCase()}">${violation.severity.toUpperCase()}</span>
+                        </div>
+                        <div class="violation-location">📁 ${violation.location}</div>
+                        <div class="violation-value">
+                          <strong>Line ${violation.line}:</strong>
+                          <pre class="violation-context">${(
+                            violation.fullContext ||
+                            violation.context ||
+                            ''
+                          )
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                            .replace(/"/g, '&quot;')}</pre>
+                        </div>
+                        <div class="violation-suggestion">
+                          <strong>💡 Suggestion:</strong><br>
+                          <div class="suggestion-content">${(() => {
+                            const lines = violation.suggestion.split('\n')
+                            return lines
+                              .map((line) => {
+                                const trimmedLine = line.trim()
+                                if (trimmedLine.startsWith('Found violation:')) {
+                                  const violationMatch = trimmedLine.match(
+                                    /Found violation: "(.+)"$/
+                                  )
+                                  if (violationMatch) {
+                                    return `<strong>Found violation:</strong> <code class="violation-code">${violationMatch[1].replace(
+                                      /"/g,
+                                      '&quot;'
+                                    )}</code>`
+                                  }
+                                  return trimmedLine
+                                }
+                                if (trimmedLine.startsWith('In line:')) {
+                                  const lineContent = trimmedLine.substring('In line: '.length)
+                                  return `<strong>In line:</strong><br><code class="line-code">${lineContent
+                                    .replace(/"/g, '&quot;')
+                                    .replace(/</g, '&lt;')
+                                    .replace(/>/g, '&gt;')}</code>`
+                                }
+                                return trimmedLine
+                              })
+                              .join('<br>')
+                          })()}</div>
+                        </div>
+                      </div>
+                    `
+                      )
+                      .join('')}
+                  </div>
+                </div>
+              `
+            })
+            .join('')
+
+          // Set up event listeners after rendering
+          setTimeout(() => {
+            this.setupCollapseListeners()
+          }, 0)
+
+          return `
+            <h3 style="margin-bottom: 15px; color: #e6e6e6;">Violations (${violations.length})</h3>
+            <div class="violation-list">
+              ${groupsHtml}
+            </div>
+          `
+        }
+
+        setupCollapseListeners() {
+          // Remove existing listeners to avoid duplicates
+          document.querySelectorAll('.violation-group-header').forEach((header) => {
+            header.removeEventListener('click', this.handleCollapseClick)
+          })
+
+          // Add new listeners
+          document.querySelectorAll('.violation-group-header').forEach((header) => {
+            header.addEventListener('click', this.handleCollapseClick.bind(this))
+          })
+        }
+
+        handleCollapseClick(event) {
+          const header = event.currentTarget
+          const targetId = header.getAttribute('data-target')
+          const content = document.getElementById(targetId)
+          const icon = header.querySelector('.collapse-icon')
+
+          if (content && icon) {
+            const isCurrentlyExpanded = content.classList.contains('expanded')
+
+            if (isCurrentlyExpanded) {
+              // Collapsing: first set the current height, then animate to 0
+              const currentHeight = content.scrollHeight
+              content.style.height = currentHeight + 'px'
+
+              // Force a reflow
+              content.offsetHeight
+
+              // Now animate to collapsed state
+              content.classList.remove('expanded')
+              content.classList.add('collapsed')
+            } else {
+              // Expanding: first remove collapsed class and set height to auto to measure
+              content.classList.remove('collapsed')
+              content.style.height = 'auto'
+              const targetHeight = content.scrollHeight
+
+              // Set height to 0 and force reflow
+              content.style.height = '0px'
+              content.offsetHeight
+
+              // Now animate to target height
+              content.style.height = targetHeight + 'px'
+              content.classList.add('expanded')
+
+              // After animation completes, set height back to auto
+              setTimeout(() => {
+                if (content.classList.contains('expanded')) {
+                  content.style.height = 'auto'
+                }
+              }, 300)
+            }
+
+            icon.classList.toggle('collapsed')
+          }
+        }
+
+        getCoverageColor(coverage) {
+          if (coverage >= 90) return '#3fb950'
+          if (coverage >= 70) return '#58a6ff'
+          if (coverage >= 50) return '#d29922'
+          if (coverage >= 30) return '#fb8500'
+          return '#f85149'
+        }
+
+        getStatusColor(status) {
+          const colors = {
+            excellent: '#3fb950',
+            good: '#58a6ff',
+            fair: '#d29922',
+            poor: '#fb8500',
+            critical: '#f85149'
+          }
+          return colors[status] || '#8b949e'
+        }
+
+        showRocketLoading() {
+          document.getElementById('mainHeader').style.display = 'none'
+
+          document.getElementById('mainContent').innerHTML = `
+            <div class="rocket-loading">
+              <div class="loading-text">🚀 Auditing All Files</div>
+              <div class="loading-subtext">Scanning codebase for theme compliance...</div>
+              
+              <div class="audit-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                  <div class="smoke-trail" id="smokeTrail"></div>
+                  <div class="rocket" id="rocket">
+                    <svg width="30" height="20" viewBox="0 0 30 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <!-- Small animated stars around rocket -->
+                      <circle cx="8" cy="6" r="0.5" fill="#FFD23F">
+                        <animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite"/>
+                      </circle>
+                      <circle cx="6" cy="14" r="0.4" fill="#FF6B35">
+                        <animate attributeName="opacity" values="0;1;0" dur="1.2s" begin="0.3s" repeatCount="indefinite"/>
+                      </circle>
+                      <circle cx="10" cy="16" r="0.3" fill="#F7931E">
+                        <animate attributeName="opacity" values="0;1;0" dur="0.8s" begin="0.6s" repeatCount="indefinite"/>
+                      </circle>
+                      
+                      <!-- Rocket body main -->
+                      <ellipse cx="20" cy="10" rx="7" ry="5" fill="#FFD23F"/>
+                      
+                      <!-- Rocket body inner -->
+                      <ellipse cx="20" cy="10" rx="5" ry="3" fill="#FF6B35"/>
+                      
+                      <!-- Rocket window -->
+                      <circle cx="22" cy="10" r="1.5" fill="#000000"/>
+                      
+                      <!-- Top fin -->
+                      <polygon points="13,7 15,4 20,6 18,9" fill="#FF6B35"/>
+                      <polygon points="15,4 20,6 18,9 16,7" fill="#F7931E"/>
+                      
+                      <!-- Bottom fin -->
+                      <polygon points="13,13 15,16 20,14 18,11" fill="#FF6B35"/>
+                      <polygon points="15,16 20,14 18,11 16,13" fill="#F7931E"/>
+                      
+                      <!-- Rocket tip -->
+                      <polygon points="27,10 29,8 29,12" fill="#FFD23F"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="progress-text" id="progressText">
+                  Starting audit... (0 / ${this.auditAllTotal} files)
+                </div>
+              </div>
+            </div>
+          `
+        }
+
+        updateRocketProgress() {
+          const progressFill = document.getElementById('progressFill')
+          const progressText = document.getElementById('progressText')
+          const rocket = document.getElementById('rocket')
+          const smokeTrail = document.getElementById('smokeTrail')
+
+          if (progressFill && progressText) {
+            progressFill.style.width = `${this.auditAllProgress}%`
+            progressText.textContent = `Analyzing files... (${this.auditAllCompleted} / ${
+              this.auditAllTotal
+            } files) - ${Math.round(this.auditAllProgress)}%`
+          }
+
+          // Move rocket inside progress bar
+          if (rocket) {
+            const progress = this.auditAllProgress
+            const progressBar = rocket.closest('.progress-bar')
+            const progressBarWidth = progressBar.offsetWidth - 30 // Account for rocket width
+
+            // Calculate rocket position (inside the progress bar)
+            const rocketPosition = Math.max(5, (progressBarWidth * progress) / 100)
+
+            rocket.style.left = `${rocketPosition}px`
+
+            // Create pentagon smoke trail
+            this.createSmokeTrail(rocketPosition, smokeTrail)
+          }
+        }
+
+        createSmokeTrail(rocketX, smokeContainer) {
+          if (!smokeContainer) return
+
+          // Create pentagon smoke every 200ms
+          if (!this.lastSmokeTime || Date.now() - this.lastSmokeTime > 200) {
+            this.lastSmokeTime = Date.now()
+
+            const pentagon = document.createElement('div')
+            pentagon.className = 'smoke-pentagon'
+            pentagon.innerHTML = `
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="4,1 7,3 6,7 2,7 1,3" fill="#888" opacity="0.6"/>
+              </svg>
+            `
+
+            // Position pentagon behind rocket
+            pentagon.style.left = `${Math.max(0, rocketX - 15)}px`
+            pentagon.style.top = `50%`
+            pentagon.style.transform = 'translateY(-50%)'
+
+            smokeContainer.appendChild(pentagon)
+
+            // Remove pentagon after animation
+            setTimeout(() => {
+              if (pentagon.parentNode) {
+                pentagon.parentNode.removeChild(pentagon)
+              }
+            }, 2000)
+          }
+
+          // Clean up old smoke elements (performance)
+          const oldSmoke = smokeContainer.querySelectorAll('.smoke-pentagon')
+          if (oldSmoke.length > 10) {
+            for (let i = 0; i < oldSmoke.length - 10; i++) {
+              if (oldSmoke[i].parentNode) {
+                oldSmoke[i].parentNode.removeChild(oldSmoke[i])
+              }
+            }
+          }
+        }
+
+        completeAuditAll() {
+          this.isAuditingAll = false
+          const duration = Date.now() - this.auditAllStartTime
+          const durationText = `${(duration / 1000).toFixed(1)}s`
+
+          // Re-enable the audit all button
+          const auditAllBtn = document.getElementById('auditAllBtn')
+          if (auditAllBtn) {
+            auditAllBtn.disabled = false
+            auditAllBtn.textContent = 'Audit All Files'
+          }
+
+          // Calculate summary statistics
+          const stats = this.calculateAuditSummary()
+
+          document.getElementById('mainContent').innerHTML = `
+            <div class="rocket-loading">
+              <div class="loading-text">✅ Audit Complete!</div>
+              <div class="loading-subtext">All files have been analyzed in ${durationText}</div>
+              
+              <div class="audit-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 100%; animation: none; background: #3fb950;"></div>
+                </div>
+                <div class="progress-text">
+                  Completed ${this.auditAllTotal} files successfully!
+                </div>
+              </div>
+              
+              <div class="audit-summary">
+                <h3>📊 Audit Summary</h3>
+                <div class="summary-stats">
+                  <div class="summary-stat excellent">
+                    <div class="count">${stats.excellent}</div>
+                    <div class="label">Excellent</div>
+                  </div>
+                  <div class="summary-stat good">
+                    <div class="count">${stats.good}</div>
+                    <div class="label">Good</div>
+                  </div>
+                  <div class="summary-stat fair">
+                    <div class="count">${stats.fair}</div>
+                    <div class="label">Fair</div>
+                  </div>
+                  <div class="summary-stat poor">
+                    <div class="count">${stats.poor}</div>
+                    <div class="label">Poor</div>
+                  </div>
+                  <div class="summary-stat critical">
+                    <div class="count">${stats.critical}</div>
+                    <div class="label">Critical</div>
+                  </div>
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-size: 12px; color: #8b949e;">
+                  Click on any file in the sidebar to view detailed results
+                </div>
+              </div>
+            </div>
+          `
+
+          // Update filter counts
+          this.updateFilterCounts()
+
+          // Check if summary page was requested
+          if (this.summaryPagePending) {
+            this.summaryPagePending = false
+
+            // Reset summary button
+            const summaryBtn = document.getElementById('summaryBtn')
+            if (summaryBtn) {
+              summaryBtn.textContent = '📊 Theme Coverage Summary'
+              summaryBtn.disabled = false
+            }
+
+            // Open summary page after a short delay to allow UI updates
+            setTimeout(() => {
+              this.openSummaryWindow()
+            }, 1000)
+          }
+        }
+
+        calculateAuditSummary() {
+          const stats = {
+            excellent: 0,
+            good: 0,
+            fair: 0,
+            poor: 0,
+            critical: 0
+          }
+
+          Object.values(this.auditData).forEach((result) => {
+            if (result && result.status) {
+              stats[result.status] = (stats[result.status] || 0) + 1
+            }
+          })
+
+          return stats
+        }
+      }
+
+      // Initialize the app when the page loads
+      window.addEventListener('DOMContentLoaded', () => {
+        new ThemeTrackerApp()
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Insights Dashboard - ThemeTracker</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #0a0e27;
+        color: #e6e6e6;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      .app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+        border-bottom: 1px solid #4338ca;
+        padding: 24px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(67, 56, 202, 0.15);
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo-icon {
+        font-size: 32px;
+        background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3));
+      }
+
+      .logo-text {
+        font-size: 28px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #a5f3fc, #67e8f9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: #a5b4fc;
+        font-weight: 500;
+        margin-left: 8px;
+        opacity: 0.9;
+      }
+
+      .connection-status {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        backdrop-filter: blur(10px);
+      }
+
+      .connection-status.connected {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+        border: 1px solid #22c55e;
+        box-shadow: 0 0 16px rgba(34, 197, 94, 0.2);
+      }
+
+      .connection-status.disconnected {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border: 1px solid #ef4444;
+        box-shadow: 0 0 16px rgba(239, 68, 68, 0.2);
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .action-button {
+        background: linear-gradient(135deg, #4338ca 0%, #5b21b6 100%);
+        border: 1px solid #6366f1;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .action-button:hover {
+        background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+        border-color: #8b5cf6;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        text-decoration: none;
+        color: #ffffff;
+      }
+
+      .action-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .back-button {
+        background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+        border: 1px solid #6b7280;
+      }
+
+      .back-button:hover {
+        background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
+        border-color: #9ca3af;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        padding: 32px;
+        background: linear-gradient(180deg, #0a0e27 0%, #0f172a 100%);
+      }
+
+      /* Dashboard Grid */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 32px;
+        margin-bottom: 32px;
+      }
+
+      /* Key Metrics Section */
+      .key-metrics {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border: 1px solid #475569;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .section-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .section-icon {
+        font-size: 24px;
+        filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3));
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 20px;
+      }
+
+      .metric-card {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #8b5cf6, #a855f7, #c084fc);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .metric-card:hover {
+        transform: translateY(-4px);
+        border-color: #6366f1;
+        box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+      }
+
+      .metric-card:hover::before {
+        opacity: 1;
+      }
+
+      .metric-value {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #a5f3fc, #67e8f9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+      }
+
+      .metric-label {
+        font-size: 14px;
+        color: #94a3b8;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .metric-sublabel {
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 400;
+      }
+
+      /* Project Health */
+      .project-health {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border: 1px solid #475569;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .health-score {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .health-circle {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 16px;
+        position: relative;
+      }
+
+      .circular-chart {
+        width: 120px;
+        height: 120px;
+        transform: rotate(-90deg);
+      }
+
+      .circle-bg {
+        fill: none;
+        stroke: #1e293b;
+        stroke-width: 8;
+      }
+
+      .circle-progress {
+        fill: none;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-dasharray: 0 377;
+        transition: stroke-dasharray 1s ease;
+        filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+      }
+
+      .circle-progress.excellent { stroke: #22c55e; }
+      .circle-progress.good { stroke: #3b82f6; }
+      .circle-progress.fair { stroke: #f59e0b; }
+      .circle-progress.poor { stroke: #f97316; }
+      .circle-progress.critical { stroke: #ef4444; }
+
+      .health-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+
+      .health-value {
+        font-size: 24px;
+        font-weight: 800;
+        color: #f1f5f9;
+        line-height: 1;
+      }
+
+      .health-label {
+        font-size: 12px;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 4px;
+      }
+
+      .health-breakdown {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .health-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 8px;
+        border: 1px solid #334155;
+      }
+
+      .health-item-label {
+        font-size: 12px;
+        color: #94a3b8;
+        font-weight: 500;
+      }
+
+      .health-item-value {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .health-item-value.excellent { color: #22c55e; }
+      .health-item-value.good { color: #3b82f6; }
+      .health-item-value.fair { color: #f59e0b; }
+      .health-item-value.poor { color: #f97316; }
+      .health-item-value.critical { color: #ef4444; }
+
+      /* Loading States */
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 60px;
+        color: #94a3b8;
+        font-size: 16px;
+        gap: 12px;
+      }
+
+      .loading::before {
+        content: '';
+        width: 24px;
+        height: 24px;
+        border: 3px solid #334155;
+        border-top: 3px solid #8b5cf6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      .loading-shimmer {
+        background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
+      }
+
+      /* Animations */
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fade-in {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      /* Detailed Analytics */
+      .analytics-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        margin-bottom: 32px;
+      }
+
+      .analytics-card {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border: 1px solid #475569;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      /* File Types Distribution */
+      .file-types-chart {
+        margin-top: 20px;
+      }
+
+      .file-type-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        padding: 12px 16px;
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 10px;
+        border: 1px solid #334155;
+        transition: all 0.3s ease;
+      }
+
+      .file-type-item:hover {
+        border-color: #6366f1;
+        transform: translateX(4px);
+      }
+
+      .file-type-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .file-type-icon {
+        font-size: 20px;
+        width: 32px;
+        text-align: center;
+      }
+
+      .file-type-details {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .file-type-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+
+      .file-type-description {
+        font-size: 12px;
+        color: #94a3b8;
+      }
+
+      .file-type-count {
+        font-size: 18px;
+        font-weight: 700;
+        color: #67e8f9;
+      }
+
+      /* Violations Analysis */
+      .violations-chart {
+        margin-top: 20px;
+      }
+
+      .violation-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 10px 14px;
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 8px;
+        border-left: 4px solid;
+      }
+
+      .violation-item.critical { border-left-color: #ef4444; }
+      .violation-item.high { border-left-color: #f97316; }
+      .violation-item.medium { border-left-color: #f59e0b; }
+      .violation-item.low { border-left-color: #3b82f6; }
+
+      .violation-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .violation-type {
+        font-size: 13px;
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+
+      .violation-description {
+        font-size: 11px;
+        color: #94a3b8;
+      }
+
+      .violation-count {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .violation-count.critical { color: #ef4444; }
+      .violation-count.high { color: #f97316; }
+      .violation-count.medium { color: #f59e0b; }
+      .violation-count.low { color: #3b82f6; }
+
+      /* Components Section */
+      .components-overview {
+        grid-column: 1 / -1;
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border: 1px solid #475569;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .components-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .components-actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .framework-badge {
+        padding: 6px 12px;
+        background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        color: white;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .framework-badge.disabled {
+        background: linear-gradient(135deg, #64748b, #94a3b8);
+        color: #1e293b;
+      }
+
+      /* Table Styles */
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #334155;
+      }
+
+      .data-table th {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #f1f5f9;
+        font-weight: 700;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px 20px;
+        text-align: left;
+        border-bottom: 2px solid #475569;
+      }
+
+      .data-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #334155;
+        font-size: 14px;
+        color: #e2e8f0;
+      }
+
+      .data-table tbody tr {
+        background: rgba(15, 23, 42, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      .data-table tbody tr:hover {
+        background: rgba(99, 102, 241, 0.1);
+        transform: scale(1.01);
+      }
+
+      /* Progress Bars */
+      .progress-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .progress-bar {
+        flex: 1;
+        height: 8px;
+        background: #1e293b;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        border-radius: 4px;
+        transition: width 1s ease;
+      }
+
+      .progress-fill.excellent { background: linear-gradient(90deg, #22c55e, #16a34a); }
+      .progress-fill.good { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+      .progress-fill.fair { background: linear-gradient(90deg, #f59e0b, #d97706); }
+      .progress-fill.poor { background: linear-gradient(90deg, #f97316, #ea580c); }
+      .progress-fill.critical { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+      .progress-text {
+        font-size: 12px;
+        font-weight: 600;
+        color: #94a3b8;
+        min-width: 60px;
+        text-align: right;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 40px;
+        color: #94a3b8;
+      }
+
+      .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.6;
+      }
+
+      .empty-state-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #f1f5f9;
+        margin-bottom: 8px;
+      }
+
+      .empty-state-description {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1400px) {
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        
+        .analytics-section {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          padding: 20px 16px;
+        }
+
+        .header {
+          padding: 16px 20px;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .metrics-grid {
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+          gap: 16px;
+        }
+
+        .metric-value {
+          font-size: 24px;
+        }
+
+        .health-circle {
+          width: 100px;
+          height: 100px;
+        }
+
+        .circular-chart {
+          width: 100px;
+          height: 100px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <div class="logo-section">
+            <div class="logo-icon">🎯</div>
+            <div class="logo-text">
+              ThemeTracker
+              <span class="subtitle">Project Insights Dashboard</span>
+            </div>
+          </div>
+          <div id="connectionStatus" class="connection-status connected">Connected</div>
+        </div>
+        <div class="header-actions">
+          <button id="runAnalysisBtn" class="action-button">
+            ⚡ Run Full Analysis
+          </button>
+          <a href="/" class="action-button back-button">
+            ← Back to Tracker
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+          <!-- Key Metrics -->
+          <div class="key-metrics animate-fade-in">
+            <h2 class="section-title">
+              <span class="section-icon">📊</span>
+              Project Overview
+            </h2>
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-value" id="totalFilesMetric">-</div>
+                <div class="metric-label">Files Analyzed</div>
+                <div class="metric-sublabel">Processed files</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="totalFilesFoundMetric">-</div>
+                <div class="metric-label">Total Files</div>
+                <div class="metric-sublabel">In project</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="totalFilesIgnoredMetric">-</div>
+                <div class="metric-label">Files Ignored</div>
+                <div class="metric-sublabel">Skipped files</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="totalComponentsMetric">-</div>
+                <div class="metric-label">Components</div>
+                <div class="metric-sublabel">React/UI components</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="totalViolationsMetric">-</div>
+                <div class="metric-label">Theme Issues</div>
+                <div class="metric-sublabel">Violations found</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="averageCoverageMetric">-%</div>
+                <div class="metric-label">Avg Coverage</div>
+                <div class="metric-sublabel">Theme adoption</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="excellentFilesMetric">-</div>
+                <div class="metric-label">Excellent Files</div>
+                <div class="metric-sublabel">100% coverage</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="criticalFilesMetric">-</div>
+                <div class="metric-label">Critical Files</div>
+                <div class="metric-sublabel">Need attention</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Health -->
+          <div class="project-health animate-fade-in">
+            <h2 class="section-title">
+              <span class="section-icon">🏥</span>
+              Project Health
+            </h2>
+            <div class="health-score">
+              <div class="health-circle">
+                <svg class="circular-chart">
+                  <circle class="circle-bg" cx="60" cy="60" r="50"></circle>
+                  <circle
+                    class="circle-progress excellent"
+                    id="healthProgressCircle"
+                    cx="60"
+                    cy="60"
+                    r="50"
+                  ></circle>
+                </svg>
+                <div class="health-center">
+                  <div class="health-value" id="healthScoreValue">-</div>
+                  <div class="health-label">Health Score</div>
+                </div>
+              </div>
+            </div>
+            <div class="health-breakdown">
+              <div class="health-item">
+                <span class="health-item-label">Excellent</span>
+                <span class="health-item-value excellent" id="excellentCountHealth">-</span>
+              </div>
+              <div class="health-item">
+                <span class="health-item-label">Good</span>
+                <span class="health-item-value good" id="goodCountHealth">-</span>
+              </div>
+              <div class="health-item">
+                <span class="health-item-label">Fair</span>
+                <span class="health-item-value fair" id="fairCountHealth">-</span>
+              </div>
+              <div class="health-item">
+                <span class="health-item-label">Poor</span>
+                <span class="health-item-value poor" id="poorCountHealth">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Analytics -->
+        <div class="analytics-section">
+          <!-- File Types Distribution -->
+          <div class="analytics-card animate-fade-in">
+            <h2 class="section-title">
+              <span class="section-icon">📁</span>
+              File Distribution
+            </h2>
+            <div class="file-types-chart" id="fileTypesChart">
+              <div class="loading">Loading file distribution...</div>
+            </div>
+          </div>
+
+          <!-- Violations Analysis -->
+          <div class="analytics-card animate-fade-in">
+            <h2 class="section-title">
+              <span class="section-icon">🔍</span>
+              Violations Analysis
+            </h2>
+            <div class="violations-chart" id="violationsChart">
+              <div class="loading">Loading violations data...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Components Overview -->
+        <div class="components-overview animate-fade-in">
+          <div class="components-header">
+            <h2 class="section-title">
+              <span class="section-icon">🧩</span>
+              Components Analysis
+            </h2>
+            <div class="components-actions">
+              <div class="framework-badge" id="frameworkBadge">React</div>
+              <button id="refreshComponentsBtn" class="action-button">
+                🔄 Refresh Components
+              </button>
+            </div>
+          </div>
+          
+          <div id="componentsTableContainer">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Page Route</th>
+                  <th>Total Components</th>
+                  <th>Page-Specific</th>
+                  <th>Common</th>
+                  <th>Theme Usage</th>
+                  <th>Coverage</th>
+                </tr>
+              </thead>
+              <tbody id="componentsTableBody">
+                <tr>
+                  <td colspan="6">
+                    <div class="loading">Loading components analysis...</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class ProjectInsightsDashboard {
+        constructor() {
+          this.ws = null
+          this.isConnected = false
+          this.auditData = {}
+          this.coverageMetrics = {}
+          this.componentsMetrics = {}
+          this.isAnalysisRunning = false
+          
+          this.initializeApp()
+        }
+
+        initializeApp() {
+          console.log('🚀 Initializing Project Insights Dashboard')
+          this.connectWebSocket()
+          this.updateConnectionStatus('Connecting...', false)
+          this.setupEventListeners()
+          this.startLoadingAnimations()
+        }
+
+        setupEventListeners() {
+          const runAnalysisBtn = document.getElementById('runAnalysisBtn')
+          const refreshComponentsBtn = document.getElementById('refreshComponentsBtn')
+
+          if (runAnalysisBtn) {
+            runAnalysisBtn.addEventListener('click', () => this.runFullAnalysis())
+          }
+
+          if (refreshComponentsBtn) {
+            refreshComponentsBtn.addEventListener('click', () => this.refreshComponents())
+          }
+        }
+
+        startLoadingAnimations() {
+          // Add shimmer effect to metric cards
+          const metricValues = document.querySelectorAll('.metric-value')
+          metricValues.forEach(el => {
+            if (el.textContent === '-' || el.textContent === '-%') {
+              el.classList.add('loading-shimmer')
+            }
+          })
+        }
+
+        connectWebSocket() {
+          const wsUrl = `ws://${window.location.hostname}:${window.location.port}`
+          this.ws = new WebSocket(wsUrl)
+
+          this.ws.onopen = () => {
+            this.isConnected = true
+            this.updateConnectionStatus('Connected', true)
+            this.requestInitialData()
+          }
+
+          this.ws.onclose = () => {
+            this.isConnected = false
+            this.updateConnectionStatus('Disconnected', false)
+            setTimeout(() => this.connectWebSocket(), 3000)
+          }
+
+          this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error)
+            this.updateConnectionStatus('Error', false)
+          }
+
+          this.ws.onmessage = (event) => {
+            this.handleWebSocketMessage(JSON.parse(event.data))
+          }
+        }
+
+        updateConnectionStatus(status, isConnected) {
+          const statusEl = document.getElementById('connectionStatus')
+          statusEl.textContent = status
+          statusEl.className = `connection-status ${isConnected ? 'connected' : 'disconnected'}`
+        }
+
+        requestInitialData() {
+          if (this.ws && this.isConnected) {
+            console.log('📨 Requesting initial data...')
+            this.ws.send(JSON.stringify({ type: 'GET_COVERAGE_METRICS' }))
+            this.ws.send(JSON.stringify({ type: 'GET_COMPONENTS_METRICS' }))
+          }
+        }
+
+        runFullAnalysis() {
+          if (this.isAnalysisRunning || !this.isConnected) return
+
+          this.isAnalysisRunning = true
+          const runBtn = document.getElementById('runAnalysisBtn')
+          
+          runBtn.textContent = '⏳ Running Analysis...'
+          runBtn.disabled = true
+          
+          console.log('🚀 Starting full project analysis')
+          this.ws.send(JSON.stringify({ type: 'AUDIT_ALL' }))
+          this.startLoadingAnimations()
+        }
+
+        refreshComponents() {
+          if (!this.isConnected) return
+
+          const refreshBtn = document.getElementById('refreshComponentsBtn')
+          refreshBtn.textContent = '⏳ Refreshing...'
+          refreshBtn.disabled = true
+
+          console.log('🔄 Refreshing components analysis')
+          this.ws.send(JSON.stringify({ type: 'RUN_COMPONENTS_ANALYSIS' }))
+        }
+
+        handleWebSocketMessage(message) {
+          const { type, data } = message
+          console.log('📨 Received message:', type)
+
+          switch (type) {
+            case 'COVERAGE_METRICS':
+              this.coverageMetrics = data
+              this.updateProjectMetrics()
+              this.updateFileTypesChart()
+              this.updateViolationsChart()
+              break
+
+            case 'COMPONENTS_METRICS':
+              this.componentsMetrics = data
+              this.updateComponentsSection()
+              this.resetRefreshButton()
+              break
+
+            case 'COMPONENTS_METRICS_ERROR':
+              console.error('Components metrics error:', message.error)
+              this.showComponentsError(message.error)
+              this.resetRefreshButton()
+              break
+
+            case 'AUDIT_ALL_COMPLETED':
+              this.isAnalysisRunning = false
+              this.resetAnalysisButton()
+              this.requestInitialData() // Refresh data after analysis
+              break
+
+            case 'AUDIT_COMPLETED':
+              // Individual file completed - could show progress
+              break
+
+            default:
+              console.log('📨 Unhandled message type:', type)
+          }
+        }
+
+        updateProjectMetrics() {
+          if (!this.coverageMetrics?.overview) return
+
+          const overview = this.coverageMetrics.overview
+          const scanStats = this.coverageMetrics.scanStatistics
+          console.log('📊 Updating project metrics:', overview)
+          console.log('📂 Scan statistics:', scanStats)
+
+          // Remove loading shimmer
+          document.querySelectorAll('.loading-shimmer').forEach(el => {
+            el.classList.remove('loading-shimmer')
+          })
+
+          // Update main metrics
+          this.animateValue('totalFilesMetric', overview.totalFiles)
+          this.animateValue('totalViolationsMetric', overview.totalViolations)
+          this.animateValue('averageCoverageMetric', overview.averageCoverage, '%')
+          this.animateValue('excellentFilesMetric', overview.statusDistribution.excellent)
+          this.animateValue('criticalFilesMetric', overview.statusDistribution.critical)
+
+          // Update new scan statistics metrics
+          if (scanStats) {
+            this.animateValue('totalFilesFoundMetric', scanStats.totalFilesFound)
+            this.animateValue('totalFilesIgnoredMetric', scanStats.totalFilesIgnored)
+          } else {
+            // Fallback if scan stats not available
+            this.animateValue('totalFilesFoundMetric', overview.totalFiles)
+            this.animateValue('totalFilesIgnoredMetric', 0)
+          }
+
+          // Update health score
+          const healthScore = this.calculateHealthScore(overview)
+          this.updateHealthScore(healthScore, overview.statusDistribution)
+        }
+
+        calculateHealthScore(overview) {
+          const total = overview.totalFiles || 1
+          const excellent = overview.statusDistribution.excellent || 0
+          const good = overview.statusDistribution.good || 0
+          const fair = overview.statusDistribution.fair || 0
+          
+          // Weighted score: excellent=100, good=75, fair=50, poor=25, critical=0
+          const score = Math.round(
+            ((excellent * 100) + (good * 75) + (fair * 50) + 
+             (overview.statusDistribution.poor * 25)) / total
+          )
+          
+          return Math.min(score, 100)
+        }
+
+        updateHealthScore(score, distribution) {
+          const healthValue = document.getElementById('healthScoreValue')
+          const healthCircle = document.getElementById('healthProgressCircle')
+          
+          this.animateValue('healthScoreValue', score)
+          
+          // Update health circle
+          const circumference = 2 * Math.PI * 50
+          const offset = circumference - (score / 100) * circumference
+          
+          healthCircle.style.strokeDasharray = `${circumference}`
+          healthCircle.style.strokeDashoffset = offset
+          
+          // Update color based on score
+          const colorClass = score >= 90 ? 'excellent' : 
+                           score >= 70 ? 'good' : 
+                           score >= 50 ? 'fair' : 
+                           score >= 30 ? 'poor' : 'critical'
+          
+          healthCircle.setAttribute('class', `circle-progress ${colorClass}`)
+          
+          // Update breakdown
+          this.animateValue('excellentCountHealth', distribution.excellent)
+          this.animateValue('goodCountHealth', distribution.good)
+          this.animateValue('fairCountHealth', distribution.fair)
+          this.animateValue('poorCountHealth', distribution.poor)
+        }
+
+        animateValue(elementId, targetValue, suffix = '') {
+          const element = document.getElementById(elementId)
+          if (!element) return
+
+          const startValue = 0
+          const duration = 1000
+          const startTime = Date.now()
+
+          const animate = () => {
+            const elapsed = Date.now() - startTime
+            const progress = Math.min(elapsed / duration, 1)
+            
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+            const currentValue = Math.floor(startValue + (targetValue - startValue) * easeOutQuart)
+            
+            element.textContent = currentValue + suffix
+            
+            if (progress < 1) {
+              requestAnimationFrame(animate)
+            }
+          }
+
+          requestAnimationFrame(animate)
+        }
+
+        resetAnalysisButton() {
+          const runBtn = document.getElementById('runAnalysisBtn')
+          runBtn.textContent = '⚡ Run Full Analysis'
+          runBtn.disabled = false
+        }
+
+        resetRefreshButton() {
+          const refreshBtn = document.getElementById('refreshComponentsBtn')
+          refreshBtn.textContent = '🔄 Refresh Components'
+          refreshBtn.disabled = false
+        }
+
+        updateFileTypesChart() {
+          if (!this.coverageMetrics?.fileTypes) return
+
+          const fileTypes = this.coverageMetrics.fileTypes
+          const chart = document.getElementById('fileTypesChart')
+          
+          const fileTypeData = [
+            { 
+              icon: '⚛️', 
+              name: 'Components', 
+              description: 'React/UI components',
+              count: fileTypes.components || 0,
+              color: '#8b5cf6'
+            },
+            { 
+              icon: '📄', 
+              name: 'Pages', 
+              description: 'Page-level components',
+              count: fileTypes.pages || 0,
+              color: '#06b6d4'
+            },
+            { 
+              icon: '🎨', 
+              name: 'Styles', 
+              description: 'CSS/SCSS files',
+              count: fileTypes.styles || 0,
+              color: '#10b981'
+            },
+            { 
+              icon: '🔧', 
+              name: 'Utilities', 
+              description: 'Helper/utility files',
+              count: fileTypes.utilities || 0,
+              color: '#f59e0b'
+            },
+            { 
+              icon: '📦', 
+              name: 'Other', 
+              description: 'Other file types',
+              count: fileTypes.other || 0,
+              color: '#6b7280'
+            }
+          ]
+
+          chart.innerHTML = fileTypeData.map((item, index) => `
+            <div class="file-type-item animate-fade-in" style="animation-delay: ${index * 0.1}s">
+              <div class="file-type-info">
+                <div class="file-type-icon">${item.icon}</div>
+                <div class="file-type-details">
+                  <div class="file-type-name">${item.name}</div>
+                  <div class="file-type-description">${item.description}</div>
+                </div>
+              </div>
+              <div class="file-type-count">${item.count}</div>
+            </div>
+          `).join('')
+        }
+
+        updateViolationsChart() {
+          if (!this.coverageMetrics?.violations) return
+
+          const violations = this.coverageMetrics.violations
+          const chart = document.getElementById('violationsChart')
+          
+          const violationData = [
+            {
+              type: 'Critical Issues',
+              description: 'Hardcoded colors & values',
+              count: violations.critical || 0,
+              severity: 'critical'
+            },
+            {
+              type: 'High Priority',
+              description: 'Theme violations',
+              count: violations.high || 0,
+              severity: 'high'
+            },
+            {
+              type: 'Medium Priority',
+              description: 'Spacing & sizing',
+              count: violations.medium || 0,
+              severity: 'medium'
+            },
+            {
+              type: 'Low Priority',
+              description: 'Minor improvements',
+              count: violations.low || 0,
+              severity: 'low'
+            }
+          ]
+
+          chart.innerHTML = violationData.map((item, index) => `
+            <div class="violation-item ${item.severity} animate-fade-in" style="animation-delay: ${index * 0.1}s">
+              <div class="violation-info">
+                <div class="violation-type">${item.type}</div>
+                <div class="violation-description">${item.description}</div>
+              </div>
+              <div class="violation-count ${item.severity}">${item.count}</div>
+            </div>
+          `).join('')
+        }
+
+        updateComponentsSection() {
+          const container = document.getElementById('componentsTableContainer')
+          const tbody = document.getElementById('componentsTableBody')
+          const badge = document.getElementById('frameworkBadge')
+
+          if (!this.componentsMetrics) {
+            this.showComponentsEmpty()
+            return
+          }
+
+          // Handle disabled components analysis
+          if (this.componentsMetrics.disabled) {
+            badge.textContent = this.componentsMetrics.frameworkType || 'Disabled'
+            badge.classList.add('disabled')
+            
+            tbody.innerHTML = `
+              <tr>
+                <td colspan="6">
+                  <div class="empty-state">
+                    <div class="empty-state-icon">🔌</div>
+                    <div class="empty-state-title">Components Analysis Disabled</div>
+                    <div class="empty-state-description">${this.componentsMetrics.message}</div>
+                  </div>
+                </td>
+              </tr>
+            `
+            return
+          }
+
+          // Update framework badge
+          badge.textContent = this.componentsMetrics.frameworkType || 'React'
+          badge.classList.remove('disabled')
+
+          // Update components count in main metrics
+          if (this.componentsMetrics.summary) {
+            this.animateValue('totalComponentsMetric', this.componentsMetrics.summary.totalUniqueComponents || 0)
+          }
+
+          // Update components table
+          if (this.componentsMetrics.pageMetrics) {
+            this.updateComponentsTable()
+          } else {
+            this.showComponentsEmpty()
+          }
+        }
+
+        updateComponentsTable() {
+          const tbody = document.getElementById('componentsTableBody')
+          const pageMetrics = Object.values(this.componentsMetrics.pageMetrics)
+
+          if (pageMetrics.length === 0) {
+            this.showComponentsEmpty()
+            return
+          }
+
+          tbody.innerHTML = pageMetrics.map((page, index) => {
+            const themePercentage = page.total > 0 ? 
+              Math.round((page.themeUsageCount / page.total) * 100) : 0
+            
+            const coverageClass = this.getCoverageClass(page.averageCoverage)
+            const pageIcon = this.getPageIcon(page.name)
+
+            return `
+              <tr style="animation-delay: ${index * 0.1}s" class="animate-fade-in">
+                <td>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 16px;">${pageIcon}</span>
+                    <div>
+                      <div style="font-weight: 600; color: #67e8f9;">${page.name}</div>
+                      <div style="font-size: 12px; color: #94a3b8;">${page.path}</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="text-align: center; font-weight: 700; color: #a5f3fc;">
+                  ${page.totalComponents || 0}
+                </td>
+                <td style="text-align: center; font-weight: 600; color: #8b5cf6;">
+                  ${page.pageSpecificComponents?.length || 0}
+                </td>
+                <td style="text-align: center; font-weight: 600; color: #06b6d4;">
+                  ${page.commonComponents?.length || 0}
+                </td>
+                <td style="text-align: center; font-weight: 600; color: #10b981;">
+                  ${page.themeUsageCount || 0}
+                </td>
+                <td>
+                  <div class="progress-container">
+                    <div class="progress-bar">
+                      <div class="progress-fill ${coverageClass}" 
+                           style="width: ${page.averageCoverage || 0}%"></div>
+                    </div>
+                    <div class="progress-text">${page.averageCoverage || 0}%</div>
+                  </div>
+                </td>
+              </tr>
+            `
+          }).join('')
+        }
+
+        showComponentsEmpty() {
+          const tbody = document.getElementById('componentsTableBody')
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6">
+                <div class="empty-state">
+                  <div class="empty-state-icon">🧩</div>
+                  <div class="empty-state-title">No Components Data</div>
+                  <div class="empty-state-description">
+                    Click "Refresh Components" to analyze your project's component structure
+                  </div>
+                </div>
+              </td>
+            </tr>
+          `
+        }
+
+        showComponentsError(error) {
+          const tbody = document.getElementById('componentsTableBody')
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6">
+                <div class="empty-state">
+                  <div class="empty-state-icon">❌</div>
+                  <div class="empty-state-title">Analysis Error</div>
+                  <div class="empty-state-description">${error}</div>
+                </div>
+              </td>
+            </tr>
+          `
+        }
+
+        getCoverageClass(coverage) {
+          if (coverage >= 100) return 'excellent'
+          if (coverage >= 85) return 'good'
+          if (coverage >= 60) return 'fair'
+          if (coverage >= 30) return 'poor'
+          return 'critical'
+        }
+
+        getPageIcon(pageName) {
+          const iconMap = {
+            Dashboard: '📊', Profile: '👤', Security: '🔒',
+            Organisation: '🏢', Bills: '💳', UsersAndGroups: '👥',
+            AuditLogs: '📝', AccountTransfer: '🔄', ConfigureMFA: '🔐',
+            OAuthErrorPage: '⚠️', OauthConsent: '✅', SelectAccount: '🎯',
+            ManageActiveSessions: '⚡'
+          }
+          return iconMap[pageName] || '📄'
+        }
+      }
+
+      // Initialize dashboard when page loads
+      document.addEventListener('DOMContentLoaded', function () {
+        window.dashboard = new ProjectInsightsDashboard()
+        console.log('🚀 Project Insights Dashboard initialized')
+      })
+    </script>
+  </body>
+</html>

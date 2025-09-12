@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+
+/**
+ * ThemeTracker CLI Executable
+ * Entry point for the themetracker command
+ */
+
+const path = require('path')
+const fs = require('fs')
+
+// Get the package root directory
+const packageRoot = path.dirname(__dirname)
+const cliScript = path.join(packageRoot, 'lib', 'cli.js')
+
+// Check if the CLI script exists
+if (!fs.existsSync(cliScript)) {
+  console.error('❌ ThemeTracker CLI script not found. Please reinstall the package.')
+  process.exit(1)
+}
+
+// Load and execute the CLI
+try {
+  const cli = require(cliScript)
+  cli.main()
+} catch (error) {
+  console.error('❌ Failed to start ThemeTracker:', error.message)
+  if (process.env.DEBUG) {
+    console.error(error.stack)
+  }
+  process.exit(1)
+}
