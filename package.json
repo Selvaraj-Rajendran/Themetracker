@@ -1,10 +1,10 @@
 {
   "name": "themetracker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Real-time theme auditing tool with comprehensive analytics for design system migration. Track design token usage and violations across your React projects.",
   "keywords": [
     "theme-auditing",
-    "design-system", 
+    "design-system",
     "css-audit",
     "scss",
     "styled-components",
@@ -47,14 +47,13 @@
   "preferGlobal": true,
   "os": [
     "darwin",
-    "linux", 
+    "linux",
     "win32"
   ],
   "cpu": [
     "x64",
     "arm64"
   ],
-
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
