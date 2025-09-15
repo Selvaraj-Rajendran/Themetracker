@@ -1,0 +1,62 @@
+{
+  "name": "themetracker-mcp",
+  "version": "1.0.0",
+  "description": "ThemeTracker MCP Server for AI-powered theme violation detection and fixes",
+  "mcpServers": {
+    "themetracker": {
+      "command": "node",
+      "args": ["lib/mcp/theme-mcp-server.js"],
+      "env": {
+        "THEMETRACKER_PROJECT_ROOT": "."
+      }
+    }
+  },
+  "capabilities": {
+    "resources": [
+      {
+        "name": "violations",
+        "description": "Real-time theme violations across the project"
+      },
+      {
+        "name": "patterns",
+        "description": "Design system patterns and approved tokens"
+      },
+      {
+        "name": "config",
+        "description": "ThemeTracker configuration and capabilities"
+      }
+    ],
+    "tools": [
+      {
+        "name": "analyze_file",
+        "description": "Analyze theme violations in any file"
+      },
+      {
+        "name": "get_fix_suggestions",
+        "description": "Get AI-ready fix suggestions for violations"
+      },
+      {
+        "name": "validate_code",
+        "description": "Validate code against design system"
+      }
+    ]
+  },
+  "integration": {
+    "cursor": {
+      "instructions": "Add this to your Cursor settings to enable ThemeTracker MCP integration",
+      "config": {
+        "mcpServers": {
+          "themetracker": {
+            "command": "npx",
+            "args": ["themetracker", "mcp"],
+            "env": {}
+          }
+        }
+      }
+    },
+    "cline": {
+      "instructions": "Configure Cline to use ThemeTracker MCP server for theme analysis",
+      "config": "Use the themetracker MCP server for design system compliance checking"
+    }
+  }
+}

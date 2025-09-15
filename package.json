@@ -16,7 +16,11 @@
     "code-analysis",
     "coverage-metrics",
     "migration-tool",
-    "css-variables"
+    "css-variables",
+    "mcp-server",
+    "ai-integration",
+    "cursor-integration",
+    "copilot-integration"
   ],
   "author": "kenkaran",
   "license": "MIT",
@@ -37,13 +41,14 @@
   },
   "scripts": {
     "start": "node bin/themetracker start",
+    "mcp": "node bin/themetracker mcp",
     "test": "echo \"No tests yet\" && exit 0",
     "prepublishOnly": "echo \"Ready to publish ThemeTracker!\"",
     "postinstall": "echo \"🎨 ThemeTracker installed! Run 'npx themetracker start' to begin.\""
   },
-  "dependencies": {},
-  "devDependencies": {},
-  "peerDependencies": {},
+  "optionalDependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0"
+  },
   "preferGlobal": true,
   "os": [
     "darwin",

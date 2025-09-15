@@ -1,0 +1,135 @@
+// SCSS file with design system violations
+
+// ❌ SCSS Variables (should use CSS custom properties instead)
+$primary-color: #0066cc; // Should use var(--dew-color-brand-primary)
+$secondary-color: #6c5ce7; // Should use var(--dew-color-brand-secondary)
+$text-color: #1a1a1a; // Should use var(--dew-color-text-primary)
+$background-color: #ffffff; // Should use var(--dew-color-surface)
+$border-color: #e5e7eb; // Should use var(--dew-color-border)
+
+// ❌ Hardcoded spacing values
+$spacing-sm: 8px; // Should use var(--dew-spacing-sm)
+$spacing-md: 16px; // Should use var(--dew-spacing-md)
+$spacing-lg: 24px; // Should use var(--dew-spacing-lg)
+
+// ❌ Component styles using SCSS variables
+.modal {
+  background: $background-color; // Should use var(--dew-color-surface)
+  border: 1px solid $border-color; // Should use var(--dew-color-border)
+  border-radius: 8px; // Should use var(--dew-radius-lg)
+  padding: $spacing-lg; // Should use var(--dew-spacing-lg)
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); // Should use var(--dew-shadow-lg)
+
+  .modal-header {
+    color: $text-color; // Should use var(--dew-color-text-primary)
+    font-size: 20px; // Should use var(--dew-text-xl)
+    font-weight: 600;
+    margin-bottom: $spacing-md; // Should use var(--dew-spacing-md)
+    padding-bottom: $spacing-sm; // Should use var(--dew-spacing-sm)
+    border-bottom: 1px solid lighten($border-color, 5%); // SCSS function - should use CSS variables
+  }
+
+  .modal-body {
+    color: #6b7280; // Should use var(--dew-color-text-secondary)
+    line-height: 1.6;
+    margin: $spacing-md 0; // Should use var(--dew-spacing-md) 0
+  }
+
+  .modal-footer {
+    margin-top: $spacing-lg; // Should use var(--dew-spacing-lg)
+    padding-top: $spacing-md; // Should use var(--dew-spacing-md)
+    border-top: 1px solid $border-color; // Should use var(--dew-color-border)
+    display: flex;
+    gap: $spacing-sm; // Should use var(--dew-spacing-sm)
+    justify-content: flex-end;
+  }
+}
+
+.form-group {
+  margin-bottom: $spacing-md; // Should use var(--dew-spacing-md)
+
+  label {
+    display: block;
+    color: $text-color; // Should use var(--dew-color-text-primary)
+    font-size: 14px; // Should use var(--dew-text-sm)
+    font-weight: 500;
+    margin-bottom: $spacing-sm; // Should use var(--dew-spacing-sm)
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 12px $spacing-md; // Should use var(--dew-spacing-sm) var(--dew-spacing-md)
+    border: 1px solid $border-color; // Should use var(--dew-color-border)
+    border-radius: 6px; // Should use var(--dew-radius-md)
+    font-size: 16px; // Should use var(--dew-text-base)
+    background: $background-color; // Should use var(--dew-color-surface)
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color; // Should use var(--dew-color-border-focus)
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1); // Should use focus ring utility
+    }
+
+    &::placeholder {
+      color: #9ca3af; // Should use var(--dew-color-text-muted)
+    }
+  }
+}
+
+.notification {
+  padding: $spacing-md; // Should use var(--dew-spacing-md)
+  border-radius: 6px; // Should use var(--dew-radius-md)
+  margin-bottom: $spacing-md; // Should use var(--dew-spacing-md)
+
+  &.success {
+    background: #d1fae5; // Should use var(--dew-color-success-background)
+    color: darken(
+      #10b981,
+      20%
+    ); // SCSS function - should use var(--dew-color-success-text)
+    border-left: 4px solid #10b981; // Should use var(--dew-color-success)
+  }
+
+  &.warning {
+    background: #fef3c7; // Should use var(--dew-color-warning-background)
+    color: darken(
+      #f59e0b,
+      20%
+    ); // SCSS function - should use var(--dew-color-warning-text)
+    border-left: 4px solid $secondary-color; // Mixed usage - should use var(--dew-color-warning)
+  }
+
+  &.error {
+    background: #fee2e2; // Should use var(--dew-color-error-background)
+    color: darken(
+      #ef4444,
+      15%
+    ); // SCSS function - should use var(--dew-color-error-text)
+    border-left: 4px solid #ef4444; // Should use var(--dew-color-error)
+  }
+}
+
+// ❌ Responsive breakpoints (should use design system breakpoints)
+@media (max-width: 768px) {
+  .modal {
+    margin: $spacing-md; // Should use var(--dew-spacing-md)
+    width: calc(100% - #{$spacing-lg * 2}); // Complex SCSS calculation
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: $spacing-md; // Should use var(--dew-spacing-md)
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    padding: $spacing-md $spacing-sm; // Should use var(--dew-spacing-md) var(--dew-spacing-sm)
+  }
+
+  .content-area {
+    padding: $spacing-lg $spacing-md; // Should use var(--dew-spacing-lg) var(--dew-spacing-md)
+  }
+}
+
