@@ -24,8 +24,8 @@ const Button = styled.button`
 
 // 🤖 AI immediately suggests:
 const Button = styled.button`
-  background: var(--dew-color-surface);
-  margin: var(--dew-spacing-md);
+  background: var(--color-fill-surface);
+  margin: var(--spacing-200);
 `;
 ```
 
@@ -157,16 +157,16 @@ Design system patterns and tokens:
 {
   "designSystem": {
     "name": "Dew Design System",
-    "cssVariablePrefix": "--dew-"
+    "cssVariablePrefix": "--"
   },
   "approvedPatterns": {
-    "colors": ["var(--dew-color-*)", "bg-color-*"],
-    "spacing": ["var(--dew-spacing-*)", "p-spacing-*"]
+    "colors": ["var(--color-*)", "--color-fill*"],
+    "spacing": ["var(--spacing-*)", "--border-radius*"
   },
   "examples": [
     {
       "violation": "background: #ffffff",
-      "fix": "background: var(--dew-color-surface)",
+      "fix": "background: var(--color-fill-surface)",
       "explanation": "Use design system color tokens"
     }
   ]
@@ -205,7 +205,7 @@ Validate code compliance:
 
 ```javascript
 const isValid = await mcp.callTool("validate_code", {
-  code: "background: var(--dew-color-surface)",
+  code: "background: var(--color-fill-surface)",
   fileType: "jsx",
 });
 ```
@@ -236,9 +236,9 @@ const Card = () => (
 const Card = () => (
   <div
     style={{
-      background: "var(--dew-color-surface)",
-      padding: "var(--dew-spacing-md)",
-      borderRadius: "var(--dew-radius-md)",
+      background: "var(--color-fill-surface)",
+      padding: "var(--spacing-200)",
+      borderRadius: "var(--border-radius-medium)",
     }}
   >
     Content
@@ -267,10 +267,10 @@ const Card = () => (
 >
 > ```jsx
 > const Button = styled.button`
->   background: var(--dew-color-brand-primary);
->   color: var(--dew-color-text-on-brand);
->   padding: var(--dew-spacing-sm) var(--dew-spacing-md);
->   border-radius: var(--dew-radius-sm);
+>   background: var(--color-fill-brand);
+>   color: var(--color-text-primary);
+>   padding: var(--spacing-100) var(--spacing-200);
+>   border-radius: var(--border-radius-small);
 >   border: none;
 > `;
 > ```

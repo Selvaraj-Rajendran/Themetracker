@@ -71,3 +71,4 @@ const Card = ({ title, content, image }) => {
 };
 
 export default Card;
+

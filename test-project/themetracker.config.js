@@ -1,8 +1,8 @@
 module.exports = {
   // Dew Design System configuration
   dewConfig: {
-    tokensPath: "src/styles/dewStyles/tailwind-dew-colors.json",
-    cssVariablePrefix: "--dew-",
+    tokensPath: "../lib/autofix-rules/dewStyles/colors.css",
+    cssVariablePrefix: "--",
   },
 
   // Source directories to scan

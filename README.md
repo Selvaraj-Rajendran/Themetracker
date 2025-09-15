@@ -168,7 +168,7 @@ Shows:
 └── 📂 utils/                      |
     └── helpers.js       ⚫ 12%    |  🔴 HIGH PRIORITY (Line 45)
                                    |  Found: background: #ffffff;
-[🔍 Audit All] [📊 Report] [🔄]   |  💡 Use var(--dew-color-surface)
+[🔍 Audit All] [📊 Report] [🔄]   |  💡 Use var(--color-fill-surface)
 ```
 
 **Color Coding:**
@@ -204,16 +204,16 @@ Overall Coverage: 73.2%  |  Total Files: 127  |  Violations: 234
 ```javascript
 // ❌ Detected Violations
 const Button = styled.button`
-  background: #ffffff;                    // → var(--dew-color-surface)
-  margin: 16px;                          // → var(--dew-spacing-md)
-  ${({ theme }) => theme.colors.primary} // → var(--dew-color-brand)
+  background: #ffffff;                    // → var(--color-fill-surface)
+  margin: 16px;                          // → var(--spacing-200)
+  ${({ theme }) => theme.colors.primary} // → var(--color-fill-brand)
 `;
 
 // Tailwind violations
 className="bg-blue-500 text-gray-700 p-4"  // → Use dew classes
 
 // ✅ Approved Patterns
-background: var(--dew-color-surface);
+background: var(--color-fill-surface);
 className="bg-color-brand-primary text-color-text-primary"
 ```
 
@@ -222,10 +222,10 @@ className="bg-color-brand-primary text-color-text-primary"
 ```css
 /* ❌ CSS Violations */
 .component {
-  background-color: #ffffff; /* → var(--dew-color-surface) */
-  margin: 16px; /* → var(--dew-spacing-md) */
-  font-size: 14px; /* → var(--dew-text-sm) */
-  box-shadow: 0 2px 4px #ccc; /* → var(--dew-shadow-sm) */
+  background-color: #ffffff; /* → var(--color-fill-surface) */
+  margin: 16px; /* → var(--spacing-200) */
+  font-size: 14px; /* → var(--text-sm) */
+  box-shadow: 0 2px 4px #ccc; /* → var(--shadow-sm) */
 }
 
 /* ❌ SCSS Violations */
@@ -234,8 +234,8 @@ color: darken($primary-color, 10%); /* → Use dew color tokens */
 
 /* ✅ Approved Patterns */
 .component {
-  background: var(--dew-color-surface);
-  margin: var(--dew-spacing-md);
+  background: var(--color-fill-surface);
+  margin: var(--spacing-200);
 }
 ```
 
@@ -259,7 +259,7 @@ module.exports = {
   // Dew Design System
   dewConfig: {
     tokensPath: "src/styles/dewStyles/tailwind-dew-colors.json",
-    cssVariablePrefix: "--dew-",
+    cssVariablePrefix: "--",
   },
 
   // Source scanning
@@ -351,7 +351,7 @@ ThemeTracker automatically loads your Dew Design System tokens:
 ```javascript
 // ✅ Approved
 className="bg-color-brand-primary"  // From dew tokens
-var(--dew-color-surface)           // CSS custom properties
+var(--color-fill-surface)           // CSS custom properties
 
 // ❌ Violations
 className="bg-blue-500"            // Hardcoded Tailwind
@@ -459,7 +459,7 @@ cd my-react-app
 themetracker start
 # → Click components/Button.js
 # → See violations: hardcoded colors, spacing
-# → Follow suggestions to use var(--dew-*)
+# → Follow suggestions to use var(--*)
 # → Watch coverage improve in real-time
 ```
 

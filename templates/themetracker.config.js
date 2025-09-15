@@ -26,22 +26,21 @@ module.exports = {
   dewConfig: {
     // Path to Dew Design System tokens/colors configuration
     // ThemeTracker will auto-detect common paths if not specified
-    tokensPath: 'src/styles/dewStyles/tailwind-dew-colors.json',
+    tokensPath: "lib/autofix-rules/dewStyles/colors.css",
 
     // Alternative paths to check (in order of preference)
     fallbackPaths: [
-      'styles/dew/colors.json',
-      'theme/dew-tokens.json',
-      'dew-theme.json',
-      'src/styles/tokens.json'
+      "lib/autofix-rules/dewStyles/colors.css",
+      "lib/autofix-rules/dewStyles/numbers.css",
+      "src/styles/tokens.json",
     ],
 
     // CSS variables prefix (for CSS custom properties detection)
-    cssVariablePrefix: '--dew-',
+    cssVariablePrefix: "--",
 
     // When dew tokens are imported as a package (future support)
-    packageName: '@dew/design-system', // null if not using package
-    packageTokensPath: 'dist/tokens.json' // path within the package
+    packageName: "@dew/design-system", // null if not using package
+    packageTokensPath: "dist/tokens.json", // path within the package
   },
 
   // =========================================================================
@@ -49,7 +48,7 @@ module.exports = {
   // =========================================================================
   sourceDirectories: {
     // Primary directories to scan (auto-detected if empty)
-    include: ['src', 'app', 'components', 'lib', 'pages'],
+    include: ["src", "app", "components", "lib", "pages"],
 
     // Specific subdirectories to focus on (empty = scan all)
     focus: [
@@ -61,7 +60,7 @@ module.exports = {
     maxDepth: 10,
 
     // Auto-detect common project structures
-    autoDetect: true
+    autoDetect: true,
   },
 
   // =========================================================================
@@ -70,27 +69,27 @@ module.exports = {
   fileTypes: {
     // JavaScript/TypeScript files
     javascript: {
-      extensions: ['js', 'jsx', 'ts', 'tsx'],
-      enabled: true
+      extensions: ["js", "jsx", "ts", "tsx"],
+      enabled: true,
     },
 
     // CSS/SCSS files (NEW FEATURE!)
     styles: {
-      extensions: ['css', 'scss', 'sass', 'less'],
-      enabled: true
+      extensions: ["css", "scss", "sass", "less"],
+      enabled: true,
     },
 
     // Vue.js single file components
     vue: {
-      extensions: ['vue'],
-      enabled: false // Enable if you're using Vue
+      extensions: ["vue"],
+      enabled: false, // Enable if you're using Vue
     },
 
     // Svelte components
     svelte: {
-      extensions: ['svelte'],
-      enabled: false // Enable if you're using Svelte
-    }
+      extensions: ["svelte"],
+      enabled: false, // Enable if you're using Svelte
+    },
   },
 
   // =========================================================================
@@ -100,180 +99,180 @@ module.exports = {
     // Directory patterns to completely skip
     directories: [
       // Build outputs
-      'node_modules',
-      'dist',
-      'build',
-      'coverage',
-      'out',
-      '.next',
-      '.nuxt',
-      '.output',
+      "node_modules",
+      "dist",
+      "build",
+      "coverage",
+      "out",
+      ".next",
+      ".nuxt",
+      ".output",
 
       // Version control
-      '.git',
-      '.svn',
-      '.hg',
+      ".git",
+      ".svn",
+      ".hg",
 
       // IDE/Editor
-      '.vscode',
-      '.idea',
-      '.vs',
+      ".vscode",
+      ".idea",
+      ".vs",
 
       // Cache directories
-      '.cache',
-      '.parcel-cache',
-      '.webpack',
+      ".cache",
+      ".parcel-cache",
+      ".webpack",
 
       // Testing
-      '__tests__',
-      'test',
-      'tests',
-      'spec',
-      'specs',
+      "__tests__",
+      "test",
+      "tests",
+      "spec",
+      "specs",
 
       // Documentation/Stories
-      'stories',
-      'docs',
-      'documentation',
-      '.storybook',
+      "stories",
+      "docs",
+      "documentation",
+      ".storybook",
 
       // Mock/Test data
-      'mocks',
-      'mock',
-      '__mocks__',
-      'fixtures',
+      "mocks",
+      "mock",
+      "__mocks__",
+      "fixtures",
 
       // Utilities (typically no styling)
-      'utils',
-      'util',
-      'helpers',
-      'helper',
-      'services',
-      'service',
-      'api',
-      'apis',
-      'store',
-      'stores',
-      'config',
-      'configs',
-      'constants',
-      'constant',
-      'types',
-      'models',
-      'interfaces',
-      'enums',
-      'definitions',
+      "utils",
+      "util",
+      "helpers",
+      "helper",
+      "services",
+      "service",
+      "api",
+      "apis",
+      "store",
+      "stores",
+      "config",
+      "configs",
+      "constants",
+      "constant",
+      "types",
+      "models",
+      "interfaces",
+      "enums",
+      "definitions",
 
       // Package manager
-      '.pnpm',
-      '.yarn',
+      ".pnpm",
+      ".yarn",
 
       // Framework specific
-      'theme-tracker' // Don't scan ourselves!
+      "theme-tracker", // Don't scan ourselves!
     ],
 
     // File name patterns to skip
     filePatterns: [
       // Test files
-      '*.test.*',
-      '*.spec.*',
-      'test.*',
-      '*.test',
-      '*.spec',
+      "*.test.*",
+      "*.spec.*",
+      "test.*",
+      "*.test",
+      "*.spec",
 
       // Story files
-      '*.stories.*',
-      '*.story.*',
-      'stories.*',
+      "*.stories.*",
+      "*.story.*",
+      "stories.*",
 
       // Mock files
-      '*mock*',
-      '*Mock*',
-      '*.mock.*',
+      "*mock*",
+      "*Mock*",
+      "*.mock.*",
 
       // TypeScript definition files
-      '*.d.ts',
+      "*.d.ts",
 
       // Configuration files
-      '*.config.*',
-      '*.conf.*',
+      "*.config.*",
+      "*.conf.*",
 
       // Index/barrel export files (typically no styling)
-      'index.*',
+      "index.*",
 
       // Utility file patterns
-      '*.types.*',
-      '*.model.*',
-      '*.interface.*',
-      '*.enum.*',
-      '*.constants.*',
-      '*.service.*',
-      '*.util.*',
-      '*.utils.*',
-      '*.helper.*',
-      '*.api.*',
+      "*.types.*",
+      "*.model.*",
+      "*.interface.*",
+      "*.enum.*",
+      "*.constants.*",
+      "*.service.*",
+      "*.util.*",
+      "*.utils.*",
+      "*.helper.*",
+      "*.api.*",
 
       // Build/generated files
-      '*.generated.*',
-      '*.gen.*',
-      '*.min.*',
-      'bundle.*',
-      'chunk.*'
+      "*.generated.*",
+      "*.gen.*",
+      "*.min.*",
+      "bundle.*",
+      "chunk.*",
     ],
 
     // Path patterns to skip (anywhere in the path)
     pathPatterns: [
       // Testing
-      '/test/',
-      '/tests/',
-      '/__tests__/',
-      '/spec/',
-      '/specs/',
+      "/test/",
+      "/tests/",
+      "/__tests__/",
+      "/spec/",
+      "/specs/",
 
       // Stories/Documentation
-      '/stories/',
-      '/docs/',
-      '/.storybook/',
+      "/stories/",
+      "/docs/",
+      "/.storybook/",
 
       // Mocks
-      '/mock/',
-      '/mocks/',
-      '/__mocks__/',
-      '/fixtures/',
+      "/mock/",
+      "/mocks/",
+      "/__mocks__/",
+      "/fixtures/",
 
       // Utilities
-      '/utils/',
-      '/util/',
-      '/helpers/',
-      '/helper/',
-      '/services/',
-      '/service/',
-      '/api/',
-      '/apis/',
-      '/store/',
-      '/stores/',
-      '/config/',
-      '/configs/',
-      '/constants/',
-      '/constant/',
-      '/types/',
-      '/models/',
-      '/interfaces/',
-      '/enums/',
-      '/definitions/',
+      "/utils/",
+      "/util/",
+      "/helpers/",
+      "/helper/",
+      "/services/",
+      "/service/",
+      "/api/",
+      "/apis/",
+      "/store/",
+      "/stores/",
+      "/config/",
+      "/configs/",
+      "/constants/",
+      "/constant/",
+      "/types/",
+      "/models/",
+      "/interfaces/",
+      "/enums/",
+      "/definitions/",
 
       // Build outputs
-      '/dist/',
-      '/build/',
-      '/coverage/',
-      '/out/',
-      '/.next/',
+      "/dist/",
+      "/build/",
+      "/coverage/",
+      "/out/",
+      "/.next/",
 
       // Version control
-      '/.git/',
+      "/.git/",
 
       // Package specific
-      '/node_modules/'
+      "/node_modules/",
     ],
 
     // Custom ignore patterns (regex) - for advanced users
@@ -284,7 +283,7 @@ module.exports = {
       // /\.backup\./,
       // Example: Ignore files in vendor directories
       // /\/vendor\//
-    ]
+    ],
   },
 
   // =========================================================================
@@ -301,7 +300,7 @@ module.exports = {
 
     // Framework type for component analysis
     // Options: 'react', 'vue', 'angular', 'vanilla', 'disabled'
-    frameworkType: 'react',
+    frameworkType: "react",
 
     // File classification thresholds
     fileClassification: {
@@ -310,39 +309,39 @@ module.exports = {
 
       // Keywords that indicate UI component files
       uiComponentIndicators: [
-        'styled',
-        'className',
-        'css',
-        'emotion',
-        'makeStyles',
-        'useStyles',
-        'theme'
+        "styled",
+        "className",
+        "css",
+        "emotion",
+        "makeStyles",
+        "useStyles",
+        "theme",
       ],
 
       // Keywords that indicate utility/logic files (lower styling expectations)
       utilityIndicators: [
-        'util',
-        'helper',
-        'service',
-        'api',
-        'config',
-        'constant',
-        'type',
-        'interface',
-        'enum'
-      ]
+        "util",
+        "helper",
+        "service",
+        "api",
+        "config",
+        "constant",
+        "type",
+        "interface",
+        "enum",
+      ],
     },
 
     // Coverage calculation
     coverage: {
       // Expected coverage by file type
       expectedCoverage: {
-        'ui-component': { min: 80, target: 95 },
-        'page-component': { min: 60, target: 80 },
+        "ui-component": { min: 80, target: 95 },
+        "page-component": { min: 60, target: 80 },
         utility: { min: 10, target: 30 },
         container: { min: 40, target: 70 },
-        other: { min: 30, target: 60 }
-      }
+        other: { min: 30, target: 60 },
+      },
     },
 
     // Violation detection settings
@@ -379,14 +378,14 @@ module.exports = {
 
       // Severity levels
       severityWeights: {
-        'hardcoded-color': 3,
-        'styled-components-theme': 2,
-        'tailwind-hardcoded': 2,
-        'hardcoded-spacing': 1,
-        'hardcoded-font-size': 1,
-        'hardcoded-border-radius': 0.5
-      }
-    }
+        "hardcoded-color": 3,
+        "styled-components-theme": 2,
+        "tailwind-hardcoded": 2,
+        "hardcoded-spacing": 1,
+        "hardcoded-font-size": 1,
+        "hardcoded-border-radius": 0.5,
+      },
+    },
   },
 
   // =========================================================================
@@ -397,7 +396,7 @@ module.exports = {
     port: 3001,
 
     // Server host
-    host: 'localhost',
+    host: "localhost",
 
     // Auto-open browser when starting
     autoOpen: true,
@@ -406,8 +405,8 @@ module.exports = {
     websocket: {
       port: 8080, // WebSocket will use HTTP port + 1 by default
       timeout: 30000,
-      maxClients: 10
-    }
+      maxClients: 10,
+    },
   },
 
   // =========================================================================
@@ -415,17 +414,17 @@ module.exports = {
   // =========================================================================
   output: {
     // Console log level
-    logLevel: 'info', // "debug", "info", "warn", "error"
+    logLevel: "info", // "debug", "info", "warn", "error"
 
     // Progress reporting
     showProgress: true,
 
     // Save reports to files
     saveReports: false,
-    reportsDirectory: 'theme-tracker-reports',
+    reportsDirectory: "theme-tracker-reports",
 
     // Export formats
-    exportFormats: ['json'] // "json", "csv", "html"
+    exportFormats: ["json"], // "json", "csv", "html"
   },
 
   // =========================================================================
@@ -443,9 +442,9 @@ module.exports = {
 
     // Cache analysis results
     enableCache: false,
-    cacheDirectory: '.theme-tracker-cache'
-  }
-}
+    cacheDirectory: ".theme-tracker-cache",
+  },
+};
 
 /*
  * ✅ CSS VARIABLE FALLBACK SUPPORT CONFIRMED

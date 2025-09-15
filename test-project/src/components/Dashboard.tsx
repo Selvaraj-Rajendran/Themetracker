@@ -267,3 +267,4 @@ const Dashboard: React.FC<DashboardProps> = ({ user, stats }) => {
 };
 
 export default Dashboard;
+
