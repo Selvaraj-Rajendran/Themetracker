@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dew-dark-theme">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Insights Dashboard - ThemeTracker</title>
+    <link rel="stylesheet" href="../styles/colors.css" />
+    <link rel="stylesheet" href="../styles/numbers.css" />
     <style>
       * {
         margin: 0;
@@ -12,9 +14,9 @@
       }
 
       body {
-        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #0a0e27;
-        color: #e6e6e6;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--color-fill-surface);
+        color: var(--color-text-primary);
         line-height: 1.6;
         overflow-x: hidden;
       }
@@ -27,30 +29,31 @@
 
       /* Header */
       .header {
-        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
-        border-bottom: 1px solid #4338ca;
-        padding: 24px 32px;
+        background: var(--color-fill-container);
+        border-bottom: 1px solid var(--color-boundary-brand);
+        padding: var(--spacing-300) var(--spacing-400);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 4px 20px rgba(67, 56, 202, 0.15);
+        box-shadow: var(--shadow-lg);
       }
 
       .header-left {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: var(--spacing-250);
       }
 
       .logo-section {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: var(--spacing-150);
       }
 
       .logo-icon {
         font-size: 32px;
         background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3));
@@ -59,23 +62,21 @@
       .logo-text {
         font-size: 28px;
         font-weight: 700;
-        background: linear-gradient(135deg, #a5f3fc, #67e8f9);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: var(--color-text-brand);
         letter-spacing: -0.5px;
       }
 
       .subtitle {
         font-size: 14px;
-        color: #a5b4fc;
+        color: var(--color-text-secondary);
         font-weight: 500;
-        margin-left: 8px;
-        opacity: 0.9;
+        margin-left: var(--spacing-100);
+        opacity: var(--opacity-half);
       }
 
       .connection-status {
-        padding: 8px 16px;
-        border-radius: 8px;
+        padding: var(--spacing-100) var(--spacing-200);
+        border-radius: var(--border-radius-medium);
         font-size: 12px;
         font-weight: 600;
         text-transform: uppercase;
@@ -84,100 +85,100 @@
       }
 
       .connection-status.connected {
-        background: rgba(34, 197, 94, 0.2);
-        color: #4ade80;
-        border: 1px solid #22c55e;
-        box-shadow: 0 0 16px rgba(34, 197, 94, 0.2);
+        background: var(--color-overlay-semantic-success);
+        color: var(--color-text-semantic-success);
+        border: 1px solid var(--color-boundary-semantic-success);
+        box-shadow: var(--shadow-md);
       }
 
       .connection-status.disconnected {
-        background: rgba(239, 68, 68, 0.2);
-        color: #f87171;
-        border: 1px solid #ef4444;
-        box-shadow: 0 0 16px rgba(239, 68, 68, 0.2);
+        background: var(--color-overlay-semantic-error);
+        color: var(--color-text-semantic-error);
+        border: 1px solid var(--color-boundary-semantic-error);
+        box-shadow: var(--shadow-md);
       }
 
       .header-actions {
         display: flex;
-        gap: 12px;
+        gap: var(--spacing-150);
       }
 
       .action-button {
-        background: linear-gradient(135deg, #4338ca 0%, #5b21b6 100%);
-        border: 1px solid #6366f1;
-        color: #ffffff;
-        padding: 10px 20px;
-        border-radius: 8px;
+        background: var(--color-fill-brand);
+        border: 1px solid var(--color-boundary-brand);
+        color: var(--color-text-inverse);
+        padding: 10px var(--spacing-250);
+        border-radius: var(--border-radius-medium);
         cursor: pointer;
         font-size: 14px;
         font-weight: 600;
         text-decoration: none;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--spacing-100);
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
       }
 
       .action-button:hover {
-        background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
-        border-color: #8b5cf6;
+        background: var(--color-fill-semantic-info);
+        border-color: var(--color-boundary-semantic-info);
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        box-shadow: var(--shadow-xl);
         text-decoration: none;
-        color: #ffffff;
+        color: var(--color-text-inverse);
       }
 
       .action-button:disabled {
-        opacity: 0.6;
+        opacity: var(--opacity-half);
         cursor: not-allowed;
         transform: none;
         box-shadow: none;
       }
 
       .back-button {
-        background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
-        border: 1px solid #6b7280;
+        background: var(--color-fill-neutral);
+        border: 1px solid var(--color-boundary-border);
       }
 
       .back-button:hover {
-        background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
-        border-color: #9ca3af;
+        background: var(--color-fill-neutral-bold);
+        border-color: var(--color-boundary-border-boldest);
       }
 
       /* Main Content */
       .main-content {
         flex: 1;
-        padding: 32px;
-        background: linear-gradient(180deg, #0a0e27 0%, #0f172a 100%);
+        padding: var(--spacing-400);
+        background: var(--color-fill-base);
       }
 
       /* Dashboard Grid */
       .dashboard-grid {
         display: grid;
         grid-template-columns: 2fr 1fr;
-        gap: 32px;
-        margin-bottom: 32px;
+        gap: var(--spacing-400);
+        margin-bottom: var(--spacing-400);
       }
 
       /* Key Metrics Section */
       .key-metrics {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        border: 1px solid #475569;
-        border-radius: 16px;
+        background: var(--color-fill-container);
+        border: 1px solid var(--color-boundary-border-mild);
+        border-radius: var(--border-radius-large);
         padding: 28px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow-2xl);
         backdrop-filter: blur(10px);
       }
 
       .section-title {
         font-size: 22px;
         font-weight: 700;
-        color: #f1f5f9;
-        margin-bottom: 24px;
+        color: var(--color-text-primary);
+        margin-bottom: var(--spacing-300);
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: var(--spacing-150);
       }
 
       .section-icon {
@@ -188,14 +189,14 @@
       .metrics-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 20px;
+        gap: var(--spacing-250);
       }
 
       .metric-card {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        border: 1px solid #334155;
-        border-radius: 12px;
-        padding: 20px;
+        background: var(--color-fill-surface);
+        border: 1px solid var(--color-boundary-border-mild);
+        border-radius: var(--border-radius-large);
+        padding: var(--spacing-250);
         text-align: center;
         transition: all 0.3s ease;
         position: relative;
@@ -203,7 +204,7 @@
       }
 
       .metric-card::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
@@ -216,8 +217,8 @@
 
       .metric-card:hover {
         transform: translateY(-4px);
-        border-color: #6366f1;
-        box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+        border-color: var(--color-boundary-brand);
+        box-shadow: var(--shadow-3xl);
       }
 
       .metric-card:hover::before {
@@ -227,44 +228,42 @@
       .metric-value {
         font-size: 32px;
         font-weight: 800;
-        margin-bottom: 8px;
-        background: linear-gradient(135deg, #a5f3fc, #67e8f9);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        margin-bottom: var(--spacing-100);
+        color: var(--color-text-brand);
         line-height: 1;
       }
 
       .metric-label {
         font-size: 14px;
-        color: #94a3b8;
+        color: var(--color-text-secondary);
         font-weight: 500;
         margin-bottom: 4px;
       }
 
       .metric-sublabel {
         font-size: 12px;
-        color: #64748b;
+        color: var(--color-text-disabled);
         font-weight: 400;
       }
 
       /* Project Health */
       .project-health {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        border: 1px solid #475569;
-        border-radius: 16px;
+        background: var(--color-fill-container);
+        border: 1px solid var(--color-boundary-border-mild);
+        border-radius: var(--border-radius-large);
         padding: 28px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow-2xl);
       }
 
       .health-score {
         text-align: center;
-        margin-bottom: 24px;
+        margin-bottom: var(--spacing-300);
       }
 
       .health-circle {
         width: 120px;
         height: 120px;
-        margin: 0 auto 16px;
+        margin: 0 auto var(--spacing-200);
         position: relative;
       }
 
@@ -276,7 +275,7 @@
 
       .circle-bg {
         fill: none;
-        stroke: #1e293b;
+        stroke: var(--color-fill-container);
         stroke-width: 8;
       }
 
@@ -286,14 +285,24 @@
         stroke-linecap: round;
         stroke-dasharray: 0 377;
         transition: stroke-dasharray 1s ease;
-        filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+        filter: drop-shadow(0 0 8px var(--color-shadow-25));
       }
 
-      .circle-progress.excellent { stroke: #22c55e; }
-      .circle-progress.good { stroke: #3b82f6; }
-      .circle-progress.fair { stroke: #f59e0b; }
-      .circle-progress.poor { stroke: #f97316; }
-      .circle-progress.critical { stroke: #ef4444; }
+      .circle-progress.excellent {
+        stroke: var(--color-fill-semantic-success);
+      }
+      .circle-progress.good {
+        stroke: var(--color-fill-semantic-info);
+      }
+      .circle-progress.fair {
+        stroke: var(--color-fill-semantic-warning);
+      }
+      .circle-progress.poor {
+        stroke: var(--color-fill-semantic-error);
+      }
+      .circle-progress.critical {
+        stroke: var(--color-fill-semantic-error-bold);
+      }
 
       .health-center {
         position: absolute;
@@ -306,13 +315,13 @@
       .health-value {
         font-size: 24px;
         font-weight: 800;
-        color: #f1f5f9;
+        color: var(--color-text-primary);
         line-height: 1;
       }
 
       .health-label {
         font-size: 12px;
-        color: #94a3b8;
+        color: var(--color-text-secondary);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-top: 4px;
@@ -321,23 +330,23 @@
       .health-breakdown {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 20px;
+        gap: var(--spacing-150);
+        margin-top: var(--spacing-250);
       }
 
       .health-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 12px;
-        background: rgba(15, 23, 42, 0.6);
-        border-radius: 8px;
-        border: 1px solid #334155;
+        padding: var(--spacing-100) var(--spacing-150);
+        background: var(--color-overlay-base);
+        border-radius: var(--border-radius-medium);
+        border: 1px solid var(--color-boundary-border-mild);
       }
 
       .health-item-label {
         font-size: 12px;
-        color: #94a3b8;
+        color: var(--color-text-secondary);
         font-weight: 500;
       }
 
@@ -346,48 +355,71 @@
         font-weight: 700;
       }
 
-      .health-item-value.excellent { color: #22c55e; }
-      .health-item-value.good { color: #3b82f6; }
-      .health-item-value.fair { color: #f59e0b; }
-      .health-item-value.poor { color: #f97316; }
-      .health-item-value.critical { color: #ef4444; }
+      .health-item-value.excellent {
+        color: var(--color-text-semantic-success);
+      }
+      .health-item-value.good {
+        color: var(--color-text-semantic-info);
+      }
+      .health-item-value.fair {
+        color: var(--color-text-semantic-warning);
+      }
+      .health-item-value.poor {
+        color: var(--color-fill-semantic-error);
+      }
+      .health-item-value.critical {
+        color: var(--color-text-semantic-error);
+      }
 
       /* Loading States */
       .loading {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 60px;
-        color: #94a3b8;
+        padding: var(--spacing-600);
+        color: var(--color-text-secondary);
         font-size: 16px;
-        gap: 12px;
+        gap: var(--spacing-150);
       }
 
       .loading::before {
-        content: '';
+        content: "";
         width: 24px;
         height: 24px;
-        border: 3px solid #334155;
-        border-top: 3px solid #8b5cf6;
-        border-radius: 50%;
+        border: 3px solid var(--color-boundary-border-mild);
+        border-top: 3px solid var(--color-fill-brand);
+        border-radius: var(--border-radius-circular);
         animation: spin 1s linear infinite;
       }
 
       .loading-shimmer {
-        background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+        background: linear-gradient(
+          90deg,
+          var(--color-fill-container) 25%,
+          var(--color-boundary-border-mild) 50%,
+          var(--color-fill-container) 75%
+        );
         background-size: 200% 100%;
         animation: shimmer 2s infinite;
       }
 
       /* Animations */
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       @keyframes shimmer {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
       }
 
       @keyframes fadeInUp {
@@ -409,16 +441,16 @@
       .analytics-section {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 32px;
-        margin-bottom: 32px;
+        gap: var(--spacing-400);
+        margin-bottom: var(--spacing-400);
       }
 
       .analytics-card {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        border: 1px solid #475569;
-        border-radius: 16px;
+        background: var(--color-fill-container);
+        border: 1px solid var(--color-boundary-border-mild);
+        border-radius: var(--border-radius-large);
         padding: 28px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow-2xl);
       }
 
       /* File Types Distribution */
@@ -493,10 +525,18 @@
         border-left: 4px solid;
       }
 
-      .violation-item.critical { border-left-color: #ef4444; }
-      .violation-item.high { border-left-color: #f97316; }
-      .violation-item.medium { border-left-color: #f59e0b; }
-      .violation-item.low { border-left-color: #3b82f6; }
+      .violation-item.critical {
+        border-left-color: #ef4444;
+      }
+      .violation-item.high {
+        border-left-color: #f97316;
+      }
+      .violation-item.medium {
+        border-left-color: #f59e0b;
+      }
+      .violation-item.low {
+        border-left-color: #3b82f6;
+      }
 
       .violation-info {
         display: flex;
@@ -520,10 +560,18 @@
         font-weight: 700;
       }
 
-      .violation-count.critical { color: #ef4444; }
-      .violation-count.high { color: #f97316; }
-      .violation-count.medium { color: #f59e0b; }
-      .violation-count.low { color: #3b82f6; }
+      .violation-count.critical {
+        color: #ef4444;
+      }
+      .violation-count.high {
+        color: #f97316;
+      }
+      .violation-count.medium {
+        color: #f59e0b;
+      }
+      .violation-count.low {
+        color: #3b82f6;
+      }
 
       /* Components Section */
       .components-overview {
@@ -624,11 +672,21 @@
         transition: width 1s ease;
       }
 
-      .progress-fill.excellent { background: linear-gradient(90deg, #22c55e, #16a34a); }
-      .progress-fill.good { background: linear-gradient(90deg, #3b82f6, #2563eb); }
-      .progress-fill.fair { background: linear-gradient(90deg, #f59e0b, #d97706); }
-      .progress-fill.poor { background: linear-gradient(90deg, #f97316, #ea580c); }
-      .progress-fill.critical { background: linear-gradient(90deg, #ef4444, #dc2626); }
+      .progress-fill.excellent {
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+      }
+      .progress-fill.good {
+        background: linear-gradient(90deg, #3b82f6, #2563eb);
+      }
+      .progress-fill.fair {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+      }
+      .progress-fill.poor {
+        background: linear-gradient(90deg, #f97316, #ea580c);
+      }
+      .progress-fill.critical {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+      }
 
       .progress-text {
         font-size: 12px;
@@ -668,7 +726,7 @@
           grid-template-columns: 1fr;
           gap: 24px;
         }
-        
+
         .analytics-section {
           grid-template-columns: 1fr;
         }
@@ -718,15 +776,15 @@
               <span class="subtitle">Project Insights Dashboard</span>
             </div>
           </div>
-          <div id="connectionStatus" class="connection-status connected">Connected</div>
+          <div id="connectionStatus" class="connection-status connected">
+            Connected
+          </div>
         </div>
         <div class="header-actions">
           <button id="runAnalysisBtn" class="action-button">
             ⚡ Run Full Analysis
           </button>
-          <a href="/" class="action-button back-button">
-            ← Back to Tracker
-          </a>
+          <a href="/" class="action-button back-button"> ← Back to Tracker </a>
         </div>
       </div>
 
@@ -811,19 +869,29 @@
             <div class="health-breakdown">
               <div class="health-item">
                 <span class="health-item-label">Excellent</span>
-                <span class="health-item-value excellent" id="excellentCountHealth">-</span>
+                <span
+                  class="health-item-value excellent"
+                  id="excellentCountHealth"
+                  >-</span
+                >
               </div>
               <div class="health-item">
                 <span class="health-item-label">Good</span>
-                <span class="health-item-value good" id="goodCountHealth">-</span>
+                <span class="health-item-value good" id="goodCountHealth"
+                  >-</span
+                >
               </div>
               <div class="health-item">
                 <span class="health-item-label">Fair</span>
-                <span class="health-item-value fair" id="fairCountHealth">-</span>
+                <span class="health-item-value fair" id="fairCountHealth"
+                  >-</span
+                >
               </div>
               <div class="health-item">
                 <span class="health-item-label">Poor</span>
-                <span class="health-item-value poor" id="poorCountHealth">-</span>
+                <span class="health-item-value poor" id="poorCountHealth"
+                  >-</span
+                >
               </div>
             </div>
           </div>
@@ -868,7 +936,7 @@
               </button>
             </div>
           </div>
-          
+
           <div id="componentsTableContainer">
             <table class="data-table">
               <thead>
@@ -897,312 +965,351 @@
     <script>
       class ProjectInsightsDashboard {
         constructor() {
-          this.ws = null
-          this.isConnected = false
-          this.auditData = {}
-          this.coverageMetrics = {}
-          this.componentsMetrics = {}
-          this.isAnalysisRunning = false
-          
-          this.initializeApp()
+          this.ws = null;
+          this.isConnected = false;
+          this.auditData = {};
+          this.coverageMetrics = {};
+          this.componentsMetrics = {};
+          this.isAnalysisRunning = false;
+
+          this.initializeApp();
         }
 
         initializeApp() {
-          console.log('🚀 Initializing Project Insights Dashboard')
-          this.connectWebSocket()
-          this.updateConnectionStatus('Connecting...', false)
-          this.setupEventListeners()
-          this.startLoadingAnimations()
+          console.log("🚀 Initializing Project Insights Dashboard");
+          this.connectWebSocket();
+          this.updateConnectionStatus("Connecting...", false);
+          this.setupEventListeners();
+          this.startLoadingAnimations();
         }
 
         setupEventListeners() {
-          const runAnalysisBtn = document.getElementById('runAnalysisBtn')
-          const refreshComponentsBtn = document.getElementById('refreshComponentsBtn')
+          const runAnalysisBtn = document.getElementById("runAnalysisBtn");
+          const refreshComponentsBtn = document.getElementById(
+            "refreshComponentsBtn"
+          );
 
           if (runAnalysisBtn) {
-            runAnalysisBtn.addEventListener('click', () => this.runFullAnalysis())
+            runAnalysisBtn.addEventListener("click", () =>
+              this.runFullAnalysis()
+            );
           }
 
           if (refreshComponentsBtn) {
-            refreshComponentsBtn.addEventListener('click', () => this.refreshComponents())
+            refreshComponentsBtn.addEventListener("click", () =>
+              this.refreshComponents()
+            );
           }
         }
 
         startLoadingAnimations() {
           // Add shimmer effect to metric cards
-          const metricValues = document.querySelectorAll('.metric-value')
-          metricValues.forEach(el => {
-            if (el.textContent === '-' || el.textContent === '-%') {
-              el.classList.add('loading-shimmer')
+          const metricValues = document.querySelectorAll(".metric-value");
+          metricValues.forEach((el) => {
+            if (el.textContent === "-" || el.textContent === "-%") {
+              el.classList.add("loading-shimmer");
             }
-          })
+          });
         }
 
         connectWebSocket() {
-          const wsUrl = `ws://${window.location.hostname}:${window.location.port}`
-          this.ws = new WebSocket(wsUrl)
+          const wsUrl = `ws://${window.location.hostname}:${window.location.port}`;
+          this.ws = new WebSocket(wsUrl);
 
           this.ws.onopen = () => {
-            this.isConnected = true
-            this.updateConnectionStatus('Connected', true)
-            this.requestInitialData()
-          }
+            this.isConnected = true;
+            this.updateConnectionStatus("Connected", true);
+            this.requestInitialData();
+          };
 
           this.ws.onclose = () => {
-            this.isConnected = false
-            this.updateConnectionStatus('Disconnected', false)
-            setTimeout(() => this.connectWebSocket(), 3000)
-          }
+            this.isConnected = false;
+            this.updateConnectionStatus("Disconnected", false);
+            setTimeout(() => this.connectWebSocket(), 3000);
+          };
 
           this.ws.onerror = (error) => {
-            console.error('WebSocket error:', error)
-            this.updateConnectionStatus('Error', false)
-          }
+            console.error("WebSocket error:", error);
+            this.updateConnectionStatus("Error", false);
+          };
 
           this.ws.onmessage = (event) => {
-            this.handleWebSocketMessage(JSON.parse(event.data))
-          }
+            this.handleWebSocketMessage(JSON.parse(event.data));
+          };
         }
 
         updateConnectionStatus(status, isConnected) {
-          const statusEl = document.getElementById('connectionStatus')
-          statusEl.textContent = status
-          statusEl.className = `connection-status ${isConnected ? 'connected' : 'disconnected'}`
+          const statusEl = document.getElementById("connectionStatus");
+          statusEl.textContent = status;
+          statusEl.className = `connection-status ${
+            isConnected ? "connected" : "disconnected"
+          }`;
         }
 
         requestInitialData() {
           if (this.ws && this.isConnected) {
-            console.log('📨 Requesting initial data...')
-            this.ws.send(JSON.stringify({ type: 'GET_COVERAGE_METRICS' }))
-            this.ws.send(JSON.stringify({ type: 'GET_COMPONENTS_METRICS' }))
+            console.log("📨 Requesting initial data...");
+            this.ws.send(JSON.stringify({ type: "GET_COVERAGE_METRICS" }));
+            this.ws.send(JSON.stringify({ type: "GET_COMPONENTS_METRICS" }));
           }
         }
 
         runFullAnalysis() {
-          if (this.isAnalysisRunning || !this.isConnected) return
+          if (this.isAnalysisRunning || !this.isConnected) return;
 
-          this.isAnalysisRunning = true
-          const runBtn = document.getElementById('runAnalysisBtn')
-          
-          runBtn.textContent = '⏳ Running Analysis...'
-          runBtn.disabled = true
-          
-          console.log('🚀 Starting full project analysis')
-          this.ws.send(JSON.stringify({ type: 'AUDIT_ALL' }))
-          this.startLoadingAnimations()
+          this.isAnalysisRunning = true;
+          const runBtn = document.getElementById("runAnalysisBtn");
+
+          runBtn.textContent = "⏳ Running Analysis...";
+          runBtn.disabled = true;
+
+          console.log("🚀 Starting full project analysis");
+          this.ws.send(JSON.stringify({ type: "AUDIT_ALL" }));
+          this.startLoadingAnimations();
         }
 
         refreshComponents() {
-          if (!this.isConnected) return
+          if (!this.isConnected) return;
 
-          const refreshBtn = document.getElementById('refreshComponentsBtn')
-          refreshBtn.textContent = '⏳ Refreshing...'
-          refreshBtn.disabled = true
+          const refreshBtn = document.getElementById("refreshComponentsBtn");
+          refreshBtn.textContent = "⏳ Refreshing...";
+          refreshBtn.disabled = true;
 
-          console.log('🔄 Refreshing components analysis')
-          this.ws.send(JSON.stringify({ type: 'RUN_COMPONENTS_ANALYSIS' }))
+          console.log("🔄 Refreshing components analysis");
+          this.ws.send(JSON.stringify({ type: "RUN_COMPONENTS_ANALYSIS" }));
         }
 
         handleWebSocketMessage(message) {
-          const { type, data } = message
-          console.log('📨 Received message:', type)
+          const { type, data } = message;
+          console.log("📨 Received message:", type);
 
           switch (type) {
-            case 'COVERAGE_METRICS':
-              this.coverageMetrics = data
-              this.updateProjectMetrics()
-              this.updateFileTypesChart()
-              this.updateViolationsChart()
-              break
+            case "COVERAGE_METRICS":
+              this.coverageMetrics = data;
+              this.updateProjectMetrics();
+              this.updateFileTypesChart();
+              this.updateViolationsChart();
+              break;
 
-            case 'COMPONENTS_METRICS':
-              this.componentsMetrics = data
-              this.updateComponentsSection()
-              this.resetRefreshButton()
-              break
+            case "COMPONENTS_METRICS":
+              this.componentsMetrics = data;
+              this.updateComponentsSection();
+              this.resetRefreshButton();
+              break;
 
-            case 'COMPONENTS_METRICS_ERROR':
-              console.error('Components metrics error:', message.error)
-              this.showComponentsError(message.error)
-              this.resetRefreshButton()
-              break
+            case "COMPONENTS_METRICS_ERROR":
+              console.error("Components metrics error:", message.error);
+              this.showComponentsError(message.error);
+              this.resetRefreshButton();
+              break;
 
-            case 'AUDIT_ALL_COMPLETED':
-              this.isAnalysisRunning = false
-              this.resetAnalysisButton()
-              this.requestInitialData() // Refresh data after analysis
-              break
+            case "AUDIT_ALL_COMPLETED":
+              this.isAnalysisRunning = false;
+              this.resetAnalysisButton();
+              this.requestInitialData(); // Refresh data after analysis
+              break;
 
-            case 'AUDIT_COMPLETED':
+            case "AUDIT_COMPLETED":
               // Individual file completed - could show progress
-              break
+              break;
 
             default:
-              console.log('📨 Unhandled message type:', type)
+              console.log("📨 Unhandled message type:", type);
           }
         }
 
         updateProjectMetrics() {
-          if (!this.coverageMetrics?.overview) return
+          if (!this.coverageMetrics?.overview) return;
 
-          const overview = this.coverageMetrics.overview
-          const scanStats = this.coverageMetrics.scanStatistics
-          console.log('📊 Updating project metrics:', overview)
-          console.log('📂 Scan statistics:', scanStats)
+          const overview = this.coverageMetrics.overview;
+          const scanStats = this.coverageMetrics.scanStatistics;
+          console.log("📊 Updating project metrics:", overview);
+          console.log("📂 Scan statistics:", scanStats);
 
           // Remove loading shimmer
-          document.querySelectorAll('.loading-shimmer').forEach(el => {
-            el.classList.remove('loading-shimmer')
-          })
+          document.querySelectorAll(".loading-shimmer").forEach((el) => {
+            el.classList.remove("loading-shimmer");
+          });
 
           // Update main metrics
-          this.animateValue('totalFilesMetric', overview.totalFiles)
-          this.animateValue('totalViolationsMetric', overview.totalViolations)
-          this.animateValue('averageCoverageMetric', overview.averageCoverage, '%')
-          this.animateValue('excellentFilesMetric', overview.statusDistribution.excellent)
-          this.animateValue('criticalFilesMetric', overview.statusDistribution.critical)
+          this.animateValue("totalFilesMetric", overview.totalFiles);
+          this.animateValue("totalViolationsMetric", overview.totalViolations);
+          this.animateValue(
+            "averageCoverageMetric",
+            overview.averageCoverage,
+            "%"
+          );
+          this.animateValue(
+            "excellentFilesMetric",
+            overview.statusDistribution.excellent
+          );
+          this.animateValue(
+            "criticalFilesMetric",
+            overview.statusDistribution.critical
+          );
 
           // Update new scan statistics metrics
           if (scanStats) {
-            this.animateValue('totalFilesFoundMetric', scanStats.totalFilesFound)
-            this.animateValue('totalFilesIgnoredMetric', scanStats.totalFilesIgnored)
+            this.animateValue(
+              "totalFilesFoundMetric",
+              scanStats.totalFilesFound
+            );
+            this.animateValue(
+              "totalFilesIgnoredMetric",
+              scanStats.totalFilesIgnored
+            );
           } else {
             // Fallback if scan stats not available
-            this.animateValue('totalFilesFoundMetric', overview.totalFiles)
-            this.animateValue('totalFilesIgnoredMetric', 0)
+            this.animateValue("totalFilesFoundMetric", overview.totalFiles);
+            this.animateValue("totalFilesIgnoredMetric", 0);
           }
 
           // Update health score
-          const healthScore = this.calculateHealthScore(overview)
-          this.updateHealthScore(healthScore, overview.statusDistribution)
+          const healthScore = this.calculateHealthScore(overview);
+          this.updateHealthScore(healthScore, overview.statusDistribution);
         }
 
         calculateHealthScore(overview) {
-          const total = overview.totalFiles || 1
-          const excellent = overview.statusDistribution.excellent || 0
-          const good = overview.statusDistribution.good || 0
-          const fair = overview.statusDistribution.fair || 0
-          
+          const total = overview.totalFiles || 1;
+          const excellent = overview.statusDistribution.excellent || 0;
+          const good = overview.statusDistribution.good || 0;
+          const fair = overview.statusDistribution.fair || 0;
+
           // Weighted score: excellent=100, good=75, fair=50, poor=25, critical=0
           const score = Math.round(
-            ((excellent * 100) + (good * 75) + (fair * 50) + 
-             (overview.statusDistribution.poor * 25)) / total
-          )
-          
-          return Math.min(score, 100)
+            (excellent * 100 +
+              good * 75 +
+              fair * 50 +
+              overview.statusDistribution.poor * 25) /
+              total
+          );
+
+          return Math.min(score, 100);
         }
 
         updateHealthScore(score, distribution) {
-          const healthValue = document.getElementById('healthScoreValue')
-          const healthCircle = document.getElementById('healthProgressCircle')
-          
-          this.animateValue('healthScoreValue', score)
-          
+          const healthValue = document.getElementById("healthScoreValue");
+          const healthCircle = document.getElementById("healthProgressCircle");
+
+          this.animateValue("healthScoreValue", score);
+
           // Update health circle
-          const circumference = 2 * Math.PI * 50
-          const offset = circumference - (score / 100) * circumference
-          
-          healthCircle.style.strokeDasharray = `${circumference}`
-          healthCircle.style.strokeDashoffset = offset
-          
+          const circumference = 2 * Math.PI * 50;
+          const offset = circumference - (score / 100) * circumference;
+
+          healthCircle.style.strokeDasharray = `${circumference}`;
+          healthCircle.style.strokeDashoffset = offset;
+
           // Update color based on score
-          const colorClass = score >= 90 ? 'excellent' : 
-                           score >= 70 ? 'good' : 
-                           score >= 50 ? 'fair' : 
-                           score >= 30 ? 'poor' : 'critical'
-          
-          healthCircle.setAttribute('class', `circle-progress ${colorClass}`)
-          
+          const colorClass =
+            score >= 90
+              ? "excellent"
+              : score >= 70
+              ? "good"
+              : score >= 50
+              ? "fair"
+              : score >= 30
+              ? "poor"
+              : "critical";
+
+          healthCircle.setAttribute("class", `circle-progress ${colorClass}`);
+
           // Update breakdown
-          this.animateValue('excellentCountHealth', distribution.excellent)
-          this.animateValue('goodCountHealth', distribution.good)
-          this.animateValue('fairCountHealth', distribution.fair)
-          this.animateValue('poorCountHealth', distribution.poor)
+          this.animateValue("excellentCountHealth", distribution.excellent);
+          this.animateValue("goodCountHealth", distribution.good);
+          this.animateValue("fairCountHealth", distribution.fair);
+          this.animateValue("poorCountHealth", distribution.poor);
         }
 
-        animateValue(elementId, targetValue, suffix = '') {
-          const element = document.getElementById(elementId)
-          if (!element) return
+        animateValue(elementId, targetValue, suffix = "") {
+          const element = document.getElementById(elementId);
+          if (!element) return;
 
-          const startValue = 0
-          const duration = 1000
-          const startTime = Date.now()
+          const startValue = 0;
+          const duration = 1000;
+          const startTime = Date.now();
 
           const animate = () => {
-            const elapsed = Date.now() - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            
-            const easeOutQuart = 1 - Math.pow(1 - progress, 4)
-            const currentValue = Math.floor(startValue + (targetValue - startValue) * easeOutQuart)
-            
-            element.textContent = currentValue + suffix
-            
-            if (progress < 1) {
-              requestAnimationFrame(animate)
-            }
-          }
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
 
-          requestAnimationFrame(animate)
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const currentValue = Math.floor(
+              startValue + (targetValue - startValue) * easeOutQuart
+            );
+
+            element.textContent = currentValue + suffix;
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            }
+          };
+
+          requestAnimationFrame(animate);
         }
 
         resetAnalysisButton() {
-          const runBtn = document.getElementById('runAnalysisBtn')
-          runBtn.textContent = '⚡ Run Full Analysis'
-          runBtn.disabled = false
+          const runBtn = document.getElementById("runAnalysisBtn");
+          runBtn.textContent = "⚡ Run Full Analysis";
+          runBtn.disabled = false;
         }
 
         resetRefreshButton() {
-          const refreshBtn = document.getElementById('refreshComponentsBtn')
-          refreshBtn.textContent = '🔄 Refresh Components'
-          refreshBtn.disabled = false
+          const refreshBtn = document.getElementById("refreshComponentsBtn");
+          refreshBtn.textContent = "🔄 Refresh Components";
+          refreshBtn.disabled = false;
         }
 
         updateFileTypesChart() {
-          if (!this.coverageMetrics?.fileTypes) return
+          if (!this.coverageMetrics?.fileTypes) return;
 
-          const fileTypes = this.coverageMetrics.fileTypes
-          const chart = document.getElementById('fileTypesChart')
-          
+          const fileTypes = this.coverageMetrics.fileTypes;
+          const chart = document.getElementById("fileTypesChart");
+
           const fileTypeData = [
-            { 
-              icon: '⚛️', 
-              name: 'Components', 
-              description: 'React/UI components',
+            {
+              icon: "⚛️",
+              name: "Components",
+              description: "React/UI components",
               count: fileTypes.components || 0,
-              color: '#8b5cf6'
+              color: "#8b5cf6",
             },
-            { 
-              icon: '📄', 
-              name: 'Pages', 
-              description: 'Page-level components',
+            {
+              icon: "📄",
+              name: "Pages",
+              description: "Page-level components",
               count: fileTypes.pages || 0,
-              color: '#06b6d4'
+              color: "#06b6d4",
             },
-            { 
-              icon: '🎨', 
-              name: 'Styles', 
-              description: 'CSS/SCSS files',
+            {
+              icon: "🎨",
+              name: "Styles",
+              description: "CSS/SCSS files",
               count: fileTypes.styles || 0,
-              color: '#10b981'
+              color: "#10b981",
             },
-            { 
-              icon: '🔧', 
-              name: 'Utilities', 
-              description: 'Helper/utility files',
+            {
+              icon: "🔧",
+              name: "Utilities",
+              description: "Helper/utility files",
               count: fileTypes.utilities || 0,
-              color: '#f59e0b'
+              color: "#f59e0b",
             },
-            { 
-              icon: '📦', 
-              name: 'Other', 
-              description: 'Other file types',
+            {
+              icon: "📦",
+              name: "Other",
+              description: "Other file types",
               count: fileTypes.other || 0,
-              color: '#6b7280'
-            }
-          ]
+              color: "#6b7280",
+            },
+          ];
 
-          chart.innerHTML = fileTypeData.map((item, index) => `
-            <div class="file-type-item animate-fade-in" style="animation-delay: ${index * 0.1}s">
+          chart.innerHTML = fileTypeData
+            .map(
+              (item, index) => `
+            <div class="file-type-item animate-fade-in" style="animation-delay: ${
+              index * 0.1
+            }s">
               <div class="file-type-info">
                 <div class="file-type-icon">${item.icon}</div>
                 <div class="file-type-details">
@@ -1212,68 +1319,77 @@
               </div>
               <div class="file-type-count">${item.count}</div>
             </div>
-          `).join('')
+          `
+            )
+            .join("");
         }
 
         updateViolationsChart() {
-          if (!this.coverageMetrics?.violations) return
+          if (!this.coverageMetrics?.violations) return;
 
-          const violations = this.coverageMetrics.violations
-          const chart = document.getElementById('violationsChart')
-          
+          const violations = this.coverageMetrics.violations;
+          const chart = document.getElementById("violationsChart");
+
           const violationData = [
             {
-              type: 'Critical Issues',
-              description: 'Hardcoded colors & values',
+              type: "Critical Issues",
+              description: "Hardcoded colors & values",
               count: violations.critical || 0,
-              severity: 'critical'
+              severity: "critical",
             },
             {
-              type: 'High Priority',
-              description: 'Theme violations',
+              type: "High Priority",
+              description: "Theme violations",
               count: violations.high || 0,
-              severity: 'high'
+              severity: "high",
             },
             {
-              type: 'Medium Priority',
-              description: 'Spacing & sizing',
+              type: "Medium Priority",
+              description: "Spacing & sizing",
               count: violations.medium || 0,
-              severity: 'medium'
+              severity: "medium",
             },
             {
-              type: 'Low Priority',
-              description: 'Minor improvements',
+              type: "Low Priority",
+              description: "Minor improvements",
               count: violations.low || 0,
-              severity: 'low'
-            }
-          ]
+              severity: "low",
+            },
+          ];
 
-          chart.innerHTML = violationData.map((item, index) => `
-            <div class="violation-item ${item.severity} animate-fade-in" style="animation-delay: ${index * 0.1}s">
+          chart.innerHTML = violationData
+            .map(
+              (item, index) => `
+            <div class="violation-item ${
+              item.severity
+            } animate-fade-in" style="animation-delay: ${index * 0.1}s">
               <div class="violation-info">
                 <div class="violation-type">${item.type}</div>
                 <div class="violation-description">${item.description}</div>
               </div>
               <div class="violation-count ${item.severity}">${item.count}</div>
             </div>
-          `).join('')
+          `
+            )
+            .join("");
         }
 
         updateComponentsSection() {
-          const container = document.getElementById('componentsTableContainer')
-          const tbody = document.getElementById('componentsTableBody')
-          const badge = document.getElementById('frameworkBadge')
+          const container = document.getElementById("componentsTableContainer");
+          const tbody = document.getElementById("componentsTableBody");
+          const badge = document.getElementById("frameworkBadge");
 
           if (!this.componentsMetrics) {
-            this.showComponentsEmpty()
-            return
+            this.showComponentsEmpty();
+            return;
           }
 
           // Handle disabled components analysis
           if (this.componentsMetrics.disabled) {
-            badge.textContent = this.componentsMetrics.frameworkType || 'Disabled'
-            badge.classList.add('disabled')
-            
+            badge.textContent =
+              this.componentsMetrics.frameworkType || "Disabled";
+            badge.classList.add("disabled");
+
             tbody.innerHTML = `
               <tr>
                 <td colspan="6">
@@ -1284,51 +1400,63 @@
                   </div>
                 </td>
               </tr>
-            `
-            return
+            `;
+            return;
           }
 
           // Update framework badge
-          badge.textContent = this.componentsMetrics.frameworkType || 'React'
-          badge.classList.remove('disabled')
+          badge.textContent = this.componentsMetrics.frameworkType || "React";
+          badge.classList.remove("disabled");
 
           // Update components count in main metrics
           if (this.componentsMetrics.summary) {
-            this.animateValue('totalComponentsMetric', this.componentsMetrics.summary.totalUniqueComponents || 0)
+            this.animateValue(
+              "totalComponentsMetric",
+              this.componentsMetrics.summary.totalUniqueComponents || 0
+            );
           }
 
           // Update components table
           if (this.componentsMetrics.pageMetrics) {
-            this.updateComponentsTable()
+            this.updateComponentsTable();
           } else {
-            this.showComponentsEmpty()
+            this.showComponentsEmpty();
           }
         }
 
         updateComponentsTable() {
-          const tbody = document.getElementById('componentsTableBody')
-          const pageMetrics = Object.values(this.componentsMetrics.pageMetrics)
+          const tbody = document.getElementById("componentsTableBody");
+          const pageMetrics = Object.values(this.componentsMetrics.pageMetrics);
 
           if (pageMetrics.length === 0) {
-            this.showComponentsEmpty()
-            return
+            this.showComponentsEmpty();
+            return;
           }
 
-          tbody.innerHTML = pageMetrics.map((page, index) => {
-            const themePercentage = page.total > 0 ? 
-              Math.round((page.themeUsageCount / page.total) * 100) : 0
-            
-            const coverageClass = this.getCoverageClass(page.averageCoverage)
-            const pageIcon = this.getPageIcon(page.name)
+          tbody.innerHTML = pageMetrics
+            .map((page, index) => {
+              const themePercentage =
+                page.total > 0
+                  ? Math.round((page.themeUsageCount / page.total) * 100)
+                  : 0;
 
-            return `
-              <tr style="animation-delay: ${index * 0.1}s" class="animate-fade-in">
+              const coverageClass = this.getCoverageClass(page.averageCoverage);
+              const pageIcon = this.getPageIcon(page.name);
+
+              return `
+              <tr style="animation-delay: ${
+                index * 0.1
+              }s" class="animate-fade-in">
                 <td>
                   <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 16px;">${pageIcon}</span>
                     <div>
-                      <div style="font-weight: 600; color: #67e8f9;">${page.name}</div>
-                      <div style="font-size: 12px; color: #94a3b8;">${page.path}</div>
+                      <div style="font-weight: 600; color: #67e8f9;">${
+                        page.name
+                      }</div>
+                      <div style="font-size: 12px; color: #94a3b8;">${
+                        page.path
+                      }</div>
                     </div>
                   </div>
                 </td>
@@ -1350,16 +1478,19 @@
                       <div class="progress-fill ${coverageClass}" 
                            style="width: ${page.averageCoverage || 0}%"></div>
                     </div>
-                    <div class="progress-text">${page.averageCoverage || 0}%</div>
+                    <div class="progress-text">${
+                      page.averageCoverage || 0
+                    }%</div>
                   </div>
                 </td>
               </tr>
-            `
-          }).join('')
+            `;
+            })
+            .join("");
         }
 
         showComponentsEmpty() {
-          const tbody = document.getElementById('componentsTableBody')
+          const tbody = document.getElementById("componentsTableBody");
           tbody.innerHTML = `
             <tr>
               <td colspan="6">
@@ -1372,11 +1503,11 @@
                 </div>
               </td>
             </tr>
-          `
+          `;
         }
 
         showComponentsError(error) {
-          const tbody = document.getElementById('componentsTableBody')
+          const tbody = document.getElementById("componentsTableBody");
           tbody.innerHTML = `
             <tr>
               <td colspan="6">
@@ -1387,34 +1518,42 @@
                 </div>
               </td>
             </tr>
-          `
+          `;
         }
 
         getCoverageClass(coverage) {
-          if (coverage >= 100) return 'excellent'
-          if (coverage >= 85) return 'good'
-          if (coverage >= 60) return 'fair'
-          if (coverage >= 30) return 'poor'
-          return 'critical'
+          if (coverage >= 100) return "excellent";
+          if (coverage >= 85) return "good";
+          if (coverage >= 60) return "fair";
+          if (coverage >= 30) return "poor";
+          return "critical";
         }
 
         getPageIcon(pageName) {
           const iconMap = {
-            Dashboard: '📊', Profile: '👤', Security: '🔒',
-            Organisation: '🏢', Bills: '💳', UsersAndGroups: '👥',
-            AuditLogs: '📝', AccountTransfer: '🔄', ConfigureMFA: '🔐',
-            OAuthErrorPage: '⚠️', OauthConsent: '✅', SelectAccount: '🎯',
-            ManageActiveSessions: '⚡'
-          }
-          return iconMap[pageName] || '📄'
+            Dashboard: "📊",
+            Profile: "👤",
+            Security: "🔒",
+            Organisation: "🏢",
+            Bills: "💳",
+            UsersAndGroups: "👥",
+            AuditLogs: "📝",
+            AccountTransfer: "🔄",
+            ConfigureMFA: "🔐",
+            OAuthErrorPage: "⚠️",
+            OauthConsent: "✅",
+            SelectAccount: "🎯",
+            ManageActiveSessions: "⚡",
+          };
+          return iconMap[pageName] || "📄";
         }
       }
 
       // Initialize dashboard when page loads
-      document.addEventListener('DOMContentLoaded', function () {
-        window.dashboard = new ProjectInsightsDashboard()
-        console.log('🚀 Project Insights Dashboard initialized')
-      })
+      document.addEventListener("DOMContentLoaded", function () {
+        window.dashboard = new ProjectInsightsDashboard();
+        console.log("🚀 Project Insights Dashboard initialized");
+      });
     </script>
   </body>
 </html>

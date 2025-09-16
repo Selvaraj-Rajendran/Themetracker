@@ -98,3 +98,6 @@ public
 
 # theme-tracker config
 themetracker.config.js
+# playwright mcp
+.playwright-mcp
+
