@@ -95,3 +95,6 @@ public
 # Storybook build outputs
 .out
 .storybook-out
+
+# theme-tracker config
+themetracker.config.js

@@ -24,24 +24,123 @@ module.exports = {
   // DESIGN TOKEN CONFIGURATION
   // =========================================================================
   designTokenConfig: {
-    // Path to design token definitions/colors configuration
-    // ThemeTracker will auto-detect common paths if not specified
-    tokensPath: "lib/autofix-rules/tokens/colors.css",
+    // IMPORTANT: Configure paths to YOUR project's CSS variables/design tokens
+    // ThemeTracker will read CSS variables from these files to provide fix suggestions
 
-    // Alternative paths to check (in order of preference)
+    // Primary path(s) to your design tokens/CSS variables files
+    // Supports: .css, .scss, .sass, .json, .js files
+    // Can be a single file path (string) OR array of multiple file paths
+    tokensPath: null,
+
+    // EXAMPLES:
+    // Single file
+    // tokensPath: "src/styles/tokens.css"
+    // Multiple files:
+    // tokensPath: [
+    //   "src/styles/tokens.css",
+    //   "src/styles/variables.css",
+    //   "src/theme/tokens.scss",
+    //   "src/theme/variables.scss",
+    // ]
+
+    // Alternative paths to check for design tokens (in order of preference)
+    // ThemeTracker will scan ALL existing files from this list to gather tokens
+    // You can specify multiple files for different token categories:
+    // Common patterns for different frameworks and setups:
     fallbackPaths: [
-      "lib/autofix-rules/tokens/colors.css",
-      "lib/autofix-rules/tokens/numbers.css",
-      "src/styles/tokens.json",
+      // CSS/SCSS files with CSS custom properties
+      "src/styles/tokens.css",
+      "src/styles/variables.css",
+      "src/theme/tokens.scss",
+      "src/theme/variables.scss",
+      "styles/globals.css",
+
+      // Design token JSON files
+      "src/tokens/colors.json",
+      "src/tokens/index.json",
+      "tokens.json",
+
+      // JavaScript/TypeScript token files
+      "src/theme/tokens.js",
+      "src/theme/index.ts",
+      "src/styles/theme.js",
+
+      // Framework-specific paths
+      "tailwind.config.js", // For Tailwind CSS
+      "src/theme.js", // Chakra UI, Material-UI
+      "stitches.config.js", // Stitches
+
+      // Package-based design systems
+      "node_modules/@company/design-tokens/dist/tokens.css",
     ],
 
     // CSS variables prefix (for CSS custom properties detection)
     cssVariablePrefix: "--",
 
-    // When design tokens are imported as a package (future support)
-    packageName: null, // null if not using package
+    // Supported file formats and their parsers
+    supportedFormats: {
+      css: true, // CSS files with :root { --variable: value; }
+      scss: true, // SCSS files with CSS variables
+      json: true, // JSON files with token definitions
+      js: true, // JavaScript files exporting tokens
+      ts: true, // TypeScript files exporting tokens
+    },
+
+    // When design tokens are imported as a package
+    packageName: null, // e.g., "@company/design-tokens"
     packageTokensPath: "dist/tokens.json", // path within the package
   },
+
+  // =========================================================================
+  // EXAMPLE CONFIGURATIONS FOR MULTIPLE FILES
+  // =========================================================================
+  /*
+  // EXAMPLE 1: Multiple CSS files for different token categories
+  designTokenConfig: {
+    tokensPath: [
+      "src/styles/colors.css",      // Colors only
+      "src/styles/spacing.css",     // Spacing tokens
+      "src/styles/typography.css",  // Font sizes, weights
+      "src/styles/shadows.css",     // Box shadows
+      "src/styles/borders.css",     // Border radius, widths
+    ],
+    cssVariablePrefix: "--",
+  },
+
+  // EXAMPLE 2: Design system with JSON files
+  designTokenConfig: {
+    tokensPath: "src/tokens/index.json",
+    fallbackPaths: [
+      "src/tokens/colors.json",
+      "src/tokens/spacing.json", 
+      "src/tokens/typography.json",
+    ],
+    cssVariablePrefix: "--ds-",
+  },
+
+  // EXAMPLE 3: Mixed formats (CSS + JSON + JS)
+  designTokenConfig: {
+    tokensPath: [
+      "src/theme/colors.css",      // CSS variables
+      "src/tokens/spacing.json",   // JSON tokens  
+      "src/theme/typography.js",   // JS/TS exports
+      "tailwind.config.js",        // Tailwind config
+    ],
+    cssVariablePrefix: "--",
+  },
+
+  // EXAMPLE 4: Package-based design system
+  designTokenConfig: {
+    packageName: "@company/design-tokens",
+    packageTokensPath: "dist/css/tokens.css",
+    fallbackPaths: [
+      "node_modules/@company/design-tokens/dist/css/colors.css",
+      "node_modules/@company/design-tokens/dist/css/spacing.css",
+      "src/theme/overrides.css", // Local overrides
+    ],
+    cssVariablePrefix: "--company-",
+  },
+  */
 
   // =========================================================================
   // SOURCE DIRECTORIES
