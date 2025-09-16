@@ -21,25 +21,25 @@
 
 module.exports = {
   // =========================================================================
-  // DEW DESIGN SYSTEM CONFIGURATION
+  // DESIGN TOKEN CONFIGURATION
   // =========================================================================
-  dewConfig: {
-    // Path to Dew Design System tokens/colors configuration
+  designTokenConfig: {
+    // Path to design token definitions/colors configuration
     // ThemeTracker will auto-detect common paths if not specified
-    tokensPath: "lib/autofix-rules/dewStyles/colors.css",
+    tokensPath: "lib/autofix-rules/tokens/colors.css",
 
     // Alternative paths to check (in order of preference)
     fallbackPaths: [
-      "lib/autofix-rules/dewStyles/colors.css",
-      "lib/autofix-rules/dewStyles/numbers.css",
+      "lib/autofix-rules/tokens/colors.css",
+      "lib/autofix-rules/tokens/numbers.css",
       "src/styles/tokens.json",
     ],
 
     // CSS variables prefix (for CSS custom properties detection)
     cssVariablePrefix: "--",
 
-    // When dew tokens are imported as a package (future support)
-    packageName: "@dew/design-system", // null if not using package
+    // When design tokens are imported as a package (future support)
+    packageName: null, // null if not using package
     packageTokensPath: "dist/tokens.json", // path within the package
   },
 
