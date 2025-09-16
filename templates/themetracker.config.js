@@ -92,6 +92,122 @@ module.exports = {
   },
 
   // =========================================================================
+  // CUSTOM VIOLATION PATTERNS
+  // =========================================================================
+  customViolations: {
+    // Enable custom violation patterns (set to false to use only defaults)
+    enabled: true,
+
+    // Add your project-specific violation patterns
+    patterns: [
+      // EXAMPLE: Custom hardcoded color pattern for your project
+      // {
+      //   type: "custom-hardcoded-color",
+      //   pattern: /#[0-9a-fA-F]{3,6}/g,
+      //   severity: "high",
+      //   suggestion: "Use CSS custom properties from your design system",
+      //   description: "Detects hardcoded hex color values"
+      // },
+      // EXAMPLE: Project-specific CSS class violations
+      // {
+      //   type: "deprecated-classes",
+      //   pattern: /class(?:Name)?\s*=\s*["'`][^"'`]*\b(?:old-button|legacy-card|deprecated-\w+)\b[^"'`]*["'`]/g,
+      //   severity: "medium",
+      //   suggestion: "Replace with updated component classes from design system",
+      //   description: "Detects usage of deprecated CSS classes"
+      // },
+      // EXAMPLE: Inline style violations
+      // {
+      //   type: "inline-styles",
+      //   pattern: /style\s*=\s*["'`][^"'`]*["'`]/g,
+      //   severity: "medium",
+      //   suggestion: "Use CSS classes or styled-components instead of inline styles",
+      //   description: "Detects inline style attributes"
+      // },
+      // EXAMPLE: Custom spacing violations
+      // {
+      //   type: "hardcoded-margins",
+      //   pattern: /margin(?:-(?:top|right|bottom|left))?\s*:\s*\d+(?:px|rem|em)/g,
+      //   severity: "medium",
+      //   suggestion: "Use design system spacing tokens",
+      //   description: "Detects hardcoded margin values"
+      // },
+    ],
+
+    // Override default violation patterns (advanced usage)
+    overrideDefaults: false,
+
+    // Disable specific default patterns by type
+    // You can disable any of these default violation patterns:
+    disableDefaultPatterns: [
+      // === CORE HARDCODED VALUES ===
+      // "hardcoded-color",                    // #ffffff, rgb(), rgba() values
+      // "hardcoded-font-size",                // font-size: 16px
+      // "hardcoded-border-radius",            // border-radius: 8px
+      // "hardcoded-box-shadow",               // box-shadow hardcoded values
+      // "hardcoded-margin-padding",           // margin/padding hardcoded values
+      // "hardcoded-layout-positioning",       // top, left, width, height values
+      // "hardcoded-color-names",              // color: red, blue, etc.
+      // === TAILWIND CSS PATTERNS ===
+      // "tailwind-hardcoded-colors",          // bg-red-500, text-blue-600, etc.
+      // "tailwind-hardcoded-spacing",         // p-4, m-8, gap-2, etc.
+      // "tailwind-hardcoded-sizing",          // w-64, h-32, etc.
+      // "tailwind-hardcoded-typography",      // text-lg, font-bold, etc.
+      // "tailwind-hardcoded-borders",         // border-2, border-red-500, etc.
+      // "tailwind-arbitrary-values",          // [#ff0000], [16px], etc.
+      // "tailwind-arbitrary-color-values",    // bg-[#ffffff], text-[rgb(255,0,0)]
+      // "tailwind-unapproved-color-tokens",   // Custom Tailwind color tokens
+      // "tailwind-template-literal-hardcoded-colors",  // Template literals with hardcoded colors
+      // "tailwind-conditional-hardcoded-colors",       // Conditional hardcoded colors
+      // === JAVASCRIPT/CSS-IN-JS PATTERNS ===
+      // "js-object-hardcoded-color",          // color: '#ffffff' in JS objects
+      // "js-object-hardcoded-font-size",      // fontSize: '16px' in JS objects
+      // "js-object-layout-positioning",       // top: '10px' in JS objects
+      // "js-object-margin-padding",           // margin: '16px' in JS objects
+      // "template-literal-hardcoded-colors",  // Template literals with hardcoded colors
+      // "mixed-theme-hardcoded-colors",       // Mixed theme and hardcoded values
+      // === STYLED-COMPONENTS & THEME PATTERNS ===
+      // "styled-components-theme-destructure",           // ${({ theme }) => theme.colors.primary}
+      // "styled-components-multiline-theme-function",    // Multi-line theme functions
+      // "styled-components-theme-parameter-destructure", // Theme parameter destructuring
+      // "theme-colors-access",                           // theme.colors.primary access
+      // "theme-palette-access",                          // theme.palette.primary access
+      // "theme-object-color",                            // theme object color access
+      // "theme-object-border",                           // theme object border access
+      // "theme-object-box-shadow",                       // theme object shadow access
+      // "theme-destructuring-colors",                    // theme: { colors: {...} }
+      // "multiline-theme-destructure",                   // Multi-line theme destructuring
+      // "template-literal-theme-access",                 // Template literal theme access
+      // "complex-theme-destructuring",                   // Complex theme destructuring patterns
+      // === SCSS/SASS PATTERNS ===
+      // "scss-hardcoded-variable",            // $color: #ffffff in SCSS
+      // === COMMON USAGE EXAMPLES ===
+      // Not using Tailwind CSS? Disable all Tailwind patterns:
+      // "tailwind-hardcoded-colors",
+      // "tailwind-hardcoded-spacing",
+      // "tailwind-hardcoded-sizing",
+      // "tailwind-hardcoded-typography",
+      // "tailwind-hardcoded-borders",
+      // "tailwind-arbitrary-values",
+      // "tailwind-arbitrary-color-values",
+      // "tailwind-unapproved-color-tokens",
+      // "tailwind-template-literal-hardcoded-colors",
+      // "tailwind-conditional-hardcoded-colors",
+      // Not using styled-components? Disable styled-components patterns:
+      // "styled-components-theme-destructure",
+      // "styled-components-multiline-theme-function",
+      // "styled-components-theme-parameter-destructure",
+      // Allowing hardcoded font sizes during migration?
+      // "hardcoded-font-size",
+      // "js-object-hardcoded-font-size",
+      // Allowing hardcoded spacing during gradual migration?
+      // "hardcoded-margin-padding",
+      // "js-object-margin-padding",
+      // "tailwind-hardcoded-spacing",
+    ],
+  },
+
+  // =========================================================================
   // EXAMPLE CONFIGURATIONS FOR MULTIPLE FILES
   // =========================================================================
   /*
