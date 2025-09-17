@@ -141,7 +141,7 @@ module.exports = {
     // You can disable any of these default violation patterns:
     disableDefaultPatterns: [
       // === CORE HARDCODED VALUES ===
-      "hardcoded-color",                    // #ffffff, rgb(), rgba() values
+      // "hardcoded-color",                    // #ffffff, rgb(), rgba() values
       // "hardcoded-font-size",                // font-size: 16px
       // "hardcoded-border-radius",            // border-radius: 8px
       // "hardcoded-box-shadow",               // box-shadow hardcoded values
