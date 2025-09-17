@@ -2,7 +2,7 @@
 
 🎨 **Real-time theme auditing tool with comprehensive analytics for design system migration**
 
-ThemeTracker is a sophisticated code analysis tool designed to help teams migrate from legacy styling approaches (hardcoded values, styled-components themes) to modern CSS custom properties and design systems like Dew Design System.
+ThemeTracker is a sophisticated code analysis tool designed to help teams migrate from legacy styling approaches (hardcoded values, styled-components themes) to modern CSS custom properties and design systems like design token-based systems.
 
 [![npm version](https://badge.fury.io/js/themetracker.svg)](https://www.npmjs.com/package/themetracker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -28,7 +28,7 @@ ThemeTracker is a sophisticated code analysis tool designed to help teams migrat
 
 ### 🎨 **Design System Integration**
 
-- ✅ **Dew Design System Ready** - Built-in support for Dew tokens
+- ✅ **Design System Ready** - Built-in support for design tokens
 - ✅ **Configurable Patterns** - Customize violation detection
 - ✅ **CSS Custom Properties** - Promotes `var(--*)` usage patterns
 - ✅ **Smart Auto-Detection** - Finds config files automatically
@@ -115,7 +115,7 @@ themetracker start
 **What happens:**
 
 - 🔍 Auto-detects your project structure (`src/`, `components/`, etc.)
-- 🎨 Looks for Dew Design System configuration
+- 🎨 Looks for design system configuration
 - 🌐 Starts server on `http://localhost:3001`
 - 🚀 Opens interactive dashboard in your browser
 - ⚡ Begins real-time file monitoring
@@ -130,8 +130,8 @@ Creates a `themetracker.config.js` file with all available options:
 
 ```javascript
 module.exports = {
-  dewConfig: {
-    tokensPath: "src/styles/dewStyles/tailwind-dew-colors.json",
+  designTokens: {
+    tokensPath: "src/styles/tokens/colors.json",
   },
   sourceDirectories: {
     include: ["src", "components"],
@@ -149,7 +149,7 @@ themetracker info
 Shows:
 
 - 📂 Project structure detected
-- 🎨 Dew configuration status
+- 🎨 Design system configuration status
 - 📊 Quick file scan preview
 - 🔧 Current configuration
 
@@ -210,7 +210,7 @@ const Button = styled.button`
 `;
 
 // Tailwind violations
-className="bg-blue-500 text-gray-700 p-4"  // → Use dew classes
+className="bg-blue-500 text-gray-700 p-4"  // → Use design token classes
 
 // ✅ Approved Patterns
 background: var(--color-fill-surface);
@@ -229,8 +229,8 @@ className="bg-color-brand-primary text-color-text-primary"
 }
 
 /* ❌ SCSS Violations */
-$primary-color: #007bff; /* → Use dew CSS variables */
-color: darken($primary-color, 10%); /* → Use dew color tokens */
+/* → Use design token CSS variables */
+color: darken($primary-color, 10%); /* → Use design token color tokens */
 
 /* ✅ Approved Patterns */
 .component {
@@ -246,7 +246,7 @@ color: darken($primary-color, 10%); /* → Use dew color tokens */
 ThemeTracker automatically detects:
 
 - 📂 Source directories: `src/`, `app/`, `components/`
-- 🎨 Dew config files: `src/styles/dewStyles/tailwind-dew-colors.json`
+- 🎨 Design token config files: `src/styles/tokens/colors.json`
 - 📄 File types: `.js`, `.jsx`, `.ts`, `.tsx`, `.css`, `.scss`
 - 🚫 Files to ignore: tests, mocks, node_modules, etc.
 
@@ -256,9 +256,9 @@ Create `themetracker.config.js` for custom settings:
 
 ```javascript
 module.exports = {
-  // Dew Design System
-  dewConfig: {
-    tokensPath: "src/styles/dewStyles/tailwind-dew-colors.json",
+  // Design System
+  designTokens: {
+    tokensPath: "src/styles/tokens/colors.json",
     cssVariablePrefix: "--",
   },
 
@@ -329,14 +329,14 @@ themetracker help
 | SCSS/Sass  | `.scss`, `.sass` | ✅ CSS + SCSS variables, functions                |
 | Less       | `.less`          | ✅ CSS + Less variables                           |
 
-## 🎨 Dew Design System Integration
+## 🎨 Design Token Integration
 
 ### **Token Detection**
 
-ThemeTracker automatically loads your Dew Design System tokens:
+ThemeTracker automatically loads your design token definitions:
 
 ```json
-// src/styles/dewStyles/tailwind-dew-colors.json
+// src/styles/tokens/colors.json
 {
   "color-brand-primary": "#0066cc",
   "color-text-primary": "#1a1a1a",
@@ -350,7 +350,7 @@ ThemeTracker automatically loads your Dew Design System tokens:
 
 ```javascript
 // ✅ Approved
-className="bg-color-brand-primary"  // From dew tokens
+className="bg-color-brand-primary"  // From design token
 var(--color-fill-surface)           // CSS custom properties
 
 // ❌ Violations
@@ -429,13 +429,13 @@ themetracker info  # Check detected directories
 themetracker init  # Create config file
 ```
 
-**Dew tokens not found:**
+**Design tokens not found:**
 
 ```bash
 # Check these paths exist:
-src/styles/dewStyles/tailwind-dew-colors.json
-styles/dew/colors.json
-theme/dew-tokens.json
+src/styles/tokens/colors.json
+styles/tokens/colors.json
+theme/tokens.json
 ```
 
 **Port already in use:**
@@ -550,7 +550,6 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - 📦 [npm package](https://www.npmjs.com/package/themetracker)
 - 🐛 [Report Issues](https://github.com/your-org/themetracker/issues)
 - 📖 [Documentation](https://github.com/your-org/themetracker#readme)
-- 🎨 [Dew Design System](https://dew-design-system.com)
 
 ---
 

@@ -21,27 +21,242 @@
 
 module.exports = {
   // =========================================================================
-  // DEW DESIGN SYSTEM CONFIGURATION
+  // DESIGN TOKEN CONFIGURATION
   // =========================================================================
-  dewConfig: {
-    // Path to Dew Design System tokens/colors configuration
-    // ThemeTracker will auto-detect common paths if not specified
-    tokensPath: "lib/autofix-rules/dewStyles/colors.css",
+  designTokenConfig: {
+    // IMPORTANT: Configure paths to YOUR project's CSS variables/design tokens
+    // ThemeTracker will read CSS variables from these files to provide fix suggestions
 
-    // Alternative paths to check (in order of preference)
+    // Primary path(s) to your design tokens/CSS variables files
+    // Supports: .css, .scss, .sass, .json, .js files
+    // Can be a single file path (string) OR array of multiple file paths
+    tokensPath: null,
+
+    // EXAMPLES:
+    // Single file
+    // tokensPath: "src/styles/tokens.css"
+    // Multiple files:
+    // tokensPath: [
+    //   "src/styles/tokens.css",
+    //   "src/styles/variables.css",
+    //   "src/theme/tokens.scss",
+    //   "src/theme/variables.scss",
+    // ]
+
+    // Alternative paths to check for design tokens (in order of preference)
+    // ThemeTracker will scan ALL existing files from this list to gather tokens
+    // You can specify multiple files for different token categories:
+    // Common patterns for different frameworks and setups:
     fallbackPaths: [
-      "lib/autofix-rules/dewStyles/colors.css",
-      "lib/autofix-rules/dewStyles/numbers.css",
-      "src/styles/tokens.json",
+      // CSS/SCSS files with CSS custom properties
+      "src/styles/tokens.css",
+      "src/styles/variables.css",
+      "src/theme/tokens.scss",
+      "src/theme/variables.scss",
+      "styles/globals.css",
+
+      // Design token JSON files
+      "src/tokens/colors.json",
+      "src/tokens/index.json",
+      "tokens.json",
+
+      // JavaScript/TypeScript token files
+      "src/theme/tokens.js",
+      "src/theme/index.ts",
+      "src/styles/theme.js",
+
+      // Framework-specific paths
+      "tailwind.config.js", // For Tailwind CSS
+      "src/theme.js", // Chakra UI, Material-UI
+      "stitches.config.js", // Stitches
+
+      // Package-based design systems
+      "node_modules/@company/design-tokens/dist/tokens.css",
     ],
 
     // CSS variables prefix (for CSS custom properties detection)
     cssVariablePrefix: "--",
 
-    // When dew tokens are imported as a package (future support)
-    packageName: "@dew/design-system", // null if not using package
+    // Supported file formats and their parsers
+    supportedFormats: {
+      css: true, // CSS files with :root { --variable: value; }
+      scss: true, // SCSS files with CSS variables
+      json: true, // JSON files with token definitions
+      js: true, // JavaScript files exporting tokens
+      ts: true, // TypeScript files exporting tokens
+    },
+
+    // When design tokens are imported as a package
+    packageName: null, // e.g., "@company/design-tokens"
     packageTokensPath: "dist/tokens.json", // path within the package
   },
+
+  // =========================================================================
+  // CUSTOM VIOLATION PATTERNS
+  // =========================================================================
+  customViolations: {
+    // Enable custom violation patterns (set to false to use only defaults)
+    enabled: true,
+
+    // Add your project-specific violation patterns
+    patterns: [
+      // EXAMPLE: Custom hardcoded color pattern for your project
+      // {
+      //   type: "custom-hardcoded-color",
+      //   pattern: /#[0-9a-fA-F]{3,6}/g,
+      //   severity: "high",
+      //   suggestion: "Use CSS custom properties from your design system",
+      //   description: "Detects hardcoded hex color values"
+      // },
+      // EXAMPLE: Project-specific CSS class violations
+      // {
+      //   type: "deprecated-classes",
+      //   pattern: /class(?:Name)?\s*=\s*["'`][^"'`]*\b(?:old-button|legacy-card|deprecated-\w+)\b[^"'`]*["'`]/g,
+      //   severity: "medium",
+      //   suggestion: "Replace with updated component classes from design system",
+      //   description: "Detects usage of deprecated CSS classes"
+      // },
+      // EXAMPLE: Inline style violations
+      // {
+      //   type: "inline-styles",
+      //   pattern: /style\s*=\s*["'`][^"'`]*["'`]/g,
+      //   severity: "medium",
+      //   suggestion: "Use CSS classes or styled-components instead of inline styles",
+      //   description: "Detects inline style attributes"
+      // },
+      // EXAMPLE: Custom spacing violations
+      // {
+      //   type: "hardcoded-margins",
+      //   pattern: /margin(?:-(?:top|right|bottom|left))?\s*:\s*\d+(?:px|rem|em)/g,
+      //   severity: "medium",
+      //   suggestion: "Use design system spacing tokens",
+      //   description: "Detects hardcoded margin values"
+      // },
+    ],
+
+    // Override default violation patterns (advanced usage)
+    overrideDefaults: false,
+
+    // Disable specific default patterns by type
+    // You can disable any of these default violation patterns:
+    disableDefaultPatterns: [
+      // === CORE HARDCODED VALUES ===
+      // "hardcoded-color",                    // #ffffff, rgb(), rgba() values
+      // "hardcoded-font-size",                // font-size: 16px
+      // "hardcoded-border-radius",            // border-radius: 8px
+      // "hardcoded-box-shadow",               // box-shadow hardcoded values
+      // "hardcoded-margin-padding",           // margin/padding hardcoded values
+      // "hardcoded-layout-positioning",       // top, left, width, height values
+      // "hardcoded-color-names",              // color: red, blue, etc.
+      // === TAILWIND CSS PATTERNS ===
+      // "tailwind-hardcoded-colors",          // bg-red-500, text-blue-600, etc.
+      // "tailwind-hardcoded-spacing",         // p-4, m-8, gap-2, etc.
+      // "tailwind-hardcoded-sizing",          // w-64, h-32, etc.
+      // "tailwind-hardcoded-typography",      // text-lg, font-bold, etc.
+      // "tailwind-hardcoded-borders",         // border-2, border-red-500, etc.
+      // "tailwind-arbitrary-values",          // [#ff0000], [16px], etc.
+      // "tailwind-arbitrary-color-values",    // bg-[#ffffff], text-[rgb(255,0,0)]
+      // "tailwind-unapproved-color-tokens",   // Custom Tailwind color tokens
+      // "tailwind-template-literal-hardcoded-colors",  // Template literals with hardcoded colors
+      // "tailwind-conditional-hardcoded-colors",       // Conditional hardcoded colors
+      // === JAVASCRIPT/CSS-IN-JS PATTERNS ===
+      // "js-object-hardcoded-color",          // color: '#ffffff' in JS objects
+      // "js-object-hardcoded-font-size",      // fontSize: '16px' in JS objects
+      // "js-object-layout-positioning",       // top: '10px' in JS objects
+      // "js-object-margin-padding",           // margin: '16px' in JS objects
+      // "template-literal-hardcoded-colors",  // Template literals with hardcoded colors
+      // "mixed-theme-hardcoded-colors",       // Mixed theme and hardcoded values
+      // === STYLED-COMPONENTS & THEME PATTERNS ===
+      // "styled-components-theme-destructure",           // ${({ theme }) => theme.colors.primary}
+      // "styled-components-multiline-theme-function",    // Multi-line theme functions
+      // "styled-components-theme-parameter-destructure", // Theme parameter destructuring
+      // "theme-colors-access",                           // theme.colors.primary access
+      // "theme-palette-access",                          // theme.palette.primary access
+      // "theme-object-color",                            // theme object color access
+      // "theme-object-border",                           // theme object border access
+      // "theme-object-box-shadow",                       // theme object shadow access
+      // "theme-destructuring-colors",                    // theme: { colors: {...} }
+      // "multiline-theme-destructure",                   // Multi-line theme destructuring
+      // "template-literal-theme-access",                 // Template literal theme access
+      // "complex-theme-destructuring",                   // Complex theme destructuring patterns
+      // === SCSS/SASS PATTERNS ===
+      // "scss-hardcoded-variable",            // $color: #ffffff in SCSS
+      // === COMMON USAGE EXAMPLES ===
+      // Not using Tailwind CSS? Disable all Tailwind patterns:
+      // "tailwind-hardcoded-colors",
+      // "tailwind-hardcoded-spacing",
+      // "tailwind-hardcoded-sizing",
+      // "tailwind-hardcoded-typography",
+      // "tailwind-hardcoded-borders",
+      // "tailwind-arbitrary-values",
+      // "tailwind-arbitrary-color-values",
+      // "tailwind-unapproved-color-tokens",
+      // "tailwind-template-literal-hardcoded-colors",
+      // "tailwind-conditional-hardcoded-colors",
+      // Not using styled-components? Disable styled-components patterns:
+      // "styled-components-theme-destructure",
+      // "styled-components-multiline-theme-function",
+      // "styled-components-theme-parameter-destructure",
+      // Allowing hardcoded font sizes during migration?
+      // "hardcoded-font-size",
+      // "js-object-hardcoded-font-size",
+      // Allowing hardcoded spacing during gradual migration?
+      // "hardcoded-margin-padding",
+      // "js-object-margin-padding",
+      // "tailwind-hardcoded-spacing",
+    ],
+  },
+
+  // =========================================================================
+  // EXAMPLE CONFIGURATIONS FOR MULTIPLE FILES
+  // =========================================================================
+  /*
+  // EXAMPLE 1: Multiple CSS files for different token categories
+  designTokenConfig: {
+    tokensPath: [
+      "src/styles/colors.css",      // Colors only
+      "src/styles/spacing.css",     // Spacing tokens
+      "src/styles/typography.css",  // Font sizes, weights
+      "src/styles/shadows.css",     // Box shadows
+      "src/styles/borders.css",     // Border radius, widths
+    ],
+    cssVariablePrefix: "--",
+  },
+
+  // EXAMPLE 2: Design system with JSON files
+  designTokenConfig: {
+    tokensPath: "src/tokens/index.json",
+    fallbackPaths: [
+      "src/tokens/colors.json",
+      "src/tokens/spacing.json", 
+      "src/tokens/typography.json",
+    ],
+    cssVariablePrefix: "--ds-",
+  },
+
+  // EXAMPLE 3: Mixed formats (CSS + JSON + JS)
+  designTokenConfig: {
+    tokensPath: [
+      "src/theme/colors.css",      // CSS variables
+      "src/tokens/spacing.json",   // JSON tokens  
+      "src/theme/typography.js",   // JS/TS exports
+      "tailwind.config.js",        // Tailwind config
+    ],
+    cssVariablePrefix: "--",
+  },
+
+  // EXAMPLE 4: Package-based design system
+  designTokenConfig: {
+    packageName: "@company/design-tokens",
+    packageTokensPath: "dist/css/tokens.css",
+    fallbackPaths: [
+      "node_modules/@company/design-tokens/dist/css/colors.css",
+      "node_modules/@company/design-tokens/dist/css/spacing.css",
+      "src/theme/overrides.css", // Local overrides
+    ],
+    cssVariablePrefix: "--company-",
+  },
+  */
 
   // =========================================================================
   // SOURCE DIRECTORIES

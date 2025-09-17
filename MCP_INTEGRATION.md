@@ -156,7 +156,7 @@ Design system patterns and tokens:
 ```json
 {
   "designSystem": {
-    "name": "Dew Design System",
+  "name": "Design Token System",
     "cssVariablePrefix": "--"
   },
   "approvedPatterns": {
@@ -263,7 +263,7 @@ const Card = () => (
 
 **AI Response:**
 
-> Based on your ThemeTracker analysis, I can see you're using the Dew Design System. Here's the recommended approach:
+> Based on your ThemeTracker analysis, I can see you're using a design token system. Here's the recommended approach:
 >
 > ```jsx
 > const Button = styled.button`
@@ -320,7 +320,7 @@ themetracker mcp --config custom-config.js
 #### **For Refactoring:**
 
 ```
-"Convert all hardcoded colors and spacing in this file to use our Dew Design System tokens."
+"Convert all hardcoded colors and spacing in this file to use our design token system tokens."
 ```
 
 #### **For New Development:**
