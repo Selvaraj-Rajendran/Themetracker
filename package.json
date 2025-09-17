@@ -1,6 +1,6 @@
 {
   "name": "themetracker",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Real-time theme auditing tool with comprehensive analytics for design system migration. Track design token usage and violations across your React projects.",
   "keywords": [
     "theme-auditing",
